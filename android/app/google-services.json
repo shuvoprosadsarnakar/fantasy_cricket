@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "555200530612",
+    "project_id": "banded-access-158217",
+    "storage_bucket": "banded-access-158217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555200530612:android:d2545211ffca38a312efe1",
+        "android_client_info": {
+          "package_name": "com.example.fantasy_cricket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555200530612-38ah9nrm90lh7n7p2kbd9k0kbnv4blis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFYHeXeY3BrkZfPpdb6PKG6CAeTkQC3E8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555200530612-38ah9nrm90lh7n7p2kbd9k0kbnv4blis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
