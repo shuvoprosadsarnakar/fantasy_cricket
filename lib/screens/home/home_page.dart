@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           child: Text(
             'Home',
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
       ),
