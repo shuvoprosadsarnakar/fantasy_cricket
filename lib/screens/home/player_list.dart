@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/model/player.dart';
 import 'package:fantasy_cricket/screens/home/player_tile.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ class PlayerList extends StatefulWidget {
 class _PlayerListState extends State<PlayerList> {
   @override
   Widget build(BuildContext context) {
+
     final players = Provider.of<List<Player>>(context);
 
     return ListView.builder(
