@@ -1,3 +1,5 @@
+import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
 
 class AddPlayer extends StatefulWidget {
@@ -6,14 +8,16 @@ class AddPlayer extends StatefulWidget {
 }
 
 class _AddPlayerState extends State<AddPlayer> {
+  final _databse = DataBase();
   final _formKey = GlobalKey<FormState>();
-  String _selectedRole;
+
+  Player _selectedPlayer = Player();
+
+  //FOrm values
   List<String> _roles = ['Batsmen', 'Bowlers', 'Captain', 'Wicketkeeper'];
-  
-  String _selectedHanded;
+
   List<String> _handed = ['Right', 'Left'];
 
-  String _selectedNationality;
   List<String> _nationalities = [
     'Afghanistan',
     'Albania',
@@ -29,6 +33,7 @@ class _AddPlayerState extends State<AddPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text("Add player"),
@@ -58,6 +63,11 @@ class _AddPlayerState extends State<AddPlayer> {
           hintText: "e.g Sachin tendulkar",
         ),
         textInputAction: TextInputAction.next,
+        onChanged: (name) {
+          setState(() {
+            _selectedPlayer.name = name;
+          });
+        },
       ),
     );
   }
@@ -67,10 +77,10 @@ class _AddPlayerState extends State<AddPlayer> {
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
         hint: Text('Role'), // Not necessary for Option 1
-        value: _selectedRole,
-        onChanged: (newValue) {
+        value: _selectedPlayer.role,
+        onChanged: (role) {
           setState(() {
-            _selectedRole = newValue;
+            _selectedPlayer.role = role;
           });
         },
         items: _roles.map((role) {
@@ -88,10 +98,10 @@ class _AddPlayerState extends State<AddPlayer> {
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
         hint: Text('Handed'), // Not necessary for Option 1
-        value: _selectedHanded,
+        value: _selectedPlayer.handed,
         onChanged: (newValue) {
           setState(() {
-            _selectedHanded = newValue;
+            _selectedPlayer.handed = newValue;
           });
         },
         items: _handed.map((hand) {
@@ -109,10 +119,10 @@ class _AddPlayerState extends State<AddPlayer> {
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
         hint: Text('Nationality'), // Not necessary for Option 1
-        value: _selectedNationality,
+        value: _selectedPlayer.nationality,
         onChanged: (newValue) {
           setState(() {
-            _selectedNationality = newValue;
+            _selectedPlayer.nationality = newValue;
           });
         },
         items: _nationalities.map((nationality) {
@@ -128,11 +138,19 @@ class _AddPlayerState extends State<AddPlayer> {
   RaisedButton submitButton() {
     return RaisedButton(
       color: Theme.of(context).primaryColor,
-      onPressed: () {},
+      onPressed: () => createRecord(_selectedPlayer),
       child: Text(
         "Submit",
         style: TextStyle(color: Colors.white),
       ),
     );
+  }
+
+  void createRecord(Player player) async {
+    print(player.name);
+    print(player.role);
+    print(player.nationality);
+    print(player.handed);
+    _databse.addPlayers(player);
   }
 }

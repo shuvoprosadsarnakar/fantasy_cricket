@@ -6,16 +6,19 @@ class DataBase {
       Firestore.instance.collection('player');
 
   List<Player> _playerListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((e) => 
-      Player.fromMap(e.data)
-    ).toList();
+    return snapshot.documents.map((e) => Player.fromMap(e.data)).toList();
   }
 
   Stream<List<Player>> get Players {
     return _playerCollection.snapshots().map(_playerListFromSnapshot);
   }
 
-  Future addPlayers(Player player){
-
+  Future addPlayers(Player player) async {
+    return _playerCollection.add({
+      'name': player.name,
+      'nationality': player.nationality,
+      'handed': player.handed,
+      'role': player.role
+    });
   }
 }
