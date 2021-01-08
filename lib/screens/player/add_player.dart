@@ -18,12 +18,12 @@ class _AddPlayerState extends State<AddPlayer> {
     'Afghanistan',
     'Albania',
     'Algeria',
-    'Argentina'
-        'Australia',
+    'Argentina',
+    'Australia',
     'Austria',
     'Bangladesh',
-    'Belgium'
-        'Bolivia',
+    'Belgium',
+    'Bolivia',
     'Botswana'
   ];
 
@@ -34,20 +34,20 @@ class _AddPlayerState extends State<AddPlayer> {
         title: Text("Add player"),
       ),
       body: Form(
-        child: Column(
+        child: ListView(
           children: [
-            NameInput(),
-            RoleInput(),
-            HandedInput(),
-            NationalityInput(),
-            SubmitButton()
+            nameInput(),
+            roleInput(),
+            handedInput(),
+            nationalityInput(),
+            submitButton()
           ],
         ),
       ),
     );
   }
 
-  Widget NameInput() {
+  Widget nameInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
@@ -62,7 +62,7 @@ class _AddPlayerState extends State<AddPlayer> {
     );
   }
 
-  Widget RoleInput() {
+  Widget roleInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
@@ -83,7 +83,7 @@ class _AddPlayerState extends State<AddPlayer> {
     );
   }
 
-  Widget HandedInput() {
+  Widget handedInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
@@ -104,7 +104,7 @@ class _AddPlayerState extends State<AddPlayer> {
     );
   }
 
-  Widget NationalityInput() {
+  Widget nationalityInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
@@ -125,7 +125,7 @@ class _AddPlayerState extends State<AddPlayer> {
     );
   }
 
-  RaisedButton SubmitButton() {
+  RaisedButton submitButton() {
     return RaisedButton(
       color: Theme.of(context).primaryColor,
       onPressed: () {},

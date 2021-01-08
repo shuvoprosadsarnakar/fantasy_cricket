@@ -14,4 +14,8 @@ class DataBase {
   Stream<List<Player>> get Players {
     return _playerCollection.snapshots().map(_playerListFromSnapshot);
   }
+
+  Future addPlayers(Player player){
+
+  }
 }

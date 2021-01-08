@@ -15,7 +15,7 @@ class PlayerTile extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 25,
-            backgroundColor: Colors.amber,
+            backgroundColor: Colors.greenAccent,
             ),
           title: Text(player.name),
           subtitle: Text(player.role),
