@@ -8,7 +8,7 @@ class AddPlayer extends StatefulWidget {
 }
 
 class _AddPlayerState extends State<AddPlayer> {
-  final _databse = DataBase();
+  final _database = DataBase();
   final _formKey = GlobalKey<FormState>();
 
   Player _selectedPlayer = Player();
@@ -33,12 +33,12 @@ class _AddPlayerState extends State<AddPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("Add player"),
       ),
       body: Form(
+        key: _formKey,
         child: ListView(
           children: [
             nameInput(),
@@ -58,15 +58,23 @@ class _AddPlayerState extends State<AddPlayer> {
       child: TextFormField(
         textCapitalization: TextCapitalization.words,
         keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           labelText: "Player name",
           hintText: "e.g Sachin tendulkar",
         ),
-        textInputAction: TextInputAction.next,
+        validator: (name) {
+          Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+          RegExp regex = new RegExp(pattern);
+          if (name.isEmpty)
+            return 'Empty username';
+          else if (!regex.hasMatch(name))
+            return 'Invalid name';
+          else
+            return null;
+        },
         onChanged: (name) {
-          setState(() {
-            _selectedPlayer.name = name;
-          });
+          _selectedPlayer.name = name;
         },
       ),
     );
@@ -76,16 +84,23 @@ class _AddPlayerState extends State<AddPlayer> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
-        hint: Text('Role'), // Not necessary for Option 1
+        decoration: InputDecoration(
+          labelText: "Role",
+          hintText: "e.g Bowler",
+        ), // Not necessary for Option 1
         value: _selectedPlayer.role,
+        validator: (role) {
+          if (role == null)
+            return 'Empty role';
+          else
+            return null;
+        },
         onChanged: (role) {
-          setState(() {
-            _selectedPlayer.role = role;
-          });
+          _selectedPlayer.role = role;
         },
         items: _roles.map((role) {
           return DropdownMenuItem(
-            child: new Text(role),
+            child: Text(role),
             value: role,
           );
         }).toList(),
@@ -97,12 +112,13 @@ class _AddPlayerState extends State<AddPlayer> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
-        hint: Text('Handed'), // Not necessary for Option 1
+        decoration: InputDecoration(
+          labelText: "Handed",
+          hintText: "e.g Right",
+        ),
         value: _selectedPlayer.handed,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedPlayer.handed = newValue;
-          });
+        onChanged: (hand) {
+          _selectedPlayer.handed = hand;
         },
         items: _handed.map((hand) {
           return DropdownMenuItem(
@@ -118,12 +134,13 @@ class _AddPlayerState extends State<AddPlayer> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonFormField(
-        hint: Text('Nationality'), // Not necessary for Option 1
+        decoration: InputDecoration(
+          labelText: "Nationality",
+          hintText: "e.g America",
+        ), // Not necessary for Option 1
         value: _selectedPlayer.nationality,
         onChanged: (newValue) {
-          setState(() {
-            _selectedPlayer.nationality = newValue;
-          });
+          _selectedPlayer.nationality = newValue;
         },
         items: _nationalities.map((nationality) {
           return DropdownMenuItem(
@@ -147,10 +164,12 @@ class _AddPlayerState extends State<AddPlayer> {
   }
 
   void createRecord(Player player) async {
-    print(player.name);
-    print(player.role);
-    print(player.nationality);
-    print(player.handed);
-    _databse.addPlayers(player);
+    if (_formKey.currentState.validate()) {
+      print(player.name);
+      print(player.role);
+      print(player.nationality);
+      print(player.handed);
+      //_database.addPlayers(player);
+    }
   }
 }

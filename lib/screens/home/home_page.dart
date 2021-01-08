@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/model/player.dart';
 import 'package:fantasy_cricket/screens/home/player_list.dart';
 import 'package:fantasy_cricket/screens/player/add_player.dart';
@@ -10,7 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Player>>.value(
-      value: DataBase().Players,
+      value: DataBase().players,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Home'),
