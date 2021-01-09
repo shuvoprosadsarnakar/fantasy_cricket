@@ -11,7 +11,7 @@ class ManagePlayer extends StatelessWidget
   Widget build(BuildContext context)
   {
     return StreamProvider<List<Player>>.value(
-      value: DataBase().Players,
+      value: DataBase().players,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Manage Player'),

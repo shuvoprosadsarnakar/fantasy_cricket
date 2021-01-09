@@ -9,11 +9,11 @@ class DataBase {
     return snapshot.documents.map((e) => Player.fromMap(e.data)).toList();
   }
 
-  Stream<List<Player>> get Players {
+  Stream<List<Player>> get players {
     return _playerCollection.snapshots().map(_playerListFromSnapshot);
   }
 
-  Future addPlayers(Player player) async {
+  Future addPlayers(Player player) {
     return _playerCollection.add({
       'name': player.name,
       'nationality': player.nationality,
