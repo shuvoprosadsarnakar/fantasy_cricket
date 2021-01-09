@@ -1,5 +1,5 @@
 import 'package:fantasy_cricket/model/player.dart';
-import 'package:fantasy_cricket/screens/home/player_list_tile.dart';
+import 'package:fantasy_cricket/screens/manage_player/player_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; 
 

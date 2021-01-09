@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fantasy_cricket/screens/home/manage_player.dart';
+import 'package:fantasy_cricket/screens/manage_player/manage_player.dart';
 
 void main() => runApp(MyApp());
 
