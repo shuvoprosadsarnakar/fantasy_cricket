@@ -1,5 +1,6 @@
-import 'package:fantasy_cricket/model/player.dart';
 import 'package:flutter/material.dart';
+import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/screens/player_profile/player_profile.dart';
 
 class PlayerListTile extends StatelessWidget
 {
@@ -20,7 +21,10 @@ class PlayerListTile extends StatelessWidget
         icon: Icon(Icons.edit),
         onPressed: () => print('hello!'),
       ),
-      onTap: () => print('pressed!'),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => PlayerProfile(player))
+      ),
     );
   }
 }
