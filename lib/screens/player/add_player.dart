@@ -122,7 +122,7 @@ class _AddPlayerState extends State<AddPlayer> {
         },
         items: _handed.map((hand) {
           return DropdownMenuItem(
-            child: new Text(hand),
+            child: Text(hand),
             value: hand,
           );
         }).toList(),
@@ -169,7 +169,7 @@ class _AddPlayerState extends State<AddPlayer> {
       print(player.role);
       print(player.nationality);
       print(player.handed);
-      //_database.addPlayers(player);
+      _database.addPlayers(player);
     }
   }
 }
