@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/screens/player/edit_player.dart';
 import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:fantasy_cricket/model/player.dart';
@@ -26,7 +27,7 @@ class PlayerListTile extends StatelessWidget {
             onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => PlayerProfile(player))),
+                    builder: (BuildContext context) => EditPlayer(player))),
           ),
           IconButton(
             icon: Icon(Icons.delete),
