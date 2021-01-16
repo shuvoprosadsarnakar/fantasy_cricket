@@ -7,8 +7,9 @@ class PlayerListTile extends StatelessWidget {
   final Player player;
   const PlayerListTile({this.player});
   void deleteRecord() {
-    DataBase().deletePlayer(player.id);
+    //DataBase().deletePlayer(player.id);
   }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -17,9 +18,21 @@ class PlayerListTile extends StatelessWidget {
       ),
       title: Text(player.name),
       subtitle: Text(player.handed),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () => deleteRecord(),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => PlayerProfile(player))),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => deleteRecord(),
+          ),
+        ],
       ),
       onTap: () => Navigator.push(
           context,

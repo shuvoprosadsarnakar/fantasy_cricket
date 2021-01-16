@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Player {
   String id;
   String name;
@@ -11,7 +13,7 @@ class Player {
 
   Player({this.name, this.role, this.nationality, this.handed});
 
-  Player.fromMap(Map snapshot, String documentId)
+  Player.fromSnapshot(DocumentSnapshot snapshot, String documentId)
       : id = documentId ?? 'id',
         name = snapshot['name'] ?? '',
         role = snapshot['role'] ?? '',

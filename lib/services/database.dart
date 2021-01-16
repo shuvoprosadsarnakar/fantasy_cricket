@@ -5,16 +5,15 @@ class DataBase {
   final CollectionReference _playerCollection =
       Firestore.instance.collection('player');
 
-  List<Player> _playerListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((e) => Player.fromMap(e.data,e.documentID)).toList();
-  }
-
   Stream<List<Player>> get players {
-    //print(_playerCollection.document().snapshots());
-    return _playerCollection.snapshots().map(_playerListFromSnapshot);
+    return _playerCollection.snapshots().map((snapshot) {
+      return snapshot.documents
+          .map((doc) => Player.fromSnapshot(doc, doc.documentID))
+          .toList();
+    });
   }
 
-  Future addPlayers(Player player) {
+  Future addPlayer(Player player) {
     return _playerCollection.add({
       'name': player.name,
       'nationality': player.nationality,
@@ -23,7 +22,19 @@ class DataBase {
     });
   }
 
-  Future deletePlayer(String documentID) async{
-    await _playerCollection.document(documentID).delete().whenComplete(() => print("deleted"));
+  Future updatePlayer(Player player) {
+    return _playerCollection.document(player.id).updateData({
+      'name': player.name,
+      'nationality': player.nationality,
+      'handed': player.handed,
+      'role': player.role
+    }).whenComplete(() => print("updated"));
+  }
+
+  Future deletePlayer(String documentID) async {
+    await _playerCollection
+        .document(documentID)
+        .delete()
+        .whenComplete(() => print("deleted"));
   }
 }

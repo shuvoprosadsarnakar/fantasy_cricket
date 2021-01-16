@@ -169,7 +169,7 @@ class _AddPlayerState extends State<AddPlayer> {
       print(player.role);
       print(player.nationality);
       print(player.handed);
-      _database.addPlayers(player);
+      _database.addPlayer(player);
     }
   }
 }
