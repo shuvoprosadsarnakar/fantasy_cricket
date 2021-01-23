@@ -19,7 +19,7 @@ class DataBase {
       'nationality': player.nationality,
       'handed': player.handed,
       'role': player.role
-    });
+    }).whenComplete(() => print("added"));
   }
 
   Future updatePlayer(Player player) {

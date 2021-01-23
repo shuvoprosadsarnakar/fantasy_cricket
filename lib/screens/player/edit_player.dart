@@ -59,6 +59,7 @@ class _EditPlayerState extends State<EditPlayer> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        initialValue: _selectedPlayer.name,
         textCapitalization: TextCapitalization.words,
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
@@ -172,7 +173,7 @@ class _EditPlayerState extends State<EditPlayer> {
       print(player.role);
       print(player.nationality);
       print(player.handed);
-      _database.addPlayer(player);
+      _database.updatePlayer(player);
     }
   }
 }
