@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/screens/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:fantasy_cricket/screens/manage_player/manage_player.dart';
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget
   {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      home: ManagePlayer(),
+      home: Login(),
       debugShowCheckedModeBanner: false,
     );
   }
