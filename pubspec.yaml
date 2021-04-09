@@ -32,9 +32,10 @@ dependencies:
   google_sign_in: 4.4.1
 
   rxdart: 0.23.1
-  provider: 4.0.5
+  provider: 5.0.0
 
-
+  bloc: ^7.0.0
+  flutter_bloc: ^7.0.0
 
 dev_dependencies:
   flutter_test:

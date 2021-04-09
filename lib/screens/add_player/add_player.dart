@@ -1,235 +1,132 @@
+import 'package:fantasy_cricket/resources/colours/colour_pallate.dart';
+import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddPlayer extends StatefulWidget
-{
+class AddPlayer extends StatelessWidget {
   @override
-  AddPlayerState createState() => AddPlayerState();
-}
+  Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final PlayerRoleCubit playerRoleCubit = PlayerRoleCubit();
 
-class AddPlayerState extends State<AddPlayer>
-{
-  var formKey = GlobalKey<FormState>();
-  
-  String name, bornDay, bornMonth, bornYear, nation, role, battingStyle, 
-  bowlingStyle, description;
-
-  List<String> bornDays = []; // needed for born field
-  List<String> bornYears = []; // needed for born field
-
-  List<String> roles = ['Batsman', 'Bowler', 'All Rounder', 'Wicket Keeper'];
-  List<String> battingStyles = ['Right Handed Batsman', 'Left Handed Batsman'];
-  List<String> bowlingStyles = ['Fast', 'Medium', 'Spin'];
-
-  void initState()
-  {
-    super.initState();
-
-    // init monthDays list
-    for(int i = 1; i <= 31; i++) bornDays.add(i.toString());
-
-    // init bornYears list
-    int lastBornYear = DateTime.now().year - 17; // minimum player age is 17
-    for(int i = 1980; i <= lastBornYear; i++) bornYears.add(i.toString());
-  }
-
-  @override
-  Widget build(BuildContext context)
-  {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Player'),
-        centerTitle: true,
-      ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  // name field
-                  getTextFormField(
-                    name: 'Name',
-                    onSaved: (String value) => name = value,
-                  ),
-
-                  // born fields
-                  Row(
-                    children: [
-                      Text('Born: '),
-                      SizedBox(width: 10),
-
-                      // born day field
-                      Expanded(
-                        child: getDropdownButtonFormField(
-                          name: 'Day',
-                          items: getDropdownButtonItems(bornDays),
-                          onChanged: (value) => bornDay = value,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-
-                      // born month field
-                      Expanded(
-                        child: getDropdownButtonFormField(
-                          name: 'Month',
-                          items: getBornMonthItems(),
-                          onChanged: (value) => bornMonth = value,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-
-                      // born year field
-                      Expanded(
-                        child: getDropdownButtonFormField(
-                          name: 'Year',
-                          items: getDropdownButtonItems(bornYears),
-                          onChanged: (value) => bornYear = value,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  
-                  // nation field
-                  getTextFormField(
-                    name: 'Nation',
-                    onSaved: (String value) => nation = value,
-                  ),
-
-                  // role field
-                  getDropdownButtonFormField(
-                    name: 'Role',
-                    items: getDropdownButtonItems(roles),
-                    onChanged: (value) => role = value,
-                  ),
-                  SizedBox(height: 10),
-
-                  // batting style field
-                  getDropdownButtonFormField(
-                    name: 'Batting style',
-                    items: getDropdownButtonItems(battingStyles),
-                    onChanged: (value) => battingStyle = value,
-                  ),
-                  SizedBox(height: 10),
-
-                  // bowling style field
-                  getDropdownButtonFormField(
-                    name: 'Bowling style',
-                    items: getDropdownButtonItems(bowlingStyles),
-                    onChanged: (value) => bowlingStyle = value,
-                  ),
-                  SizedBox(height: 10),
-
-                  // description field
-                  getTextFormField(
-                    name: 'Description (Optional)',
-                    maxLines: 7,
-                    maxLength: 10000,
-                    onSaved: (String value) => description = value,
-                    isRequired: false,
-                  ),
-
-                  // form buttons
-                  Row(
-                    children: [
-                      // reset button
-                      RaisedButton(
-                        child: Text('Reset'),
-                        onPressed: () => formKey.currentState.reset(),
-                      ),
-                      SizedBox(width: 10),
-
-                      // submit button
-                      RaisedButton(
-                        child: Text('Submit'),
-                        onPressed: () {
-                          if(formKey.currentState.validate()) {
-                            formKey.currentState.save();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+      appBar: AppBar(title: Text('Add Player')),
+      body: Form(
+        key: formKey,
+        child: ListView(
+          padding: EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 45,
+          ),
+          children: [
+            // name field
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: Text(
+                "Name",
+                style: TextStyle(
+                  color: ColourPallate.ebonyClay,
+                  fontSize: 20,
+                ),
               ),
             ),
-          ),
-        ],
+            Container(
+              decoration: BoxDecoration(
+                color: ColourPallate.mercury,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 8,
+                ),
+                child: TextFormField(
+                  cursorColor: Colors.black38,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(fontSize: 16),
+                    hintText: 'Enter name e.g. Sachin Tendulkar',
+                  ),
+                ),
+              ),
+            ),
+
+            // space between two fields
+            SizedBox(height: 14),
+            
+            // role field
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: Text(
+                "Role",
+                style: TextStyle(
+                  color: ColourPallate.ebonyClay,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: ColourPallate.mercury,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 8,
+                ),
+                child: BlocBuilder<PlayerRoleCubit, String>(
+                  bloc: playerRoleCubit,
+                  builder: (BuildContext context, String state) {
+                    return DropdownButton<String>(
+                      value: playerRoleCubit.state,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 1,
+                        color: ColourPallate.mercury,
+                      ),
+                      hint: Text('Enter role e.g. Batsman'),
+                      items: playerRoleCubit.playerRoles.map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String value) {
+                        playerRoleCubit.emitState(value);
+                      },
+                    );
+                  }
+                )
+              ),
+            ),
+
+            // space between two fields
+            SizedBox(height: 18),
+
+            // add player button
+            TextButton(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  'Add Player',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                primary: Colors.white,
+                backgroundColor: ColourPallate.pomegranate,
+              ),
+              onPressed: () {
+                print('Pressed!');
+              },
+            )
+          ],
+        ),
       ),
     );
-  }
-
-  Column getTextFormField({String name, Function onSaved, int maxLength = 255, 
-  int maxLines = 1, bool isRequired = true})
-  {
-    Function validator;
-
-    if(isRequired) {
-      validator = (String value) {
-        if(value.length == 0) return '$name is required.';
-      };
-    } else validator = (String value) {};
-
-    return Column(
-      children: [
-        TextFormField(
-          decoration: InputDecoration(hintText: name),
-          maxLength: maxLength,
-          maxLines: maxLines,
-          validator: validator,
-          onSaved: onSaved,
-        ),
-        SizedBox(height: 10),
-      ],
-    );
-  }
-
-  DropdownButtonFormField getDropdownButtonFormField({String name, List items, 
-  Function onChanged})
-  {
-    return DropdownButtonFormField(
-      hint: Text(name),
-      items: items,
-      onChanged: onChanged,
-      validator: (value) {
-        if(value == null) return '$name is required.';
-      },
-    );
-  }
-
-  List<DropdownMenuItem<String>> getDropdownButtonItems(List<String> items)
-  {
-    int itemsLength = items.length;
-    List<DropdownMenuItem<String>> dropdownItems = [];
-
-    for(int i = 0; i < itemsLength; i++)
-    {
-      dropdownItems.add(DropdownMenuItem(
-        child: Text(items[i]),
-        value: items[i],
-      ));
-    }
-
-    return dropdownItems;
-  }
-
-  List<DropdownMenuItem<String>> getBornMonthItems()
-  {
-    List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 
-    'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    List<DropdownMenuItem<String>> bornMonthItems = [];
-
-    for(int i = 0; i < 12; i++)
-    {
-      bornMonthItems.add(DropdownMenuItem(
-        child: Text(monthNames[i]),
-        value: i.toString(),
-      ));
-    }
-
-    return bornMonthItems;
   }
 }
