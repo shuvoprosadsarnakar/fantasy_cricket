@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/screens/add_player/add_player.dart';
 import 'package:fantasy_cricket/screens/home/home.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +10,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      home: Home(),
+      home: AddPlayer(),
       theme: ThemeData(
-        // Define the default brightness and colors.
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,
         accentColor: ColorPallate.pomegranate,
-
         canvasColor: ColorPallate.mercury
       ),
       debugShowCheckedModeBanner: false,

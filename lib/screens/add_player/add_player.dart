@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/screens/add_player/add_player_cubit.dart';
 import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
@@ -12,11 +13,13 @@ class AddPlayer extends StatelessWidget {
     final PlayerRoleCubit playerRoleCubit = PlayerRoleCubit();
 
     // login admin to insert player into firestore
-    if(FirebaseAuth.instance.currentUser() == null) {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: 'ranganroy567@gmail.com',
-        password: '1234567890',
-      ).then((AuthResult authResult) => print(authResult));
+    if (FirebaseAuth.instance.currentUser() == null) {
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: 'ranganroy567@gmail.com',
+            password: '1234567890',
+          )
+          .then((AuthResult authResult) => print(authResult));
     }
 
     return Scaffold(
@@ -59,9 +62,10 @@ class AddPlayer extends StatelessWidget {
                     hintText: 'Enter name e.g. Sachin Tendulkar',
                   ),
                   validator: (String value) {
-                    if(value.isEmpty) {
+                    if (value.isEmpty) {
                       return 'Player name is required.';
-                    } else  return null;
+                    } else
+                      return null;
                   },
                   onSaved: (String value) {
                     addPlayerCubit.playerName = value;
@@ -72,7 +76,7 @@ class AddPlayer extends StatelessWidget {
 
             // space between two fields
             SizedBox(height: 14),
-            
+
             // role field
             Padding(
               padding: EdgeInsets.all(4),
@@ -90,41 +94,41 @@ class AddPlayer extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 6,
-                  horizontal: 8,
-                ),
-                child: BlocBuilder<PlayerRoleCubit, String>(
-                  bloc: playerRoleCubit,
-                  builder: (BuildContext context, String state) {
-                    return DropdownButtonFormField<String>(
-                      value: playerRoleCubit.state,
-                      isExpanded: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      hint: Text('Enter role e.g. Batsman'),
-                      items: playerRoleCubit.playerRoles.map((String value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 8,
+                  ),
+                  child: BlocBuilder<PlayerRoleCubit, String>(
+                      bloc: playerRoleCubit,
+                      builder: (BuildContext context, String state) {
+                        return DropdownButtonFormField<String>(
+                          value: playerRoleCubit.state,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          hint: Text('Enter role e.g. Batsman'),
+                          items:
+                              playerRoleCubit.playerRoles.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String value) {
+                            playerRoleCubit.emitState(value);
+                          },
+                          validator: (String value) {
+                            if (value == null) {
+                              return 'Select a player role.';
+                            } else
+                              return null;
+                          },
+                          onSaved: (String value) {
+                            addPlayerCubit.playerRole = value;
+                          },
                         );
-                      }).toList(),
-                      onChanged: (String value) {
-                        playerRoleCubit.emitState(value);
-                      },
-                      validator: (String value) {
-                        if(value == null) {
-                          return 'Select a player role.';
-                        } else return null;
-                      },
-                      onSaved: (String value) {
-                        addPlayerCubit.playerRole = value;
-                      },
-                    );
-                  }
-                )
-              ),
+                      })),
             ),
 
             // space between two fields
@@ -147,7 +151,13 @@ class AddPlayer extends StatelessWidget {
                 backgroundColor: ColorPallate.pomegranate,
               ),
               onPressed: () {
-                addPlayerCubit.addPlayerToDb(playerRoleCubit.state);
+                //addPlayerCubit.addPlayerToDb(playerRoleCubit.state);
+                Firestore.instance.collection('players').add({
+                  'name': "playerName",
+                  'role': " ",
+                }).catchError((error) {
+                  print(error);
+                });
               },
             )
           ],

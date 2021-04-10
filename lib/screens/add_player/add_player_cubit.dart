@@ -11,6 +11,8 @@ class AddPlayerCubit extends Cubit<PlayerAddingStatus> {
   String playerName, playerRole;
 
   void addPlayerToDb(String playerRole) {
+    print("Player name:"+playerName);
+    print("\n Player role:"+playerRole);
     if(formKey.currentState.validate()) {
       formKey.currentState.save();
       Firestore.instance.collection('players').add({
