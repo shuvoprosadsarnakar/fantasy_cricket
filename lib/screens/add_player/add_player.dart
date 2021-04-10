@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/resources/colours/colour_pallate.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/screens/add_player/add_player_cubit.dart';
 import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,14 +35,14 @@ class AddPlayer extends StatelessWidget {
               child: Text(
                 "Name",
                 style: TextStyle(
-                  color: ColourPallate.ebonyClay,
+                  color: ColorPallate.ebonyClay,
                   fontSize: 20,
                 ),
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Padding(
@@ -79,14 +79,14 @@ class AddPlayer extends StatelessWidget {
               child: Text(
                 "Role",
                 style: TextStyle(
-                  color: ColourPallate.ebonyClay,
+                  color: ColorPallate.ebonyClay,
                   fontSize: 20,
                 ),
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Padding(
@@ -144,7 +144,7 @@ class AddPlayer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 primary: Colors.white,
-                backgroundColor: ColourPallate.pomegranate,
+                backgroundColor: ColorPallate.pomegranate,
               ),
               onPressed: () {
                 addPlayerCubit.addPlayerToDb(playerRoleCubit.state);

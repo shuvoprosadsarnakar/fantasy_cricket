@@ -12,6 +12,7 @@ class ManagePlayer extends StatelessWidget
   {
     return StreamProvider<List<Player>>.value(
       value: DataBase().players,
+      initialData: [],
       child: Scaffold(
         appBar: AppBar(
           title: Text('Manage Player'),
