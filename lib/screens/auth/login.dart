@@ -1,4 +1,5 @@
-import 'package:fantasy_cricket/resources/colours/colour_pallate.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/screens/home/home.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -20,12 +21,12 @@ class _LoginState extends State<Login> {
             padding: const EdgeInsets.all(4.0),
             child: Text(
               "Phone",
-              style: TextStyle(color: ColourPallate.ebonyClay, fontSize: 20),
+              style: TextStyle(color: ColorPallate.ebonyClay, fontSize: 20),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Padding(
               padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
@@ -45,12 +46,12 @@ class _LoginState extends State<Login> {
             padding: const EdgeInsets.all(4.0),
             child: Text(
               "Password",
-              style: TextStyle(color: ColourPallate.ebonyClay, fontSize: 20),
+              style: TextStyle(color: ColorPallate.ebonyClay, fontSize: 20),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Padding(
               padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
@@ -78,10 +79,14 @@ class _LoginState extends State<Login> {
               shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(10)),
               primary: Colors.white,
-              backgroundColor: ColourPallate.pomegranate,
+              backgroundColor: ColorPallate.pomegranate,
             ),
             onPressed: () {
-              print('Pressed');
+              print('Login button Pressed');
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
             },
           )
         ],

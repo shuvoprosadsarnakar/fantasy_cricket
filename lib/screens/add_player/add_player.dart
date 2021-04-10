@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/resources/colours/colour_pallate.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,14 +25,14 @@ class AddPlayer extends StatelessWidget {
               child: Text(
                 "Name",
                 style: TextStyle(
-                  color: ColourPallate.ebonyClay,
+                  color: ColorPallate.ebonyClay,
                   fontSize: 20,
                 ),
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Padding(
@@ -60,14 +60,14 @@ class AddPlayer extends StatelessWidget {
               child: Text(
                 "Role",
                 style: TextStyle(
-                  color: ColourPallate.ebonyClay,
+                  color: ColorPallate.ebonyClay,
                   fontSize: 20,
                 ),
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: ColourPallate.mercury,
+                color: ColorPallate.mercury,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Padding(
@@ -83,7 +83,7 @@ class AddPlayer extends StatelessWidget {
                       isExpanded: true,
                       underline: Container(
                         height: 1,
-                        color: ColourPallate.mercury,
+                        color: ColorPallate.mercury,
                       ),
                       hint: Text('Enter role e.g. Batsman'),
                       items: playerRoleCubit.playerRoles.map((String value) {
@@ -118,7 +118,7 @@ class AddPlayer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 primary: Colors.white,
-                backgroundColor: ColourPallate.pomegranate,
+                backgroundColor: ColorPallate.pomegranate,
               ),
               onPressed: () {
                 print('Pressed!');

@@ -1,27 +1,18 @@
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 
 enum AppTheme {
-  GreenLight,
-  GreenDark,
-  BlueLight,
-  BlueDark,
+Light,
+Dark,
 }
 
 final appThemeData = {
-  AppTheme.GreenLight: ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.green,
+  AppTheme.Light: ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: ColorPallate.pomegranate,
   ),
-  AppTheme.GreenDark: ThemeData(
+  AppTheme.Dark: ThemeData(
     brightness: Brightness.dark,
     primaryColor: Colors.green[700],
-  ),
-  AppTheme.BlueLight: ThemeData(
-    brightness: Brightness.light,
-    primaryColor: Colors.blue,
-  ),
-  AppTheme.BlueDark: ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: Colors.blue[700],
   ),
 };

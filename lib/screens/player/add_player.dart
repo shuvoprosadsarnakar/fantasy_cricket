@@ -152,9 +152,8 @@ class _AddPlayerState extends State<AddPlayer> {
     );
   }
 
-  RaisedButton submitButton() {
-    return RaisedButton(
-      color: Theme.of(context).primaryColor,
+  TextButton submitButton() {
+    return TextButton(
       onPressed: () => createRecord(_selectedPlayer),
       child: Text(
         "Submit",

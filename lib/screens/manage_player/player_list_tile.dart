@@ -1,5 +1,4 @@
 import 'package:fantasy_cricket/screens/player/edit_player.dart';
-import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:fantasy_cricket/model/player.dart';
 import 'package:fantasy_cricket/screens/player_profile/player_profile.dart';
