@@ -6,24 +6,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddPlayer extends StatelessWidget {
   // variable for managing state of this screen
-  final AddPlayerCubit addPlayerCubit = AddPlayerCubit();
+  final AddPlayerCubit _addPlayerCubit = AddPlayerCubit();
 
-  // All player roles. Every role (String) will used to make dropdown items for
-  // role field of the add player form.
-  final List<String> playerRoles = <String>[
+  // All player roles. Every role (String) will be used to make dropdown items 
+  // for role field.
+  final List<String> _playerRoles = <String>[
     'Batsman',
     'Wicket Keeper',
     'All Rounder',
     'Bowler',
   ];
   
-  // dropdown item list for role field
-  final List<DropdownMenuItem<String>> playerRoleDropdownList = [];
+  // dropdown items's list for role field
+  final List<DropdownMenuItem<String>> _playerRoleDropdownList = [];
 
   // add dropdown items of role field to _playerRoleDropdownList
   AddPlayer() {
-    playerRoles.forEach((String value) {
-      playerRoleDropdownList.add(DropdownMenuItem<String>(
+    _playerRoles.forEach((String value) {
+      _playerRoleDropdownList.add(DropdownMenuItem<String>(
         value: value,
         child: Text(value),
       ));
@@ -33,14 +33,14 @@ class AddPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPlayerCubit, PlayerAddingStatus>(
-      bloc: addPlayerCubit,
+      bloc: _addPlayerCubit,
       builder: (BuildContext context, PlayerAddingStatus playerAddingStatus) {
-        if(addPlayerCubit.state == PlayerAddingStatus.adding) {
+        if(_addPlayerCubit.state == PlayerAddingStatus.adding) {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         } else return Scaffold(
           appBar: AppBar(title: Text('Add Player')),
           body: Form(
-            key: addPlayerCubit.formKey,
+            key: _addPlayerCubit.formKey,
             child: ListView(
               padding: EdgeInsets.symmetric(
                 vertical: 20,
@@ -87,7 +87,7 @@ class AddPlayer extends StatelessWidget {
         getFieldTitle('Name'),
         attachFieldContainer(
           TextFormField(
-            initialValue: addPlayerCubit.playerName,
+            initialValue: _addPlayerCubit.playerName,
             cursorColor: Colors.black38,
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -100,7 +100,7 @@ class AddPlayer extends StatelessWidget {
               } else  return null;
             },
             onSaved: (String value) {
-              addPlayerCubit.playerName = value;
+              _addPlayerCubit.playerName = value;
             },
           ),
         ),
@@ -116,18 +116,18 @@ class AddPlayer extends StatelessWidget {
         getFieldTitle('Role'),
         attachFieldContainer(
           BlocBuilder<PlayerRoleCubit, String>(
-            bloc: addPlayerCubit.playerRoleCubit,
+            bloc: _addPlayerCubit.playerRoleCubit,
             builder: (BuildContext context, String state) {
               return DropdownButtonFormField<String>(
-                value: addPlayerCubit.playerRoleCubit.state,
+                value: _addPlayerCubit.playerRoleCubit.state,
                 isExpanded: true,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                 ),
                 hint: Text('Select a role'),
-                items: playerRoleDropdownList,
+                items: _playerRoleDropdownList,
                 onChanged: (String value) {
-                  addPlayerCubit.playerRoleCubit.emitState(value);
+                  _addPlayerCubit.playerRoleCubit.emitState(value);
                 },
                 validator: (String value) {
                   if(value == null) {
@@ -158,14 +158,14 @@ class AddPlayer extends StatelessWidget {
         backgroundColor: ColorPallate.pomegranate,
       ),
       onPressed: () async {
-        await addPlayerCubit.addPlayerToDb();
+        await _addPlayerCubit.addPlayerToDb();
 
-        if(addPlayerCubit.state != null) {
+        if(_addPlayerCubit.state != null) {
           String snackBarMsg;
           
-          if(addPlayerCubit.state == PlayerAddingStatus.added) {
+          if(_addPlayerCubit.state == PlayerAddingStatus.added) {
             snackBarMsg = 'Player added successfully.';
-          } else if(addPlayerCubit.state == PlayerAddingStatus.
+          } else if(_addPlayerCubit.state == PlayerAddingStatus.
             failed) {
             snackBarMsg = 'Failed to add player, try again.';
           }
