@@ -11,7 +11,7 @@ class Player {
   String description;
   DateTime birthDay;
 
-  Player({this.name, this.role, this.nationality, this.handed});
+  Player({this.id, this.name, this.role, this.nationality, this.handed});
 
   Player.fromSnapshot(DocumentSnapshot snapshot, String documentId)
       : id = documentId ?? 'id',

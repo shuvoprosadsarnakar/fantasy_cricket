@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/model/player.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/screens/add_player/add_player.dart';
 import 'package:fantasy_cricket/screens/home/home.dart';
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      home: AddPlayer(),
+      home: AddPlayer(player: Player(id: '3M6o64w9i361HoiCr40Z', name: 'a', role: 'Wicket Keeper')),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,

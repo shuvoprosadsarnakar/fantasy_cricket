@@ -1,48 +1,72 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 
-enum PlayerAddingStatus {adding, added, failed}
+enum PlayerAddingStatus {loading, added, updated, failed}
 
 class AddPlayerCubit extends Cubit<PlayerAddingStatus> {
   AddPlayerCubit() : super(null);
 
-  // variable for manipulating the from here
+  // variable for manipulating the form from here
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
-  // variable for managing state of role field and get player's role
+  // variable for managing state of role field
   final PlayerRoleCubit playerRoleCubit = PlayerRoleCubit();
   
-  // player's name of the form will be set here
-  String playerName;
+  // dropdown item's list for role field, items will be added from AddPlayer()
+  // screen
+  final List<DropdownMenuItem<String>> playerRoleDropdownList = [];
+  
+  // A player object will be paseed to AddPlayerScreen() if admin want to edit 
+  // and that object will be set here. If user want to add player then a new
+  // player object will be created and set into this variable.
+  Player player;
+
+  // this function sets player variable and if user want to edit then emits   
+  // player role to show player role value in the form
+  void initPlayer(Player player) {
+    if(player != null) {
+      this.player = player;
+      playerRoleCubit.emitState(player.role);
+    } else {
+      this.player = Player();
+    }
+  }
 
   Future<void> addPlayerToDb() async {
     if(formKey.currentState.validate()) {
       formKey.currentState.save();
       // after emitting this state a progress animation will be shown on 
       // AddPlayer() screen
-      emit(PlayerAddingStatus.adding);
+      emit(PlayerAddingStatus.loading);
       
       try {
-        // add player into firestore
-        await Firestore.instance.collection('players').add({
-          'name': playerName,
-          'role': playerRoleCubit.state,
-        });
-
-        // if player is successfully added then null below properties because
-        // after emitting next state the AddPlayer() screen form will be shown   
-        // again where name and role field should be empty
-        playerName = null;
-        playerRoleCubit.emitState(null);
+        final db = DataBase();
         
-        // after emitting this state AddPlayer() screen form will be shown again
-        // and a success message will be shown
-        emit(PlayerAddingStatus.added);
-      } catch(error) { 
-        // show error on debug console
-        print(error);
+        if(player.id == null) {
+          // insert player into database
+          await db.addPlayer(player);
+
+          // if player is successfully added then null below properties because
+          // after emitting next state the AddPlayer() screen form will be shown   
+          // again where name and role field should be empty
+          player.name = null;
+          playerRoleCubit.emitState(null);
+
+          // after emitting this state AddPlayer() screen form will be shown 
+          // again with empty form fields and a success message will be shown
+          emit(PlayerAddingStatus.added);
+        } else {
+          // update player into databse
+          await db.updatePlayer(player);
+
+          // after emitting this state AddPlayer() screen form will be shown 
+          // again with past form values and a success message will be shown
+          emit(PlayerAddingStatus.updated);
+        }
+      } catch(error) {
         // after emitting this state the AddPlayer() screen form will be shown
         // again with past form values and an error message will be shown
         emit(PlayerAddingStatus.failed);
