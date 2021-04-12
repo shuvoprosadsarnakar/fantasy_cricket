@@ -4,10 +4,10 @@ import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
 
-enum PlayerAddingStatus {loading, added, updated, failed}
+enum PlayerAddEditStatus {loading, added, updated, failed}
 
-class AddPlayerCubit extends Cubit<PlayerAddingStatus> {
-  AddPlayerCubit() : super(null);
+class PlayerAddEditCubit extends Cubit<PlayerAddEditStatus> {
+  PlayerAddEditCubit() : super(null);
 
   // variable for manipulating the form from here
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -40,7 +40,7 @@ class AddPlayerCubit extends Cubit<PlayerAddingStatus> {
       formKey.currentState.save();
       // after emitting this state a progress animation will be shown on 
       // AddPlayer() screen
-      emit(PlayerAddingStatus.loading);
+      emit(PlayerAddEditStatus.loading);
       
       try {
         final db = DataBase();
@@ -57,19 +57,19 @@ class AddPlayerCubit extends Cubit<PlayerAddingStatus> {
 
           // after emitting this state AddPlayer() screen form will be shown 
           // again with empty form fields and a success message will be shown
-          emit(PlayerAddingStatus.added);
+          emit(PlayerAddEditStatus.added);
         } else {
           // update player into databse
           await db.updatePlayer(player);
 
           // after emitting this state AddPlayer() screen form will be shown 
           // again with past form values and a success message will be shown
-          emit(PlayerAddingStatus.updated);
+          emit(PlayerAddEditStatus.updated);
         }
       } catch(error) {
         // after emitting this state the AddPlayer() screen form will be shown
         // again with past form values and an error message will be shown
-        emit(PlayerAddingStatus.failed);
+        emit(PlayerAddEditStatus.failed);
       }
     }
   }

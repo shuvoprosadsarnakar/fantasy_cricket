@@ -1,22 +1,22 @@
 import 'package:fantasy_cricket/models/player.dart';
-import 'package:fantasy_cricket/pages/player/cubits/add_player_cubit.dart';
+import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PlayerAddOrEdit extends StatelessWidget {
+class PlayerAddEdit extends StatelessWidget {
   // variable for managing state of this screen
-  final AddPlayerCubit _addPlayerCubit = AddPlayerCubit();
+  final PlayerAddEditCubit _playerAddEditCubit = PlayerAddEditCubit();
 
-  PlayerAddOrEdit({Player player}) {
+  PlayerAddEdit({Player player}) {
     // set player's info if admin is editing
-    _addPlayerCubit.initPlayer(player);
+    _playerAddEditCubit.initPlayer(player);
 
     // add dropdown items of role field to _playerRoleDropdownList
     playerRoles.forEach((String value) {
-      _addPlayerCubit.playerRoleDropdownList.add(
+      _playerAddEditCubit.playerRoleDropdownList.add(
         DropdownMenuItem<String>(
           value: value,
           child: Text(value),
@@ -27,17 +27,17 @@ class PlayerAddOrEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddPlayerCubit, PlayerAddingStatus>(
-      bloc: _addPlayerCubit,
-      builder: (BuildContext context, PlayerAddingStatus playerAddingStatus) {
-        if (_addPlayerCubit.state == PlayerAddingStatus.loading) {
+    return BlocBuilder<PlayerAddEditCubit, PlayerAddEditStatus>(
+      bloc: _playerAddEditCubit,
+      builder: (BuildContext context, PlayerAddEditStatus playerAddingStatus) {
+        if (_playerAddEditCubit.state == PlayerAddEditStatus.loading) {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text(_addPlayerCubit.player.id == null ? 
+            appBar: AppBar(title: Text(_playerAddEditCubit.player.id == null ? 
               'Add Player' : 'Update Player')),
             body: Form(
-              key: _addPlayerCubit.formKey,
+              key: _playerAddEditCubit.formKey,
               child: ListView(
                 padding: EdgeInsets.symmetric(
                   vertical: 20,
@@ -84,7 +84,7 @@ class PlayerAddOrEdit extends StatelessWidget {
       children: [
         getFieldTitle('Name'),
         TextFormField(
-          initialValue: _addPlayerCubit.player.name,
+          initialValue: _playerAddEditCubit.player.name,
           cursorColor: Colors.black38,
           decoration: InputDecoration(
             fillColor: ColorPallate.mercury,
@@ -107,7 +107,7 @@ class PlayerAddOrEdit extends StatelessWidget {
               return null;
             }
           },
-          onSaved: (String value) => _addPlayerCubit.player.name = value,
+          onSaved: (String value) => _playerAddEditCubit.player.name = value,
         ),
       ],
     );
@@ -120,10 +120,10 @@ class PlayerAddOrEdit extends StatelessWidget {
       children: [
         getFieldTitle('Role'),
         BlocBuilder<PlayerRoleCubit, String>(
-          bloc: _addPlayerCubit.playerRoleCubit,
+          bloc: _playerAddEditCubit.playerRoleCubit,
           builder: (BuildContext context, String state) {
             return DropdownButtonFormField<String>(
-              value: _addPlayerCubit.playerRoleCubit.state,
+              value: _playerAddEditCubit.playerRoleCubit.state,
               isExpanded: true,
               decoration: InputDecoration(
                 fillColor: ColorPallate.mercury,
@@ -138,9 +138,9 @@ class PlayerAddOrEdit extends StatelessWidget {
                 ),
               ),
               hint: Text('Select a role'),
-              items: _addPlayerCubit.playerRoleDropdownList,
+              items: _playerAddEditCubit.playerRoleDropdownList,
               onChanged: (String value) {
-                _addPlayerCubit.playerRoleCubit.emitState(value);
+                _playerAddEditCubit.playerRoleCubit.emitState(value);
               },
               validator: (String value) {
                 if (value == null) {
@@ -149,7 +149,7 @@ class PlayerAddOrEdit extends StatelessWidget {
                   return null;
                 }
               },
-              onSaved: (String value) => _addPlayerCubit.player.role = value,
+              onSaved: (String value) => _playerAddEditCubit.player.role = value,
             );
           },
         ),
@@ -173,15 +173,15 @@ class PlayerAddOrEdit extends StatelessWidget {
         backgroundColor: ColorPallate.pomegranate,
       ),
       onPressed: () async {
-        await _addPlayerCubit.addPlayerToDb();
+        await _playerAddEditCubit.addPlayerToDb();
 
         String snackBarMsg; // snack bar message
 
-        if (_addPlayerCubit.state == PlayerAddingStatus.added) {
+        if (_playerAddEditCubit.state == PlayerAddEditStatus.added) {
           snackBarMsg = 'Player added successfully.';
-        } else if (_addPlayerCubit.state == PlayerAddingStatus.updated) {
+        } else if (_playerAddEditCubit.state == PlayerAddEditStatus.updated) {
           snackBarMsg = 'Player updated successfully.';
-        } else if (_addPlayerCubit.state == PlayerAddingStatus.failed) {
+        } else if (_playerAddEditCubit.state == PlayerAddEditStatus.failed) {
           snackBarMsg = 'Failed to perform task, please try again.';
         }
 
