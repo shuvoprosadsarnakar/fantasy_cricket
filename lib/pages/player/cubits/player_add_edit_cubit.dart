@@ -24,9 +24,9 @@ class PlayerAddEditCubit extends Cubit<PlayerAddEditStatus> {
   // player object will be created and set into this variable.
   Player player;
 
-  // this function sets player variable and if user want to edit then emits   
+  // this function sets player variable and if user is doing editing then emits   
   // player role to show player role value in the form
-  void initPlayer(Player player) {
+  void setPlayer(Player player) {
     if(player != null) {
       this.player = player;
       playerRoleCubit.emitState(player.role);

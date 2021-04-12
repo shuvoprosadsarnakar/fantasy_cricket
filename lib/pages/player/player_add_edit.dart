@@ -11,8 +11,7 @@ class PlayerAddEdit extends StatelessWidget {
   final PlayerAddEditCubit _playerAddEditCubit = PlayerAddEditCubit();
 
   PlayerAddEdit({Player player}) {
-    // set player's info if admin is editing
-    _playerAddEditCubit.initPlayer(player);
+    _playerAddEditCubit.setPlayer(player);
 
     // add dropdown items of role field to _playerRoleDropdownList
     playerRoles.forEach((String value) {
