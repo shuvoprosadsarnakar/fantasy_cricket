@@ -1,16 +1,16 @@
-import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/models/player.dart';
+import 'package:fantasy_cricket/pages/player/cubits/add_player_cubit.dart';
+import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/screens/add_player/add_player_cubit.dart';
-import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddPlayer extends StatelessWidget {
+class PlayerAddOrEdit extends StatelessWidget {
   // variable for managing state of this screen
   final AddPlayerCubit _addPlayerCubit = AddPlayerCubit();
 
-  AddPlayer({Player player}) {
+  PlayerAddOrEdit({Player player}) {
     // set player's info if admin is editing
     _addPlayerCubit.initPlayer(player);
 

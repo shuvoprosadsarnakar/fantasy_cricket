@@ -1,8 +1,8 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/screens/home/tabs/fantasy_tab.dart';
-import 'package:fantasy_cricket/screens/home/tabs/leaderboard_tab.dart';
-import 'package:fantasy_cricket/screens/home/tabs/news_tab.dart';
-import 'package:fantasy_cricket/screens/home/tabs/prediction.dart';
+import 'package:fantasy_cricket/pages/home/tabs/fantasy_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/leaderboard_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/news_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/prediction.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {

@@ -1,8 +1,7 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldWidget extends StatefulWidget {
-
+class TextFieldWidget extends StatelessWidget {
   final Key fieldKey;
   final int maxLength;
   final String hintText;
@@ -12,13 +11,18 @@ class TextFieldWidget extends StatefulWidget {
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
 
-  const TextFieldWidget({Key key, this.fieldKey, this.maxLength, this.hintText, this.labelText, this.helperText, this.onSaved, this.validator, this.onFieldSubmitted}) : super(key: key);
+  const TextFieldWidget(
+      {Key key,
+      this.fieldKey,
+      this.maxLength,
+      this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted})
+      : super(key: key);
 
-  @override
-  _TextFieldWidgetState createState() => _TextFieldWidgetState();
-}
-
-class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -36,10 +40,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         hintStyle: TextStyle(fontSize: 16),
-        hintText: widget.hintText,
+        hintText: hintText,
       ),
-      validator: widget.validator,
-      onSaved: widget.onSaved,
+      validator: validator,
+      onSaved: onSaved,
     );
   }
 }

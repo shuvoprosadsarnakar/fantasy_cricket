@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/models/player.dart';
 
 class DataBase {
   final CollectionReference _playerCollection =

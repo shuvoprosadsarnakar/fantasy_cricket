@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:fantasy_cricket/model/player.dart';
+import 'package:fantasy_cricket/models/player.dart';
+import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:fantasy_cricket/screens/add_player/player_role_cubit.dart';
 
 enum PlayerAddingStatus {loading, added, updated, failed}
 

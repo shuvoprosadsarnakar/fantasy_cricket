@@ -1,5 +1,5 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/screens/home/home.dart';
+import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
