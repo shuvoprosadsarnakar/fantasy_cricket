@@ -13,7 +13,7 @@ class PlayerAddEdit extends StatelessWidget {
   PlayerAddEdit({Player player}) {
     _playerAddEditCubit.setPlayer(player);
 
-    // add dropdown items of role field to _playerRoleDropdownList
+    // add dropdown items of role field to 'playerRoleDropdownList' property
     playerRoles.forEach((String value) {
       _playerAddEditCubit.playerRoleDropdownList.add(
         DropdownMenuItem<String>(
@@ -160,7 +160,7 @@ class PlayerAddEdit extends StatelessWidget {
   TextButton getFormSubmitButton(BuildContext context) {
     return TextButton(
       child: Text(
-        'Add Player',
+        'Submit',
         style: TextStyle(fontSize: 20),
       ),
       style: TextButton.styleFrom(
