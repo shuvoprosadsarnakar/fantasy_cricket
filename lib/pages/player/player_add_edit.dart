@@ -51,7 +51,7 @@ class PlayerAddEdit extends StatelessWidget {
                   getRoleField(),
                   SizedBox(height: 20),
 
-                  // add player button
+                  // submit button
                   getFormSubmitButton(context),
                 ],
               ),
@@ -156,7 +156,7 @@ class PlayerAddEdit extends StatelessWidget {
     );
   }
 
-  // returns add player button
+  // returns submit button
   TextButton getFormSubmitButton(BuildContext context) {
     return TextButton(
       child: Text(
@@ -174,19 +174,22 @@ class PlayerAddEdit extends StatelessWidget {
       onPressed: () async {
         await _playerAddEditCubit.addPlayerToDb();
 
-        String snackBarMsg; // snack bar message
+        // _playerAddEditCubit.state will be null if form has validation error
+        if(_playerAddEditCubit.state != null) {
+          String snackBarMsg; // snack bar message
 
-        if (_playerAddEditCubit.state == PlayerAddEditStatus.added) {
-          snackBarMsg = 'Player added successfully.';
-        } else if (_playerAddEditCubit.state == PlayerAddEditStatus.updated) {
-          snackBarMsg = 'Player updated successfully.';
-        } else if (_playerAddEditCubit.state == PlayerAddEditStatus.failed) {
-          snackBarMsg = 'Failed to perform task, please try again.';
+          if (_playerAddEditCubit.state == PlayerAddEditStatus.added) {
+            snackBarMsg = 'Player added successfully.';
+          } else if (_playerAddEditCubit.state == PlayerAddEditStatus.updated) {
+            snackBarMsg = 'Player updated successfully.';
+          } else if (_playerAddEditCubit.state == PlayerAddEditStatus.failed) {
+            snackBarMsg = 'Failed to perform task, please try again.';
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(snackBarMsg),
+          ));
         }
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(snackBarMsg),
-        ));
       },
     );
   }

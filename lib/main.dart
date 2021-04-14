@@ -1,5 +1,6 @@
 import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
+import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      home: PlayerAddEdit(),
+      home: TeamAddEdit(),
       //home: Home(),
       theme: ThemeData(
         brightness: Brightness.light,
