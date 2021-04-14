@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      // home: BlocProvider(
-      //   create:  (context) => PlayerBloc()..add(PlayerFetched()),
-      //   child: PlayerList(),
-      // ),
-      home: PlayerAddEdit(),
+      home: BlocProvider(
+        create:  (context) => PlayerBloc()..add(PlayerFetched()),
+        child: PlayerList(),
+      ),
+      //home: PlayerAddEdit(),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,

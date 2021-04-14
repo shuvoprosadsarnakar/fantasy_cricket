@@ -103,9 +103,9 @@ class PostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(
-        '${post.id}',
-        style: TextStyle(fontSize: 10.0),
+      leading: CircleAvatar(
+        backgroundColor: ColorPallate.pomegranate,
+        backgroundImage: NetworkImage("https://cdn.iconscout.com/icon/free/png-512/football-player-1426973-1208513.png"),
       ),
       title: Text(post.name),
       isThreeLine: true,
