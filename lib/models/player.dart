@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class Player {
+class Player extends Equatable {
   String id;
   String name;
   String role;
@@ -28,4 +29,8 @@ class Player {
       "handed": handed,
     };
   }
+
+  @override
+  
+  List<Object> get props => [id,name,role,nationality,handed];
 }
