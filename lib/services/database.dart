@@ -8,7 +8,7 @@ class DataBase {
   Stream<List<Player>> get players {
     return _playerCollection.snapshots().map((snapshot) {
       return snapshot.documents
-          .map((doc) => Player.fromSnapshot(doc, doc.documentID))
+          .map((doc) => Player.fromMap(doc.data, doc.documentID))
           .toList();
     });
   }
@@ -16,8 +16,6 @@ class DataBase {
   Future addPlayer(Player player) {
     return _playerCollection.add({
       'name': player.name,
-      'nationality': player.nationality,
-      'handed': player.handed,
       'role': player.role
     }).whenComplete(() => print("added"));
   }
@@ -25,8 +23,6 @@ class DataBase {
   Future updatePlayer(Player player) {
     return _playerCollection.document(player.id).updateData({
       'name': player.name,
-      'nationality': player.nationality,
-      'handed': player.handed,
       'role': player.role
     }).whenComplete(() => print("updated"));
   }

@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/utils/crud_status_util.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ class PlayerAddEdit extends StatelessWidget {
   final PlayerAddEditCubit _playerAddEditCubit = PlayerAddEditCubit();
 
   PlayerAddEdit({Player player}) {
+    // to show player info on the form save player into '_playerAddEditCubit'
     _playerAddEditCubit.setPlayer(player);
 
     // add dropdown items of role field to 'playerRoleDropdownList' property
@@ -26,10 +28,10 @@ class PlayerAddEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayerAddEditCubit, PlayerAddEditStatus>(
+    return BlocBuilder<PlayerAddEditCubit, CrudStatus>(
       bloc: _playerAddEditCubit,
-      builder: (BuildContext context, PlayerAddEditStatus playerAddingStatus) {
-        if (_playerAddEditCubit.state == PlayerAddEditStatus.loading) {
+      builder: (BuildContext context, CrudStatus playerAddingStatus) {
+        if (_playerAddEditCubit.state == CrudStatus.loading) {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         } else {
           return Scaffold(
@@ -172,18 +174,20 @@ class PlayerAddEdit extends StatelessWidget {
         backgroundColor: ColorPallate.pomegranate,
       ),
       onPressed: () async {
-        await _playerAddEditCubit.addPlayerToDb();
+        await _playerAddEditCubit.addUpdatePlayer();
 
         // _playerAddEditCubit.state will be null if form has validation error
         if(_playerAddEditCubit.state != null) {
           String snackBarMsg; // snack bar message
 
-          if (_playerAddEditCubit.state == PlayerAddEditStatus.added) {
+          if (_playerAddEditCubit.state == CrudStatus.added) {
             snackBarMsg = 'Player added successfully.';
-          } else if (_playerAddEditCubit.state == PlayerAddEditStatus.updated) {
+          } else if (_playerAddEditCubit.state == CrudStatus.updated) {
             snackBarMsg = 'Player updated successfully.';
-          } else if (_playerAddEditCubit.state == PlayerAddEditStatus.failed) {
+          } else if (_playerAddEditCubit.state == CrudStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';
+          } else if (_playerAddEditCubit.state == CrudStatus.duplicate) {
+            snackBarMsg = 'Player name already exist.';
           }
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

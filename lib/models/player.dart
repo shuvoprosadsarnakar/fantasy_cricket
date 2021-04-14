@@ -1,36 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+
+// player document key names
+const String PLAYER_NAME_KEY = 'name';
+const String PLAYER_ROLE_KEY = 'role';
 
 class Player extends Equatable {
   String id;
   String name;
   String role;
-  String nationality;
-  String handed;
-  String battingStyle;
-  String bowlingStyle;
-  String description;
-  DateTime birthDay;
 
-  Player({this.id, this.name, this.role, this.nationality, this.handed});
+  Player({this.id, this.name, this.role});
 
-  Player.fromSnapshot(DocumentSnapshot snapshot, String documentId)
-      : id = documentId ?? 'id',
-        name = snapshot['name'] ?? '',
-        role = snapshot['role'] ?? '',
-        nationality = snapshot['nationality'] ?? '',
-        handed = snapshot['handed'] ?? '';
+  Player.fromMap(Map<String, dynamic> doc, String docId) {
+    id = docId;
+    name = doc[PLAYER_NAME_KEY];
+    role = doc[PLAYER_ROLE_KEY];
+  }
 
-  toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      "name": name,
-      "role": role,
-      "nationality": nationality,
-      "handed": handed,
+      PLAYER_NAME_KEY: name,
+      PLAYER_ROLE_KEY: role,
     };
   }
 
+  @override  
+  List<Object> get props => [id, name, role];
+
   @override
-  
-  List<Object> get props => [id,name,role,nationality,handed];
+  String toString() {
+    print('{ id: $id, name: $name, role: $role }');
+    return super.toString();
+  }
 }

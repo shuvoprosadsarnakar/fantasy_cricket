@@ -61,7 +61,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       lastDocument = documentList.documents.last;
 
       return documentList.documents
-          .map((doc) => Player.fromSnapshot(doc, doc.documentID))
+          .map((doc) => Player.fromMap(doc.data, doc.documentID))
           .toList();
     } else {
       return (await playerCollection
@@ -70,7 +70,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
               .startAfterDocument(lastDocument)
               .getDocuments())
           .documents
-          .map((doc) => Player.fromSnapshot(doc, doc.documentID))
+          .map((doc) => Player.fromMap(doc.data, doc.documentID))
           .toList();
     }
   }
