@@ -1,8 +1,5 @@
-import 'package:fantasy_cricket/models/player.dart';
-import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
-import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
