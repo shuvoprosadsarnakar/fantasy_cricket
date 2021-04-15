@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
-import 'package:fantasy_cricket/services/db_player.dart';
+import 'package:fantasy_cricket/repositories/player_repo.dart';
 import 'package:fantasy_cricket/utils/crud_status_util.dart';
 import 'package:flutter/material.dart';
 
@@ -43,10 +43,10 @@ class PlayerAddEditCubit extends Cubit<CrudStatus> {
 
       // try catch block is used for handeling db functions exceptions
       try {
-        if(await DbPlayer.checkPlayerName(player) == false) {
+        if(await PlayerRepo.checkPlayerName(player) == false) {
           emit(CrudStatus.duplicate);
         } else if(player.id == null) {
-          await DbPlayer.addPlayer(player);
+          await PlayerRepo.addPlayer(player);
 
           // if player is successfully added then null below properties 
           // because after emitting next state the AddPlayer() screen form    
@@ -58,7 +58,7 @@ class PlayerAddEditCubit extends Cubit<CrudStatus> {
           // again with empty form fields and a success message will be shown
           emit(CrudStatus.added);
         } else {
-          await DbPlayer.updatePlayer(player);
+          await PlayerRepo.updatePlayer(player);
           
           // after emitting this state AddPlayer() screen form will be shown 
           // again with past form values and a success message will be shown

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fantasy_cricket/models/player.dart';
 
-
 abstract class PlayerState extends Equatable {
   const PlayerState();
 
