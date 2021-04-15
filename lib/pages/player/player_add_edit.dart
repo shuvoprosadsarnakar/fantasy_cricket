@@ -4,6 +4,7 @@ import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/utils/crud_status_util.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,9 +31,9 @@ class PlayerAddEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PlayerAddEditCubit, CrudStatus>(
       bloc: _playerAddEditCubit,
-      builder: (BuildContext context, CrudStatus playerAddingStatus) {
+      builder: (BuildContext context, CrudStatus crudStatus) {
         if (_playerAddEditCubit.state == CrudStatus.loading) {
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return Loading();
         } else {
           return Scaffold(
             appBar: AppBar(title: Text(_playerAddEditCubit.player.id == null ? 
@@ -150,7 +151,9 @@ class PlayerAddEdit extends StatelessWidget {
                   return null;
                 }
               },
-              onSaved: (String value) => _playerAddEditCubit.player.role = value,
+              onSaved: (String value) {
+                _playerAddEditCubit.player.role = value;
+              }
             );
           },
         ),

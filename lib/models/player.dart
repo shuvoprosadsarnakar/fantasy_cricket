@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-// player document key names
-const String PLAYER_NAME_KEY = 'name';
-const String PLAYER_ROLE_KEY = 'role';
+// player document keys
+const String NAME_KEY = 'name';
+const String ROLE_KEY = 'role';
 
 class Player extends Equatable {
   String id;
@@ -13,14 +13,14 @@ class Player extends Equatable {
 
   Player.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;
-    name = doc[PLAYER_NAME_KEY];
-    role = doc[PLAYER_ROLE_KEY];
+    name = doc[NAME_KEY];
+    role = doc[ROLE_KEY];
   }
 
   Map<String, dynamic> toMap() {
     return {
-      PLAYER_NAME_KEY: name,
-      PLAYER_ROLE_KEY: role,
+      NAME_KEY: name,
+      ROLE_KEY: role,
     };
   }
 
@@ -29,7 +29,6 @@ class Player extends Equatable {
 
   @override
   String toString() {
-    print('{ id: $id, name: $name, role: $role }');
-    return super.toString();
+    return '{ id: $id, name: $name, role: $role }';
   }
 }

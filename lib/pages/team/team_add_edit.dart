@@ -1,96 +1,79 @@
+import 'package:fantasy_cricket/models/player.dart';
+import 'package:fantasy_cricket/models/team.dart';
+import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/utils/crud_status_util.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeamAddEdit extends StatelessWidget {
+  final TeamAddEditCubit _teamAddEditCubit = TeamAddEditCubit();
+
+  TeamAddEdit({Team team}) {
+    _teamAddEditCubit.setTeam(team);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Add/Update Team')),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: 45,
-          vertical: 20,
-        ),
-        children: [
-          // name field
-          getNameField(),
-          SizedBox(height: 15),
-
-          // add player field, player search results and submit button
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              // add player field and submit button
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<TeamAddEditCubit, CrudStatus>(
+      bloc: _teamAddEditCubit,
+      builder: (BuildContext context, CrudStatus crudStatus) {
+        if(_teamAddEditCubit.state == CrudStatus.loading) {
+          return Loading();
+        } else {
+          return Scaffold(
+            appBar: AppBar(title: Text(_teamAddEditCubit.team.id == null ? 
+              'Add Team' : 'Update Team')),
+            body: Form(
+              key: _teamAddEditCubit.formKey,
+              child: ListView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 45,
+                  vertical: 20,
+                ),
                 children: [
-                  // add player field
-                  getAddPlayerField(),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      'Add 11 more players.',
-                      style: TextStyle(color: Theme.of(context).errorColor),
-                    ),
-                  ),
-                  SizedBox(height: 20),
+                  // team name field
+                  getNameField(),
+                  SizedBox(height: 15),
 
-                  // submit button
-                  SizedBox(
-                    width: double.maxFinite,
-                    child: getFormSubmitButton(context),
+                  // stack of add player field, player search results, submit   
+                  // button and added team players
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // add player textfield
+                          getAddPlayerField(),
+                          SizedBox(height: 5),
+                          getAddPlayerFieldMsg(context),
+                          SizedBox(height: 20),
+                          
+                          // added team players
+                          getAddedTeamPlayers(),
+                          SizedBox(height: 15),
+
+                          // submit button
+                          if(_teamAddEditCubit.team.playerIds.length >= 11) 
+                            SizedBox(
+                            width: double.maxFinite,
+                            child: getFormSubmitButton(context),
+                          ),
+                        ],
+                      ),
+
+                      // search results
+                      // getPlayerSearchResult(),
+                    ],
                   ),
                 ],
               ),
-
-              // // search results
-              // Container(
-              //   margin: EdgeInsets.only(top: 85),
-              //   height: 300,
-              //   width: double.maxFinite,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(10),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.grey,
-              //         blurRadius: 5,
-              //         offset: Offset(2, 2),
-              //       ),
-              //     ],
-              //     color: Colors.white,
-              //   ),
-              //   child: ClipRRect(
-              //     borderRadius: BorderRadius.circular(10),
-              //     child: ListView(
-              //       children: [
-              //         ListTile(
-              //           title: Text('Shane Watson'),
-              //           subtitle: Text('Batsman'),
-              //         ),
-              //         Divider(height: 1),
-              //         ListTile(
-              //           title: Text('Shane Watson'),
-              //           subtitle: Text('Batsman'),
-              //         ),
-              //         Divider(height: 1),
-              //         ListTile(
-              //           title: Text('Shane Watson'),
-              //           subtitle: Text('Batsman'),
-              //         ),
-              //         Divider(height: 1),
-              //         ListTile(
-              //           title: Text('Shane Watson'),
-              //           subtitle: Text('Batsman'),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -115,7 +98,7 @@ class TeamAddEdit extends StatelessWidget {
       children: [
         getFieldTitle('Name'),
         TextFormField(
-          initialValue: '',
+          initialValue: _teamAddEditCubit.team.name,
           cursorColor: Colors.black38,
           decoration: InputDecoration(
             fillColor: ColorPallate.mercury,
@@ -138,7 +121,9 @@ class TeamAddEdit extends StatelessWidget {
               return null;
             }
           },
-          onSaved: (String value) {},
+          onSaved: (String value) {
+            _teamAddEditCubit.team.name = value;
+          },
         ),
       ],
     );
@@ -171,6 +156,29 @@ class TeamAddEdit extends StatelessWidget {
     );
   }
 
+  // returns add player field message 
+  Padding getAddPlayerFieldMsg(BuildContext context) {
+    int playersLeft = 11 - _teamAddEditCubit.team.playerIds.length;
+    String msg;
+
+    if(playersLeft > 0) {
+      msg = 'Add $playersLeft more players.';
+    } else {
+      msg = '${playersLeft * (-1) + 11} players added.';
+    }
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        msg,
+        style: TextStyle(
+          color: Theme.of(context).errorColor,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+
   // returns submit button
   TextButton getFormSubmitButton(BuildContext context) {
     return TextButton(
@@ -187,8 +195,79 @@ class TeamAddEdit extends StatelessWidget {
         backgroundColor: ColorPallate.pomegranate,
       ),
       onPressed: () async {
-
+        await _teamAddEditCubit.addEditTeam();
       },
     );
+  }
+
+  // returns a container of search matched players
+  Container getPlayerSearchResult() {
+    return Container(
+      margin: EdgeInsets.only(top: 85),
+      height: 300,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 5,
+            offset: Offset(2, 2),
+          ),
+        ],
+        color: Colors.white,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text('Shane Watson'),
+              subtitle: Text('Batsman'),
+            ),
+            Divider(height: 1),
+            ListTile(
+              title: Text('Shane Watson'),
+              subtitle: Text('Batsman'),
+            ),
+            Divider(height: 1),
+            ListTile(
+              title: Text('Shane Watson'),
+              subtitle: Text('Batsman'),
+            ),
+            Divider(height: 1),
+            ListTile(
+              title: Text('Shane Watson'),
+              subtitle: Text('Batsman'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // returns a column of added team players
+  Column getAddedTeamPlayers() {
+    List<Column> addedPlayerWidgets = [];
+    
+    _teamAddEditCubit.addedPlayers.forEach((Player player) {
+      addedPlayerWidgets.add(Column(
+        children: [
+          Card(
+            child: ListTile(
+              title: Text(player.name),
+              subtitle: Text(player.role),
+              trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {},
+              ),
+            ),
+          ),
+          SizedBox(height: 5),
+        ],
+      ));
+    });
+    
+    return Column(children: addedPlayerWidgets);
   }
 }

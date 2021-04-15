@@ -18,13 +18,15 @@ class PlayerAddEditCubit extends Cubit<CrudStatus> {
   // screen
   final List<DropdownMenuItem<String>> playerRoleDropdownList = [];
   
-  // A player object will be paseed to AddPlayerScreen() if admin want to edit 
-  // and that object will be set here. If user want to add player then a new
-  // player object will be created and set into this variable.
+  // A player object will be paseed to PlayerAddEdit() screen if admin want to  
+  // edit and that object will be set here. If user want to add player then a 
+  // new player object will be created and set into this variable. This obect is
+  // used to show player information on PlayerAddEdit() screen.
   Player player;
 
-  // this function sets player variable and if user is doing editing then emits   
-  // player role to show player role value in the form
+  // This function sets player variable and if user is doing editing then emits   
+  // player role to show player role value in the form. Argument player will be
+  // null if admin is creating player.
   void setPlayer(Player player) {
     if(player != null) {
       this.player = player;

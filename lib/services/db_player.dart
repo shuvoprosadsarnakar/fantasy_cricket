@@ -1,8 +1,3 @@
-/*
-  Author: Rangan Roy
-  Purpose: Testing
-*/
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/player.dart';
 
