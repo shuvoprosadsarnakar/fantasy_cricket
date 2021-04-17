@@ -2,7 +2,6 @@ import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/utils/crud_status_util.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +28,10 @@ class PlayerAddEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlayerAddEditCubit, CrudStatus>(
+    return BlocBuilder<PlayerAddEditCubit, AddEditStatus>(
       bloc: _playerAddEditCubit,
-      builder: (BuildContext context, CrudStatus crudStatus) {
-        if (_playerAddEditCubit.state == CrudStatus.loading) {
+      builder: (BuildContext context, AddEditStatus addEditStatus) {
+        if (_playerAddEditCubit.state == AddEditStatus.loading) {
           return Loading();
         } else {
           return Scaffold(
@@ -103,13 +102,15 @@ class PlayerAddEdit extends StatelessWidget {
             hintText: 'Enter name',
           ),
           validator: (String value) {
-            if (value.isEmpty) {
+            if (value == null || value.trim() == '') {
               return 'Player name is required.';
             } else {
               return null;
             }
           },
-          onSaved: (String value) => _playerAddEditCubit.player.name = value,
+          onSaved: (String value) {
+            _playerAddEditCubit.player.name = value.trim();
+          },
         ),
       ],
     );
@@ -179,17 +180,18 @@ class PlayerAddEdit extends StatelessWidget {
       onPressed: () async {
         await _playerAddEditCubit.addUpdatePlayer();
 
-        // _playerAddEditCubit.state will be null if form has validation error
-        if(_playerAddEditCubit.state != null) {
-          String snackBarMsg; // snack bar message
+        // _playerAddEditCubit.state will be AddEditStatus.notValid  if form has 
+        // validation error
+        if(_playerAddEditCubit.state != AddEditStatus.notValid) {
+          String snackBarMsg;
 
-          if (_playerAddEditCubit.state == CrudStatus.added) {
+          if (_playerAddEditCubit.state == AddEditStatus.added) {
             snackBarMsg = 'Player added successfully.';
-          } else if (_playerAddEditCubit.state == CrudStatus.updated) {
+          } else if (_playerAddEditCubit.state == AddEditStatus.updated) {
             snackBarMsg = 'Player updated successfully.';
-          } else if (_playerAddEditCubit.state == CrudStatus.failed) {
+          } else if (_playerAddEditCubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';
-          } else if (_playerAddEditCubit.state == CrudStatus.duplicate) {
+          } else if (_playerAddEditCubit.state == AddEditStatus.duplicate) {
             snackBarMsg = 'Player name already exist.';
           }
 

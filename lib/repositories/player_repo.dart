@@ -1,15 +1,11 @@
-/*
-  Author: Rangan Roy
-  Purpose: Testing
-*/
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/player.dart';
 
 abstract class PlayerRepo {
   static final CollectionReference _playerCollection =
-      Firestore.instance.collection('player');
+      Firestore.instance.collection('players');
   static DocumentSnapshot lastDocument;
+  
   // returns true if player's name is not taken already, false otherwise
   static Future<bool> checkPlayerName(Player player) async {
     QuerySnapshot querySanpshot = await _playerCollection
@@ -17,15 +13,16 @@ abstract class PlayerRepo {
         .getDocuments();
 
     if (querySanpshot.documents.isEmpty ||
-        // Name field is unique, so we can get only one document (even if player's
-        // name is changed to update) that matches. Now, if the matched document's
-        // id matches then there is no other player with the same name.
+        // Name field is unique, so we can get only one document (even if 
+        // player's name is changed to update) that matches. Now, if the matched 
+        // document's id matches then there is no other player with the same 
+        // name.
         (player.id != null &&
             querySanpshot.documents[0].documentID == player.id)) {
       return true;
+    } else {
+      return false;
     }
-
-    return false;
   }
 
   static Future<void> addPlayer(Player player) async {
@@ -66,5 +63,9 @@ abstract class PlayerRepo {
           .map((doc) => Player.fromMap(doc.data, doc.documentID))
           .toList();
     }
+  }
+
+  static Future<QuerySnapshot> getAllPlayers() async {
+    return await _playerCollection.getDocuments();
   }
 }

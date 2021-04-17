@@ -1,5 +1,7 @@
+import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
+import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
@@ -20,11 +22,7 @@ class MyApp extends StatelessWidget {
       home: TeamAddEdit(team: Team(
         id: '6IU4zbW3psbQaY9LsQ1C',
         name: 'Bangladesh',
-        playerIds: [
-          'RvLeWz8YfH8yhjiyaYIY',
-          'Vhixtg7bmtnTlgiFZomX',
-          'sPtHzti2gAyG5vNhpw2w',
-        ],  
+        playerIds: ['RvLeWz8YfH8yhjiyaYIY'],  
       )),
       theme: ThemeData(
         brightness: Brightness.light,
