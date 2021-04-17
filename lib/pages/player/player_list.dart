@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_state.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
+import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,15 +103,24 @@ class PostWidget extends StatelessWidget {
       direction: DismissDirection.endToStart,
       key: UniqueKey(),
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: ColorPallate.pomegranate,
-          backgroundImage: NetworkImage(
-              "https://cdn.iconscout.com/icon/free/png-512/football-player-1426973-1208513.png"),
-        ),
-        title: Text(player.name ?? ""),
-        subtitle: Text(player.role ?? ""),
-        dense: true,
-      ),
+          leading: CircleAvatar(
+            backgroundColor: ColorPallate.pomegranate,
+            backgroundImage: NetworkImage(
+                "https://cdn.iconscout.com/icon/free/png-512/football-player-1426973-1208513.png"),
+          ),
+          title: Text(player.name ?? ""),
+          subtitle: Text(player.role ?? ""),
+          dense: true,
+          trailing: IconButton(
+            icon: Icon(Icons.edit),
+            color: ColorPallate.pomegranate,
+            onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PlayerAddEdit(player: player)),
+            );
+            },
+          )),
       background: Container(
         color: Colors.red,
         padding: EdgeInsets.only(right: 10),
@@ -121,14 +131,8 @@ class PostWidget extends StatelessWidget {
         ),
       ),
       onDismissed: (dismissDirection) {
-        if (dismissDirection == DismissDirection.startToEnd) {
-          // Player edit logic/function needs to be done here
-          print("Edit player");
-        } else {
-          // Deletes the player
           BlocProvider.of<PlayerBloc>(context).add(PlayerDelete(player));
-          print("Delete player");
-        }
+          print("Player deleted");
       },
     );
   }

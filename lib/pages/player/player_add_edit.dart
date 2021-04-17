@@ -17,12 +17,10 @@ class PlayerAddEdit extends StatelessWidget {
 
     // add dropdown items of role field to 'playerRoleDropdownList' property
     playerRoles.forEach((String value) {
-      _playerAddEditCubit.playerRoleDropdownList.add(
-        DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        )
-      );
+      _playerAddEditCubit.playerRoleDropdownList.add(DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      ));
     });
   }
 
@@ -35,8 +33,10 @@ class PlayerAddEdit extends StatelessWidget {
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text(_playerAddEditCubit.player.id == null ? 
-              'Add Player' : 'Update Player')),
+            appBar: AppBar(
+              title: Text(_playerAddEditCubit.player.id == null
+                    ? 'Add Player'
+                    : 'Update Player')),
             body: Form(
               key: _playerAddEditCubit.formKey,
               child: ListView(
@@ -150,7 +150,8 @@ class PlayerAddEdit extends StatelessWidget {
                   return null;
                 }
               },
-              onSaved: (String value) => _playerAddEditCubit.player.role = value,
+              onSaved: (String value) =>
+                  _playerAddEditCubit.player.role = value,
             );
           },
         ),
@@ -177,7 +178,7 @@ class PlayerAddEdit extends StatelessWidget {
         await _playerAddEditCubit.addUpdatePlayer();
 
         // _playerAddEditCubit.state will be null if form has validation error
-        if(_playerAddEditCubit.state != null) {
+        if (_playerAddEditCubit.state != null) {
           String snackBarMsg; // snack bar message
 
           if (_playerAddEditCubit.state == CrudStatus.added) {
