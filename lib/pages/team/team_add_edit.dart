@@ -3,10 +3,15 @@ import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/utils/team_util.dart';
+import 'package:fantasy_cricket/widgets/form_field_title.dart';
+import 'package:fantasy_cricket/widgets/form_submit_button.dart';
+import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Stateful widget is taken instead of Stateless to dispose form field 
+// controllers
 class TeamAddEdit extends StatefulWidget {
   final Team team;
 
@@ -62,15 +67,9 @@ class _TeamAddEditState extends State<TeamAddEdit> {
                   // team name field
                   getNameField(),
                   if(_teamAddEditCubit.state == AddEditStatus.validationError)
-                    Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Text(
-                        'Team name is required',
-                        style: TextStyle(
-                          color: Theme.of(context).errorColor,
-                          fontSize: 12,
-                        ),
-                      ),
+                    getFieldMsg(
+                      'Team name is required.',
+                      Theme.of(context).errorColor,
                     ),
                   SizedBox(height: 15),
 
@@ -83,9 +82,8 @@ class _TeamAddEditState extends State<TeamAddEdit> {
                         children: [
                           // add player textfield
                           getAddPlayerField(),
-                          SizedBox(height: 5),
                           getAddPlayerFieldMsg(context),
-                          SizedBox(height: 20),
+                          SizedBox(height: 15),
                         ],
                       ),
                       // search results
@@ -113,43 +111,26 @@ class _TeamAddEditState extends State<TeamAddEdit> {
     );
   }
 
-  Padding getFieldTitle(String title) {
-    return Padding(
-      padding: EdgeInsets.all(4),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: ColorPallate.ebonyClay,
-          fontSize: 20,
-        ),
-      ),
-    );
-  }
-
   Column getNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getFieldTitle('Name'),
-        TextFormField(
-          controller: _teamAddEditCubit.teamNameController,
-          cursorColor: Colors.black38,
-          decoration: InputDecoration(
-            fillColor: ColorPallate.mercury,
-            filled: true,
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 6,
-              horizontal: 6,
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            hintStyle: TextStyle(fontSize: 16),
-            hintText: 'Enter team name',
-          ),
-        ),
+        FormFieldTitle('Name'),
+        FormTextField(controller: _teamAddEditCubit.teamNameController),
       ],
+    );
+  }
+
+  Padding getFieldMsg(String msg, Color color) {
+    return Padding(
+      padding: EdgeInsets.all(4),
+      child: Text(
+        msg,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+        ),
+      ),
     );
   }
 
@@ -157,70 +138,32 @@ class _TeamAddEditState extends State<TeamAddEdit> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getFieldTitle('Add Player'),
-        TextFormField(
+        FormFieldTitle('Add Player'),
+        FormTextField(
           controller: _teamAddEditCubit.addPlayerController,
-          cursorColor: Colors.black38,
-          decoration: InputDecoration(
-            fillColor: ColorPallate.mercury,
-            filled: true,
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 6,
-              horizontal: 6,
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            hintStyle: TextStyle(fontSize: 16),
-            hintText: 'Enter player name',
-          ),
-          onChanged: (String value) {
-            _teamAddEditCubit.searchPlayer(value);
-          },
+          onChanged: (String value) => _teamAddEditCubit.searchPlayer(value),
         ),
       ],
     );
   }
 
   Padding getAddPlayerFieldMsg(BuildContext context) {
-    String msg;
-    Color msgColor;
-
     if(_teamAddEditCubit.playersNeeded <= 0) {
-      msg = '${_teamAddEditCubit.addedPlayers.length} players added.';
-      msgColor = Colors.grey;
+      return getFieldMsg(
+        '${_teamAddEditCubit.addedPlayers.length} players added.',
+        Colors.grey,
+      );
     } else {
-      msg = '${_teamAddEditCubit.playersNeeded} more players to add.';
-      msgColor = Theme.of(context).errorColor;
+      return getFieldMsg(
+        '${_teamAddEditCubit.playersNeeded} more players to add.',
+        Theme.of(context).errorColor,
+      );
     }
-    
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4),
-      child: Text(
-        msg,
-        style: TextStyle(
-          color: msgColor,
-          fontSize: 12,
-        ),
-      ),
-    );
   }
 
-  TextButton getFormSubmitButton(BuildContext context) {
-    return TextButton(
-      child: Text(
-        'Submit',
-        style: TextStyle(fontSize: 20),
-      ),
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.all(15),
-        primary: Colors.white,
-        backgroundColor: ColorPallate.pomegranate,
-      ),
+  FormSubmitButton getFormSubmitButton(BuildContext context) {
+    return FormSubmitButton(
+      title: 'Submit',
       onPressed: () async {
         await _teamAddEditCubit.addUpdateTeam();
 

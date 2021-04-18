@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/widgets/textfield.dart';
+import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:flutter/material.dart';
 
 class FantasyTab extends StatelessWidget {
@@ -7,7 +7,7 @@ class FantasyTab extends StatelessWidget {
     return Container(
       child: Center(child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: TextFieldWidget(),
+        child: FormTextField(),
       ))
       
     );

@@ -1,32 +1,28 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldWidget extends StatelessWidget {
-  final Key fieldKey;
-  final int maxLength;
+class FormTextField extends StatelessWidget {
   final String hintText;
-  final String labelText;
-  final String helperText;
-  final FormFieldSetter<String> onSaved;
+  final String initialValue;
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
   final FormFieldValidator<String> validator;
-  final ValueChanged<String> onFieldSubmitted;
+  final FormFieldSetter<String> onSaved;
 
-  const TextFieldWidget(
-      {Key key,
-      this.fieldKey,
-      this.maxLength,
-      this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted})
-      : super(key: key);
+  const FormTextField({
+    this.hintText,
+    this.initialValue,
+    this.controller,
+    this.onChanged,
+    this.validator,
+    this.onSaved,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: "",
+      initialValue: initialValue,
+      controller: controller,
       cursorColor: Colors.black38,
       decoration: InputDecoration(
         fillColor: ColorPallate.mercury,
@@ -42,6 +38,7 @@ class TextFieldWidget extends StatelessWidget {
         hintStyle: TextStyle(fontSize: 16),
         hintText: hintText,
       ),
+      onChanged: onChanged,
       validator: validator,
       onSaved: onSaved,
     );

@@ -14,10 +14,6 @@ class PlayerAddEditCubit extends Cubit<AddEditStatus> {
   // variable for managing state of role field
   final PlayerRoleCubit playerRoleCubit = PlayerRoleCubit();
   
-  // dropdown item's list for role field, items will be added from 
-  // PlayerAddEdit() screen
-  final List<DropdownMenuItem<String>> playerRoleDropdownList = [];
-  
   // A player object will be paseed to PlayerAddEdit() screen if admin want to  
   // edit and that object will be set here. If user want to add player then a 
   // new player object will be created and set into this variable. This obect is

@@ -24,11 +24,7 @@ class MyApp extends StatelessWidget {
       //   create:  (context) => PlayerBloc()..add(PlayerFetched()),
       //   child: PlayerList(),
       // ),
-      home: TeamAddEdit(team: Team(
-        id: '6IU4zbW3psbQaY9LsQ1C',
-        name: 'Bangladesh',
-        playerIds: ['RvLeWz8YfH8yhjiyaYIY'],  
-      )),
+      home: PlayerAddEdit(),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,
