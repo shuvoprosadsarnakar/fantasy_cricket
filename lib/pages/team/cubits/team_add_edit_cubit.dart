@@ -15,7 +15,7 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   final TextEditingController addPlayerController = TextEditingController();
   final TextEditingController teamNameController = TextEditingController();
 
-  // A team object will be paseed to TeamAddEdit() screen if admin want to edit 
+  // A team object will be paseed to TeamAddEdit() screen if admin want to edit
   // and that object will be set here. If user want to add player then a new
   // player object will be created and set into this variable. This obect is
   // used to show team information on TeamAddEdit() screen and save team
@@ -30,29 +30,29 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   // player list ui
   final List<Player> addedPlayers = [];
 
-  // all name matched player when searching will be added here then the list 
+  // all name matched player when searching will be added here then the list
   // will be shown as search result
   final List<Player> matchedPlayers = [];
 
   // this wil be used for generating add player field msg on the ui
   int get playersNeeded => 11 - addedPlayers.length;
-  
+
   // argument 'team' will be null if admin is creating team
   void init(Team team) {
-    if(team != null) {
+    if (team != null) {
       this.team.id = team.id;
       this.team.name = teamNameController.text = team.name;
       this.team.playerIds = team.playerIds;
     } else {
-      // this is done to add player ids to the list without checking it's null 
+      // this is done to add player ids to the list without checking it's null
       // or not
       this.team.playerIds = [];
     }
 
-    // emit state to show progress indicator because all players nedded to be 
+    // emit state to show progress indicator because all players nedded to be
     // fetched from database
     emit(AddEditStatus.loading);
-    
+
     // get all players from db and set them to 'allPlayers' list and add team
     // players to 'addedPlayers' to show team players on the ui
     setAllPlayers();
@@ -63,22 +63,23 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   Future<void> setAllPlayers() async {
     try {
       QuerySnapshot snapshot = await PlayerRepo.getAllPlayers();
-      
+
       snapshot.docs.forEach((DocumentSnapshot snapshot) {
         allPlayers.add(Player.fromMap(snapshot.data(), snapshot.id));
       });
-      
+
       // set 'addedPlayers' to show team players list on the ui
       setAddedPlayers();
-      
+
       emit(null);
-    } catch(error) {
+    } catch (error) {
+      print(error);
       // because of this state only a message will be shown on the ui, not form
       emit(AddEditStatus.fetchError);
     }
   }
 
-  // setting 'addedPlayers' from 'allPlayers' by matching ids which are taken 
+  // setting 'addedPlayers' from 'allPlayers' by matching ids which are taken
   // from 'team.playerIds'
   void setAddedPlayers() {
     Player player;
@@ -89,7 +90,6 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
     });
   }
 
-
   // this function deletes player from team, one at a time
   void deletePlayer(Player player) {
     team.playerIds.remove(player.id);
@@ -97,9 +97,9 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
     // emiiting same state doesn't rebuild ui, that's why different state will
     // be emitted everytime from here
-    if(state == AddEditStatus.playerDeleted)
+    if (state == AddEditStatus.playerDeleted)
       emit(null);
-    else 
+    else
       emit(AddEditStatus.playerDeleted);
   }
 
@@ -111,7 +111,7 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
     // emiiting same state doesn't rebuild ui, that's why different state will
     // be emitted everytime from here
-    if(state == AddEditStatus.playerAdded) {
+    if (state == AddEditStatus.playerAdded) {
       emit(null);
     } else {
       emit(AddEditStatus.playerAdded);
@@ -122,17 +122,17 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   void searchPlayer(String name) {
     matchedPlayers.clear(); // clear previous search matched players
 
-    if(name != null && name != '') {
+    if (name != null && name != '') {
       name = name.toLowerCase();
       allPlayers.forEach((Player player) {
-        if(player.name.toLowerCase().contains(name) 
-          && (team.playerIds.contains(player.id) == false)) {
+        if (player.name.toLowerCase().contains(name) &&
+            (team.playerIds.contains(player.id) == false)) {
           matchedPlayers.add(player);
         }
       });
     }
 
-    if(state == AddEditStatus.searched) {
+    if (state == AddEditStatus.searched) {
       emit(null);
     } else {
       emit(AddEditStatus.searched);
@@ -141,8 +141,8 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
   // add or update team to database
   Future<void> addUpdateTeam() async {
-    if(teamNameController.text == null || teamNameController.text.trim() != '') 
-    {
+    if (teamNameController.text == null ||
+        teamNameController.text.trim() != '') {
       team.name = teamNameController.text.trim();
 
       // after emitting this state a progress animation will be shown on the ui
@@ -150,9 +150,9 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
       // try catch block is used for handeling db functions exceptions
       try {
-        if(await TeamRepo.checkTeamName(team)) {
+        if (await TeamRepo.checkTeamName(team)) {
           print('rangan');
-          if(team.id == null) {
+          if (team.id == null) {
             await TeamRepo.addTeam(team);
 
             team.playerIds.clear();
@@ -160,21 +160,21 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
             teamNameController.clear();
             addPlayerController.clear();
 
-            // after emitting this state TeamAddEdit() screen form will be shown 
+            // after emitting this state TeamAddEdit() screen form will be shown
             // again with empty form fields and a success message will be shown
             emit(AddEditStatus.added);
           } else {
             await TeamRepo.updateTeam(team);
             addPlayerController.clear();
-            
-            // after emitting this state TeamAddEdit() screen form will be shown 
+
+            // after emitting this state TeamAddEdit() screen form will be shown
             // again with past form values and a success message will be shown
             emit(AddEditStatus.updated);
           }
         } else {
           emit(AddEditStatus.duplicate);
-        } 
-      } catch(error) {
+        }
+      } catch (error) {
         // after emitting this state the TeamAddEdit() screen form will be shown
         // again with past form values and an error message will be shown
         emit(AddEditStatus.failed);
