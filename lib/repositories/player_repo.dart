@@ -3,22 +3,22 @@ import 'package:fantasy_cricket/models/player.dart';
 
 abstract class PlayerRepo {
   static final CollectionReference _playerCollection =
-      Firestore.instance.collection('players');
+      FirebaseFirestore.instance.collection('players');
   static DocumentSnapshot lastDocument;
   
   // returns true if player's name is not taken already, false otherwise
   static Future<bool> checkPlayerName(Player player) async {
     QuerySnapshot querySanpshot = await _playerCollection
         .where('name', isEqualTo: player.name)
-        .getDocuments();
+        .get();
 
-    if (querySanpshot.documents.isEmpty ||
+    if (querySanpshot.docs.isEmpty ||
         // Name field is unique, so we can get only one document (even if 
         // player's name is changed to update) that matches. Now, if the matched 
         // document's id matches then there is no other player with the same 
         // name.
         (player.id != null &&
-            querySanpshot.documents[0].documentID == player.id)) {
+            querySanpshot.docs[0].id == player.id)) {
       return true;
     } else {
       return false;
@@ -30,11 +30,11 @@ abstract class PlayerRepo {
   }
 
   static Future<void> updatePlayer(Player player) async {
-    await _playerCollection.document(player.id).updateData(player.toMap());
+    await _playerCollection.doc(player.id).update(player.toMap());
   }
 
   static Future<bool> deletePlayer(Player player) async {
-    await _playerCollection.document(player.id).delete().whenComplete(() {
+    await _playerCollection.doc(player.id).delete().whenComplete(() {
       print("deleted");
       return true;
     }).onError((error, stackTrace) {
@@ -46,26 +46,26 @@ abstract class PlayerRepo {
   static Future<List<Player>> fetchPlayers(int startIndex, int limit) async {
     if (startIndex == 0) {
       QuerySnapshot documentList =
-          await _playerCollection.orderBy("name").limit(limit).getDocuments();
-      lastDocument = documentList.documents.last;
+          await _playerCollection.orderBy("name").limit(limit).get();
+      lastDocument = documentList.docs.last;
 
-      return documentList.documents
-          .map((doc) => Player.fromMap(doc.data, doc.documentID))
+      return documentList.docs
+          .map((doc) => Player.fromMap(doc.data(), doc.id))
           .toList();
     } else {
       QuerySnapshot documentList = await _playerCollection
           .orderBy("name")
           .limit(limit)
           .startAfterDocument(lastDocument)
-          .getDocuments();
-      lastDocument = documentList.documents.last;
-      return documentList.documents
-          .map((doc) => Player.fromMap(doc.data, doc.documentID))
+          .get();
+      lastDocument = documentList.docs.last;
+      return documentList.docs
+          .map((doc) => Player.fromMap(doc.data(), doc.id))
           .toList();
     }
   }
 
   static Future<QuerySnapshot> getAllPlayers() async {
-    return await _playerCollection.getDocuments();
+    return await _playerCollection.get();
   }
 }

@@ -64,8 +64,8 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
     try {
       QuerySnapshot snapshot = await PlayerRepo.getAllPlayers();
       
-      snapshot.documents.forEach((DocumentSnapshot snapshot) {
-        allPlayers.add(Player.fromMap(snapshot.data, snapshot.documentID));
+      snapshot.docs.forEach((DocumentSnapshot snapshot) {
+        allPlayers.add(Player.fromMap(snapshot.data(), snapshot.id));
       });
       
       // set 'addedPlayers' to show team players list on the ui
