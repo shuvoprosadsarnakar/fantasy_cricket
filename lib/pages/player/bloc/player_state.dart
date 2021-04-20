@@ -15,10 +15,12 @@ class PlayerFailure extends PlayerState {}
 class PlayerSuccess extends PlayerState {
   final List<Player> players;
   final bool hasReachedMax;
+  final String searchKey;
 
   const PlayerSuccess({
     this.players,
     this.hasReachedMax,
+    this.searchKey,
   });
 
   PlayerSuccess copyWith({
@@ -32,9 +34,9 @@ class PlayerSuccess extends PlayerState {
   }
 
   @override
-  List<Object> get props => [players, hasReachedMax];
+  List<Object> get props => [players, hasReachedMax,searchKey];
 
   @override
   String toString() =>
-      'PlayerSuccess { Players: ${players.length}, hasReachedMax: $hasReachedMax }';
+      'PlayerSuccess { Players: ${players.length}, hasReachedMax: $hasReachedMax , searchKey: $searchKey}';
 }

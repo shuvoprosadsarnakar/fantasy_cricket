@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/repositories/player_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
@@ -51,11 +50,24 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         yield PlayerFailure();
       }
     }
-    if (event is PlayerDelete) {
-     PlayerRepo.deletePlayer(event.player);
+    if (event is PlayerSearched ) {
+      print("Player searched 2");
+      if (currentState is PlayerSuccess) {
+        final players =
+            await PlayerRepo.searchPlayers(currentState.searchKey, limit);
+        if (players.length < limit)
+          yield PlayerSuccess(
+              players: players, hasReachedMax: true);
+        else
+          yield PlayerSuccess(
+              players: players, hasReachedMax: false);
+      }
     }
-  }
+    if (event is PlayerDelete) {
+      PlayerRepo.deletePlayer(event.player);
+    }
 
+  }
 
   bool _hasReachedMax(PlayerState state) =>
       state is PlayerSuccess && state.hasReachedMax;
