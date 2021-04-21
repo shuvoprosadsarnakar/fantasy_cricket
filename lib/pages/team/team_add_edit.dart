@@ -1,7 +1,6 @@
 import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
-import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/utils/team_util.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
@@ -26,7 +25,7 @@ class _TeamAddEditState extends State<TeamAddEdit> {
 
   @override
   void initState() {
-    _teamAddEditCubit.init(widget.team);
+    _teamAddEditCubit.setTeam(widget.team);
     super.initState();
   }
 
@@ -56,7 +55,6 @@ class _TeamAddEditState extends State<TeamAddEdit> {
             appBar: AppBar(title: Text(_teamAddEditCubit.team.id == null ? 
               'Add Team' : 'Update Team')),
             body: Form(
-              autovalidateMode: AutovalidateMode.disabled,
               key: _teamAddEditCubit.formKey,
               child: ListView(
                 padding: EdgeInsets.symmetric(

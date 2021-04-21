@@ -1,8 +1,7 @@
 import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
-import 'package:fantasy_cricket/pages/player/cubits/player_role_cubit.dart';
-import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
+import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
@@ -14,16 +13,14 @@ class PlayerAddEdit extends StatelessWidget {
   // variable for managing state of this screen
   final PlayerAddEditCubit _playerAddEditCubit = PlayerAddEditCubit();
   
-  // dropdown item's list for role field, items will be added from 
-  final List<DropdownMenuItem<String>> _playerRoleDropdownList = [];
+  // role dropdown list for player role dropdown field
+  final List<DropdownMenuItem<String>> _roleDropdownList = [];
 
   PlayerAddEdit({Player player}) {
-    // to show player info on the form save player into '_playerAddEditCubit'
     _playerAddEditCubit.setPlayer(player);
 
-    // add dropdown items of role field to 'playerRoleDropdownList' property
     playerRoles.forEach((String value) {
-      _playerRoleDropdownList.add(DropdownMenuItem<String>(
+      _roleDropdownList.add(DropdownMenuItem<String>(
         value: value,
         child: Text(value),
       ));
@@ -51,11 +48,11 @@ class PlayerAddEdit extends StatelessWidget {
                   horizontal: 45,
                 ),
                 children: [
-                  getNameField(),
+                  getNameFieldWithTitle(),
                   SizedBox(height: 15),
-                  getRoleField(),
+                  getRoleFieldWithTitle(),
                   SizedBox(height: 20),
-                  getSubmitButton(context),
+                  getFormSubmitButton(context),
                 ],
               ),
             ),
@@ -65,8 +62,7 @@ class PlayerAddEdit extends StatelessWidget {
     );
   }
 
-  // returns name field with field title
-  Column getNameField() {
+  Column getNameFieldWithTitle() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,53 +85,29 @@ class PlayerAddEdit extends StatelessWidget {
     );
   }
 
-  // returns role field with field title
-  Column getRoleField() {
+  Column getRoleFieldWithTitle() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormFieldTitle('Role'),
-        BlocBuilder<PlayerRoleCubit, String>(
-          bloc: _playerAddEditCubit.playerRoleCubit,
-          builder: (BuildContext context, String state) {
-            return DropdownButtonFormField<String>(
-              value: _playerAddEditCubit.playerRoleCubit.state,
-              isExpanded: true,
-              decoration: InputDecoration(
-                fillColor: ColorPallate.mercury,
-                filled: true,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 6,
-                  horizontal: 6,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-              hint: Text('Select a player role'),
-              items: _playerRoleDropdownList,
-              onChanged: (String value) {
-                _playerAddEditCubit.playerRoleCubit.emitState(value);
-              },
-              validator: (String value) {
-                if (value == null) {
-                  return 'Player role is required.';
-                } else {
-                  return null;
-                }
-              },
-              onSaved: (String value) =>
-                  _playerAddEditCubit.player.role = value,
-            );
+        FormDropdownField(
+          value: _playerAddEditCubit.player.role,
+          hint: Text('Select a player role'),
+          items: _roleDropdownList,
+          validator: (dynamic value) {
+            if (value == null) {
+              return 'Player role is required.';
+            } else {
+              return null;
+            }
           },
+          onSaved: (dynamic value) => _playerAddEditCubit.player.role = value,
         ),
       ],
     );
   }
 
-  // returns submit button
-  FormSubmitButton getSubmitButton(BuildContext context) {
+  FormSubmitButton getFormSubmitButton(BuildContext context) {
     return FormSubmitButton(
       title: 'Submit',
       onPressed: () async {

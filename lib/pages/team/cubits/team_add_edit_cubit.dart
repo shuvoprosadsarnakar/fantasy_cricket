@@ -38,7 +38,7 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   int get playersNeeded => 11 - addedPlayers.length;
 
   // argument 'team' will be null if admin is creating team
-  void init(Team team) {
+  void setTeam(Team team) {
     if (team != null) {
       this.team.id = team.id;
       this.team.name = teamNameController.text = team.name;

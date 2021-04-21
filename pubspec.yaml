@@ -23,17 +23,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # firebase
   firebase_core: ^1.0.3
   firebase_analytics: 8.0.0
-
   cloud_firestore: ^1.0.5
-
   firebase_auth: ^1.1.0
   google_sign_in: 5.0.2
 
+  # bloc
   rxdart: 0.26.0
   equatable: ^2.0.0
   flutter_bloc: ^7.0.0
+
+  # datetime picker
+  date_time_picker: "^2.0.0"
 
 dev_dependencies:
   flutter_test:

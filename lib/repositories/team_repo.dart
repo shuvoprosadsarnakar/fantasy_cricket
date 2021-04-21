@@ -28,4 +28,12 @@ abstract class TeamRepo {
   static Future<void> updateTeam(Team team) async {
     await _teamCollection.doc(team.id).update(team.toMap());
   }
+
+  static Future<void> fetchAllTeams(List<Team> allTeams) async {
+    QuerySnapshot snapshot = await _teamCollection.get();
+
+    snapshot.docs.forEach((QueryDocumentSnapshot snapshot) {
+      allTeams.add(Team.fromMap(snapshot.data(), snapshot.id));
+    });
+  }
 }

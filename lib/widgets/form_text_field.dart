@@ -5,6 +5,7 @@ class FormTextField extends StatelessWidget {
   final String hintText;
   final String initialValue;
   final TextEditingController controller;
+  final TextInputType keyboardType;
   final ValueChanged<String> onChanged;
   final FormFieldValidator<String> validator;
   final FormFieldSetter<String> onSaved;
@@ -13,6 +14,7 @@ class FormTextField extends StatelessWidget {
     this.hintText,
     this.initialValue,
     this.controller,
+    this.keyboardType = TextInputType.name,
     this.onChanged,
     this.validator,
     this.onSaved,
@@ -23,8 +25,10 @@ class FormTextField extends StatelessWidget {
     return TextFormField(
       initialValue: initialValue,
       controller: controller,
+      keyboardType: keyboardType,
       cursorColor: Colors.black38,
       decoration: InputDecoration(
+        errorMaxLines: 5, // to avoid validation message ellipsis
         fillColor: ColorPallate.mercury,
         filled: true,
         contentPadding: EdgeInsets.symmetric(

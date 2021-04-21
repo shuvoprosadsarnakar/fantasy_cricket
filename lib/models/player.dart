@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-// player document keys
+// keys
 const String NAME_KEY = 'name';
 const String ROLE_KEY = 'role';
 
