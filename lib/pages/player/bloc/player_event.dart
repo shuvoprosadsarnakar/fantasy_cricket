@@ -8,11 +8,20 @@ abstract class PlayerEvent extends Equatable {
 
 class PlayerFetched extends PlayerEvent {}
 
+class PlayerSearched extends PlayerEvent {
+  final String searchKeyWord;
+
+  PlayerSearched(this.searchKeyWord);
+
+  @override
+  List<Object> get props => [searchKeyWord];
+}
+
 class PlayerDelete extends PlayerEvent {
   final Player player;
 
   PlayerDelete(this.player);
-  
+
   @override
   List<Object> get props => [player];
 }

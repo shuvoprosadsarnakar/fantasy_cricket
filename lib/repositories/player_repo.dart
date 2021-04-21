@@ -5,20 +5,18 @@ abstract class PlayerRepo {
   static final CollectionReference _playerCollection =
       FirebaseFirestore.instance.collection('players');
   static DocumentSnapshot lastDocument;
-  
+
   // returns true if player's name is not taken already, false otherwise
   static Future<bool> checkPlayerName(Player player) async {
-    QuerySnapshot querySanpshot = await _playerCollection
-        .where('name', isEqualTo: player.name)
-        .get();
+    QuerySnapshot querySanpshot =
+        await _playerCollection.where('name', isEqualTo: player.name).get();
 
     if (querySanpshot.docs.isEmpty ||
-        // Name field is unique, so we can get only one document (even if 
-        // player's name is changed to update) that matches. Now, if the matched 
-        // document's id matches then there is no other player with the same 
+        // Name field is unique, so we can get only one document (even if
+        // player's name is changed to update) that matches. Now, if the matched
+        // document's id matches then there is no other player with the same
         // name.
-        (player.id != null &&
-            querySanpshot.docs[0].id == player.id)) {
+        (player.id != null && querySanpshot.docs[0].id == player.id)) {
       return true;
     } else {
       return false;
@@ -33,9 +31,9 @@ abstract class PlayerRepo {
     await _playerCollection.doc(player.id).update(player.toMap());
   }
 
-  static Future<bool> deletePlayer(Player player) async {
+  static Future<void> deletePlayer(Player player) async {
     await _playerCollection.doc(player.id).delete().whenComplete(() {
-      print("deleted");
+      print("player deleted");
       return true;
     }).onError((error, stackTrace) {
       print(error);
@@ -62,6 +60,21 @@ abstract class PlayerRepo {
       return documentList.docs
           .map((doc) => Player.fromMap(doc.data(), doc.id))
           .toList();
+    }
+  }
+
+  static Future<List<Player>> searchPlayers(String searchKey, int limit) async {
+    try {
+      QuerySnapshot documentList = await _playerCollection
+          .where('name', isGreaterThanOrEqualTo:"wa")
+          .where('name', isLessThan:"wb")
+          .get();
+      print(documentList.docs.first.data());
+      return documentList.docs
+          .map((doc) => Player.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (error) {
+      print(error);
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit_2.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/routing/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,17 +28,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      // home: BlocProvider(
-      //   create:  (context) => PlayerBloc()..add(PlayerFetched()),
-      //   child: PlayerList(),
-      // ),
-      home: SeriesAddEdit(),
-     
+       onGenerateRoute: AppRouter.onGenerateRoute,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,
         accentColor: ColorPallate.pomegranate,
-        //canvasColor: ColorPallate.mercury,
       ),
       debugShowCheckedModeBanner: false,
     );
