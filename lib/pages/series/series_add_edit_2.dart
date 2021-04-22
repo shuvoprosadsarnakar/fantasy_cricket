@@ -210,7 +210,7 @@ class SeriesAddEdit2 extends StatelessWidget {
       children: [
         // remove button
         if(_seriesAddEditCubit.series.matchExcerpts.length > 1 && 
-          _seriesAddEditCubit.series.matchExcerpts.last.id == null) 
+          _seriesAddEditCubit.series.matchExcerpts.last.status == null) 
         Row(children: [
           IconButton(
             icon: Icon(Icons.remove),

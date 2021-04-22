@@ -8,6 +8,7 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
+import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit_2.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-       onGenerateRoute: AppRouter.onGenerateRoute,
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      home: SeriesAddEdit(SeriesAddEditCubit(Series())),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,

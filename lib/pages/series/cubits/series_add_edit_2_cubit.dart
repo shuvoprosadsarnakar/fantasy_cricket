@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/models/match_excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
+import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
@@ -9,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
+  // this variable is used to save and validate the second form
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  
   // this contains the refernece of object series that is already built in the 
   // first form/screen
   final Series series;
@@ -17,9 +21,6 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
   // db and all team objects will added to [allTeams] variable. This variable 
   // will be used to create dropdown list for team dropdown fields.
   final List<Team> allTeams = [];
-  
-  // this variable is used to save and validate the second form
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
   SeriesAddEdit2Cubit(this.series) : super(null) {
     emit(AddEditStatus.loading);
@@ -59,14 +60,14 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
         if(await SeriesRepo.checkSeriesName(series)) {
           if(series.id == null) {
             await SeriesRepo.addSeries(series);
-            emit(AddEditStatus.added);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (BuildContext context) {
-                return SeriesAddEdit();
+                return SeriesAddEdit(SeriesAddEditCubit(Series()));
               }),
               ModalRoute.withName('/'),
             );
+            emit(AddEditStatus.added);
           } else {
             await SeriesRepo.updateSeries(series);
             emit(AddEditStatus.updated);
@@ -76,8 +77,6 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
           emit(AddEditStatus.duplicate);
         }
       } catch(error) {
-        print('RR');
-        print(error);
         emit(AddEditStatus.failed);
       }
     } else {

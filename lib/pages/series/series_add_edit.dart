@@ -16,11 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
 class SeriesAddEdit extends StatelessWidget {
-  final SeriesAddEditCubit _seriesAddEditCubit = SeriesAddEditCubit();
+  // variable to manage the state of this screen
+  final SeriesAddEditCubit _seriesAddEditCubit;
   
-  SeriesAddEdit({Series series}) {
-    _seriesAddEditCubit.setSeries(series);
-  }
+  SeriesAddEdit(this._seriesAddEditCubit);
 
   @override
   Widget build(BuildContext context) {

@@ -7,28 +7,20 @@ import 'package:fantasy_cricket/utils/series_util.dart';
 import 'package:flutter/material.dart';
 
 class SeriesAddEditCubit extends Cubit<AddEditStatus> {
-  SeriesAddEditCubit() : super(null);
-
-  // this variable's properites will be set by [setSeries] function
-  final Series series = Series();
+  final Series series;
+  
+  SeriesAddEditCubit(this.series) : super(null) {
+    if(series.id == null) {
+      // these assignments are needed to build the [SeriesAddEdit] & 
+      // [SeriesAddEdit2] UI
+      series.chipsDistributes = [ChipsDistribute()];
+      series.times = Times();
+      series.matchExcerpts = [MatchExcerpt(teamIds: [null, null])];
+    }
+  }
   
   // this variable is used to save and validate the first form
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  // this function sets [series] variable properties on the basis of admin is 
-  // creating or editing series 
-  void setSeries(Series series) {
-    if(series != null) {
-      this.series.name = series.name;
-      this.series.chipsDistributes = series.chipsDistributes;
-      this.series.times = series.times;
-      this.series.matchExcerpts = series.matchExcerpts;
-    } else {
-      this.series.chipsDistributes = [ChipsDistribute()];
-      this.series.times = Times();
-      this.series.matchExcerpts = [MatchExcerpt(teamIds: [null, null])];
-    }
-  }
 
   // adds a [ChipsDistribute] class object to [series] object's 
   // [chipsDistributes] list

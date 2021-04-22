@@ -6,6 +6,7 @@ const String TYPE_KEY = 'type';
 const String NO_KEY = 'no';
 const String TEAM_IDS_KEY = 'teamIds';
 const String START_TIME_KEY = 'startTime';
+const String STATUS_KEY = 'status';
 
 class MatchExcerpt {
   String id;
@@ -13,8 +14,16 @@ class MatchExcerpt {
   int no;
   List<String> teamIds;
   Timestamp startTime;
+  String status;
 
-  MatchExcerpt({this.id, this.type, this.no, this.teamIds, this.startTime});
+  MatchExcerpt({
+    this.id,
+    this.type,
+    this.no,
+    this.teamIds,
+    this.startTime,
+    this.status,
+  });
 
   MatchExcerpt.fromMap(Map<String, dynamic> map) {
     id = map[ID_KEY];
@@ -22,6 +31,7 @@ class MatchExcerpt {
     no = map[NO_KEY];
     teamIds = map[TEAM_IDS_KEY];
     startTime = map[START_TIME_KEY];
+    status = map[STATUS_KEY];
   }
 
   Map<String, dynamic> toMap() {
@@ -31,12 +41,13 @@ class MatchExcerpt {
       NO_KEY: no,
       TEAM_IDS_KEY: teamIds,
       START_TIME_KEY: startTime,
+      STATUS_KEY: status,
     };
   }
 
   @override
   String toString() {
     return '{ id: $id, type: $type, no: $no, teamIds: $teamIds, ' + 
-      'startTime: $startTime }';
+      'startTime: $startTime, status: $status }';
   }
 }
