@@ -1,5 +1,4 @@
 import 'package:fantasy_cricket/models/player.dart';
-import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
 import 'package:fantasy_cricket/utils/team_util.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
@@ -12,22 +11,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Stateful widget is taken instead of Stateless to dispose form field 
 // controllers
 class TeamAddEdit extends StatefulWidget {
-  final Team team;
+  final TeamAddEditCubit _teamAddEditCubit;
 
-  TeamAddEdit({this.team});
+  TeamAddEdit(this._teamAddEditCubit);
 
   @override
-  _TeamAddEditState createState() => _TeamAddEditState();
+  _TeamAddEditState createState() => _TeamAddEditState(_teamAddEditCubit);
 }
 
 class _TeamAddEditState extends State<TeamAddEdit> {
-  final TeamAddEditCubit _teamAddEditCubit = TeamAddEditCubit();
+  final TeamAddEditCubit _teamAddEditCubit;
 
-  @override
-  void initState() {
-    _teamAddEditCubit.setTeam(widget.team);
-    super.initState();
-  }
+  _TeamAddEditState(this._teamAddEditCubit);
 
   @override
   void dispose() {

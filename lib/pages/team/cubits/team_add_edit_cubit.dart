@@ -8,19 +8,28 @@ import 'package:fantasy_cricket/utils/team_util.dart';
 import 'package:flutter/material.dart';
 
 class TeamAddEditCubit extends Cubit<AddEditStatus> {
-  TeamAddEditCubit() : super(null);
+  final Team team;
+
+  TeamAddEditCubit(this.team) : super(null) {
+    if(team.id == null) {
+      // this is done to add player ids to the list without checking it's null
+      // or not
+      this.team.playerIds = [];
+    }
+
+    // emit state to show progress indicator because all players nedded to be
+    // fetched from database
+    emit(AddEditStatus.loading);
+
+    // get all players from db and set them to 'allPlayers' list and add team
+    // players to 'addedPlayers' to show team players on the ui
+    setAllPlayers();
+  }
 
   // form key and controllers for handling the team add edit form from here
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController addPlayerController = TextEditingController();
   final TextEditingController teamNameController = TextEditingController();
-
-  // A team object will be paseed to TeamAddEdit() screen if admin want to edit
-  // and that object will be set here. If user want to add player then a new
-  // player object will be created and set into this variable. This obect is
-  // used to show team information on TeamAddEdit() screen and save team
-  // information to database.
-  final Team team = Team();
 
   // all players form databse will be here to search player and get players of
   // a team to show on the ui
@@ -36,27 +45,6 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
   // this wil be used for generating add player field msg on the ui
   int get playersNeeded => 11 - addedPlayers.length;
-
-  // argument 'team' will be null if admin is creating team
-  void setTeam(Team team) {
-    if (team != null) {
-      this.team.id = team.id;
-      this.team.name = teamNameController.text = team.name;
-      this.team.playerIds = team.playerIds;
-    } else {
-      // this is done to add player ids to the list without checking it's null
-      // or not
-      this.team.playerIds = [];
-    }
-
-    // emit state to show progress indicator because all players nedded to be
-    // fetched from database
-    emit(AddEditStatus.loading);
-
-    // get all players from db and set them to 'allPlayers' list and add team
-    // players to 'addedPlayers' to show team players on the ui
-    setAllPlayers();
-  }
 
   // get all players from db and set them to 'allPLayers' to build player search
   // result ui and team player list ui

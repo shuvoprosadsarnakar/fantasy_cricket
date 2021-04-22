@@ -12,7 +12,7 @@ class SeriesAddEditCubit extends Cubit<AddEditStatus> {
   SeriesAddEditCubit(this.series) : super(null) {
     if(series.id == null) {
       // these assignments are needed to build the [SeriesAddEdit] & 
-      // [SeriesAddEdit2] UI
+      // [SeriesAddEdit2] screen
       series.chipsDistributes = [ChipsDistribute()];
       series.times = Times();
       series.matchExcerpts = [MatchExcerpt(teamIds: [null, null])];

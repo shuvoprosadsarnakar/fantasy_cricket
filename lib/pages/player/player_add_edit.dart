@@ -1,4 +1,3 @@
-import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
@@ -11,14 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlayerAddEdit extends StatelessWidget {
   // variable for managing state of this screen
-  final PlayerAddEditCubit _playerAddEditCubit = PlayerAddEditCubit();
+  final PlayerAddEditCubit _playerAddEditCubit;
   
   // role dropdown list for player role dropdown field
   final List<DropdownMenuItem<String>> _roleDropdownList = [];
 
-  PlayerAddEdit({Player player}) {
-    _playerAddEditCubit.setPlayer(player);
-
+  PlayerAddEdit(this._playerAddEditCubit) {
     playerRoles.forEach((String value) {
       _roleDropdownList.add(DropdownMenuItem<String>(
         value: value,

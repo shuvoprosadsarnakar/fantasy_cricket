@@ -5,26 +5,12 @@ import 'package:fantasy_cricket/utils/player_util.dart';
 import 'package:flutter/material.dart';
 
 class PlayerAddEditCubit extends Cubit<AddEditStatus> {
-  PlayerAddEditCubit() : super(null);
+  final Player player;
+  
+  PlayerAddEditCubit(this.player) : super(null);
 
   // variable for manipulating the form from here
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
-  // A player object will be paseed to PlayerAddEdit() screen if admin want to  
-  // edit and that object will be set here. If user want to add player then a 
-  // new player object will be created and set into this variable. This obect is
-  // used to show player information on PlayerAddEdit() screen.
-  final Player player = Player();
-
-  // This function sets player variable. Argument player will be null if admin
-  // is creating player.
-  void setPlayer(Player player) {
-    if(player != null) {
-      this.player.id = player.id;
-      this.player.name = player.name;
-      this.player.role = player.role;
-    }
-  }
 
   Future<void> addUpdatePlayer() async {
     if(formKey.currentState.validate()) {

@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
+import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +21,12 @@ class AppRouter {
       case '/team':
         return MaterialPageRoute(
           builder: (_) => TeamAddEdit(
-              team: Team(
+              TeamAddEditCubit(Team(
             id: '6IU4zbW3psbQaY9LsQ1C',
             name: 'Bangladesh',
             playerIds: ['RvLeWz8YfH8yhjiyaYIY'],
           )),
-        );
+        ));
       default:
         return null;
     }
