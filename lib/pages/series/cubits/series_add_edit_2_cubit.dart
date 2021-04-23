@@ -51,7 +51,7 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
     }
   }
 
-  Future<void> addUpdateSeriesInfo(BuildContext context) async {
+  Future<bool> addUpdateSeriesInfo(BuildContext context) async {
     if(formKey.currentState.validate()) {
       formKey.currentState.save();
       emit(AddEditStatus.loading);
@@ -60,14 +60,16 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
         if(await SeriesRepo.checkSeriesName(series)) {
           if(series.id == null) {
             await SeriesRepo.addSeries(series);
-            Navigator.pushAndRemoveUntil(
+            
+            // without await [SeriesAddEdit2] screen will be shown first then
+            // [SeriesAddEdit] screen
+            await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (BuildContext context) {
-                return SeriesAddEdit(SeriesAddEditCubit(Series()));
+                return SeriesAddEdit(SeriesAddEditCubit(Series()), true);
               }),
               ModalRoute.withName('/'),
             );
-            emit(AddEditStatus.added);
           } else {
             await SeriesRepo.updateSeries(series);
             emit(AddEditStatus.updated);
@@ -79,8 +81,10 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
       } catch(error) {
         emit(AddEditStatus.failed);
       }
+
+      return true;
     } else {
-      emit(AddEditStatus.notValid);
+      return false;
     }
   }
 }

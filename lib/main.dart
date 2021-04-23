@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      home: TeamAddEdit(TeamAddEditCubit(Team())),
+      home: SeriesAddEdit(SeriesAddEditCubit(Series()), false),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.mercury,

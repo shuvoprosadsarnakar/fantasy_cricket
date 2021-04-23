@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/chips_distribute.dart';
-import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/times.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
@@ -18,8 +17,12 @@ import 'package:date_time_picker/date_time_picker.dart';
 class SeriesAddEdit extends StatelessWidget {
   // variable to manage the state of this screen
   final SeriesAddEditCubit _seriesAddEditCubit;
+
+  // this will be true if a series is added successfully, it can be set to true
+  // by only [SeriesAddEdit2Cubit] cubit
+  final bool _isAdded;
   
-  SeriesAddEdit(this._seriesAddEditCubit);
+  SeriesAddEdit(this._seriesAddEditCubit, this._isAdded);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,12 @@ class SeriesAddEdit extends StatelessWidget {
         child: BlocBuilder<SeriesAddEditCubit, AddEditStatus>(
           bloc: _seriesAddEditCubit,
           builder: (BuildContext context, AddEditStatus addEditStatus) {
+            Future.delayed(Duration()).then((dynamic value) {
+              if(_isAdded) ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Series is added successfully.'))
+              );
+            });
+
             return ListView(
               padding: Paddings.formPadding,
               children: [
@@ -206,7 +215,8 @@ class SeriesAddEdit extends StatelessWidget {
             // if end date is before start date
             times.end = Timestamp.fromDate(DateTime.parse(value));
 
-            if(times.start.seconds > times.end.seconds) {
+            if((times.start != null) && 
+              (times.start.seconds > times.end.seconds)) {
               return 'End date is before start date.';
             } else {
               return null;
@@ -221,9 +231,7 @@ class SeriesAddEdit extends StatelessWidget {
     return FormSubmitButton(
       title: 'Submit',
       onPressed: () {
-        _seriesAddEditCubit.validateSaveFirstForm();
-
-        if(_seriesAddEditCubit.state != AddEditStatus.notValid) {
+        if(_seriesAddEditCubit.validateSaveFirstForm()) {
           Navigator.push(context, MaterialPageRoute(
             builder: (BuildContext context) {
               return SeriesAddEdit2(SeriesAddEdit2Cubit(

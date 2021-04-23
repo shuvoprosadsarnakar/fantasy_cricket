@@ -232,26 +232,20 @@ class SeriesAddEdit2 extends StatelessWidget {
     return FormSubmitButton(
       title: 'Submit',
       onPressed: () async {
-        await _seriesAddEditCubit.addUpdateSeriesInfo(context);
-        
-        // [state] will be [AddEditStatus.notValid] if form has validation error
-        if(_seriesAddEditCubit.state != AddEditStatus.notValid) {
+        if(await _seriesAddEditCubit.addUpdateSeriesInfo(context)) {
           String snackBarMsg;
-          AddEditStatus status = _seriesAddEditCubit.state;
 
-          if (status == AddEditStatus.added) {
-            snackBarMsg = 'Series is added successfully.';
-          } else if (status == AddEditStatus.updated) {
+          if (_seriesAddEditCubit.state == AddEditStatus.updated) {
             snackBarMsg = 'Series is updated successfully.';
-          } else if (status == AddEditStatus.failed) {
+          } else if (_seriesAddEditCubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';
-          } else if (status == AddEditStatus.duplicate) {
+          } else if (_seriesAddEditCubit.state == AddEditStatus.duplicate) {
             snackBarMsg = 'Series name already exist.';
           }
 
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(snackBarMsg),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(snackBarMsg))
+          );
         }
       },
     );

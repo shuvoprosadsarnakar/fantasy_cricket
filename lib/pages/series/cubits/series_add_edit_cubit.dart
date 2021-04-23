@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class SeriesAddEditCubit extends Cubit<AddEditStatus> {
   final Series series;
-  
+
   SeriesAddEditCubit(this.series) : super(null) {
     if(series.id == null) {
       // these assignments are needed to build the [SeriesAddEdit] & 
@@ -46,12 +46,12 @@ class SeriesAddEditCubit extends Cubit<AddEditStatus> {
     }
   }
 
-  void validateSaveFirstForm() {
+  bool validateSaveFirstForm() {
     if(formKey.currentState.validate()) {
       formKey.currentState.save();
-      emit(null);
+      return true;
     } else {
-      emit(AddEditStatus.notValid);
+      return false;
     }
   }
 }
