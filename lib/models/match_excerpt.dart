@@ -12,7 +12,7 @@ class MatchExcerpt {
   String id;
   String type;
   int no;
-  List<String> teamIds;
+  List<String> teamIds = [];
   Timestamp startTime;
   String status;
 
@@ -22,16 +22,19 @@ class MatchExcerpt {
     this.no,
     this.teamIds,
     this.startTime,
-    this.status,
+    this.status = 'Upcoming',
   });
 
   MatchExcerpt.fromMap(Map<String, dynamic> map) {
     id = map[ID_KEY];
     type = map[TYPE_KEY];
     no = map[NO_KEY];
-    teamIds = map[TEAM_IDS_KEY];
     startTime = map[START_TIME_KEY];
     status = map[STATUS_KEY];
+
+    map[TEAM_IDS_KEY].forEach((dynamic teamId) {
+      teamIds.add(teamId.toString());
+    });
   }
 
   Map<String, dynamic> toMap() {

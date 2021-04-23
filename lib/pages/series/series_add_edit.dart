@@ -18,11 +18,10 @@ class SeriesAddEdit extends StatelessWidget {
   // variable to manage the state of this screen
   final SeriesAddEditCubit _seriesAddEditCubit;
 
-  // this will be true if a series is added successfully, it can be set to true
-  // by only [SeriesAddEdit2Cubit] cubit
-  final bool _isAdded;
+  // this will be true if a series is added successfully
+  bool _isSeriesAdded;
   
-  SeriesAddEdit(this._seriesAddEditCubit, this._isAdded);
+  SeriesAddEdit(this._seriesAddEditCubit, this._isSeriesAdded);
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +34,12 @@ class SeriesAddEdit extends StatelessWidget {
           bloc: _seriesAddEditCubit,
           builder: (BuildContext context, AddEditStatus addEditStatus) {
             Future.delayed(Duration()).then((dynamic value) {
-              if(_isAdded) ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Series is added successfully.'))
-              );
+              if(_isSeriesAdded) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Series is added successfully.'))
+                );  
+                _isSeriesAdded = false;
+              }
             });
 
             return ListView(
@@ -182,6 +184,7 @@ class SeriesAddEdit extends StatelessWidget {
     return Column(children: [
       // start date picker
       DateTimePicker(
+        type: DateTimePickerType.dateTime,
         initialValue: times.start.toString(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2100),
@@ -203,6 +206,7 @@ class SeriesAddEdit extends StatelessWidget {
 
       // end date picker
       DateTimePicker(
+        type: DateTimePickerType.dateTime,
         initialValue: times.end.toString(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2100),

@@ -11,9 +11,9 @@ const String MATCH_EXCERPTS_KEY = 'matchExcerpts';
 class Series {
   String id;
   String name;
-  List<ChipsDistribute> chipsDistributes;
+  List<ChipsDistribute> chipsDistributes = [];
   Times times;
-  List<MatchExcerpt> matchExcerpts;
+  List<MatchExcerpt> matchExcerpts = [];
 
   Series({
     this.id,
@@ -27,16 +27,15 @@ class Series {
     id = docId;
     name = doc[NAME_KEY];
 
-    chipsDistributes = doc[CHIPS_DISTRIBUTES_KEY]
-      .map((Map<String, dynamic> map) {
-        return ChipsDistribute.fromMap(map);
-      }).toList();
+    doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic map) {
+      chipsDistributes.add(ChipsDistribute.fromMap(map));
+    });
     
     times = Times.fromMap(doc[TIMES_KEY]);
     
-    matchExcerpts = doc[MATCH_EXCERPTS_KEY].map((Map<String, dynamic> map) {
-        return MatchExcerpt.fromMap(map);
-      }).toList();
+    doc[MATCH_EXCERPTS_KEY].forEach((dynamic map) {
+      matchExcerpts.add(MatchExcerpt.fromMap(map));
+    });
   }
 
   Map<String, dynamic> toMap() {

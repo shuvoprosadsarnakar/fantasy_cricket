@@ -4,6 +4,9 @@ import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/models/times.dart';
+import 'package:fantasy_cricket/pages/contests/cubits/upcoming_contests_list_cubit.dart';
+import 'package:fantasy_cricket/pages/contests/upcoming_contests_list.dart';
+import 'package:fantasy_cricket/pages/home/admin_home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
@@ -33,10 +36,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      home: SeriesAddEdit(SeriesAddEditCubit(Series()), false),
+      initialRoute: UpcomingContestsList.routeName,
+      routes: {
+        UpcomingContestsList.routeName: (BuildContext context) => 
+          UpcomingContestsList(UpcomingContestsListCubit()),
+      },
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: ColorPallate.mercury,
+        primaryColor: ColorPallate.pomegranate,
         accentColor: ColorPallate.pomegranate,
       ),
       debugShowCheckedModeBanner: false,

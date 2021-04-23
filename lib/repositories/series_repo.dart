@@ -28,4 +28,15 @@ class SeriesRepo {
   static Future<void> updateSeries(Series series) async {
     await _seriesCollection.doc(series.id).update(series.toMap());
   }
+
+  static Future<void> assignNotEndedSerieses(List<Series> notEndedSerieses) 
+    async {
+    QuerySnapshot collection = await _seriesCollection
+      .where('times.end', isGreaterThan: Timestamp.fromDate(DateTime.now()))
+      .get();
+
+    collection.docs.forEach((QueryDocumentSnapshot doc) {
+      notEndedSerieses.add(Series.fromMap(doc.data(), doc.id));
+    });
+  }
 }
