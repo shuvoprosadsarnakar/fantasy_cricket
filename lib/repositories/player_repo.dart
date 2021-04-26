@@ -78,7 +78,11 @@ abstract class PlayerRepo {
     }
   }
 
-  static Future<QuerySnapshot> getAllPlayers() async {
-    return await _playerCollection.get();
+  static Future<void> assignAllPlayers(List<Player> allPlayers) async {
+    QuerySnapshot snapshot =  await _playerCollection.get();
+
+    snapshot.docs.forEach((DocumentSnapshot snapshot) {
+      allPlayers.add(Player.fromMap(snapshot.data(), snapshot.id));
+    });
   }
 }

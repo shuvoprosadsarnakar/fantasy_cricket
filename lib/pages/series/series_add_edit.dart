@@ -5,7 +5,6 @@ import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit_2.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/series_util.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
@@ -19,7 +18,7 @@ class SeriesAddEdit extends StatelessWidget {
   final SeriesAddEditCubit _seriesAddEditCubit;
 
   // this will be true if a series is added successfully
-  bool _isSeriesAdded;
+  final bool _isSeriesAdded;
   
   SeriesAddEdit(this._seriesAddEditCubit, this._isSeriesAdded);
 
@@ -33,14 +32,13 @@ class SeriesAddEdit extends StatelessWidget {
         child: BlocBuilder<SeriesAddEditCubit, AddEditStatus>(
           bloc: _seriesAddEditCubit,
           builder: (BuildContext context, AddEditStatus addEditStatus) {
-            Future.delayed(Duration()).then((dynamic value) {
-              if(_isSeriesAdded) {
+            if(_isSeriesAdded) {
+              Future.delayed(Duration()).then((dynamic value) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Series is added successfully.'))
-                );  
-                _isSeriesAdded = false;
-              }
-            });
+                );
+              });
+            }
 
             return ListView(
               padding: Paddings.formPadding,
@@ -49,15 +47,15 @@ class SeriesAddEdit extends StatelessWidget {
                 getNameFieldWithTitle(),
                 SizedBox(height: 20),
                 
-                // chips distributes
-                FormFieldTitle('Chips Distributes'),
-                SizedBox(height: 15),
-                getChipsDistributesSubtitles(),
-                SizedBox(height: 5),
-                getChipsDistributesFields(),
-                SizedBox(height: 10),
-                getChipsDistributesButtons(),
-                SizedBox(height: 10),
+                // chips distributes fields
+                  FormFieldTitle('Chips Distributes'),
+                  SizedBox(height: 15),
+                  getChipsDistributesSubtitles(),
+                  SizedBox(height: 5),
+                  getChipsDistributesFields(),
+                  SizedBox(height: 10),
+                  getChipsDistributesButtons(),
+                  SizedBox(height: 10),
 
                 // date pickers
                 FormFieldTitle('Times'),
@@ -93,87 +91,6 @@ class SeriesAddEdit extends StatelessWidget {
             _seriesAddEditCubit.series.name = value.trim();
           },
         ),
-      ],
-    );
-  }
-
-  Row getChipsDistributesSubtitles() {
-    return Row(
-      children: [
-        Expanded(child: Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text('Chips'),
-        )),
-        Expanded(child: Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text('From'),
-        )),
-        Expanded(child: Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text('To'),
-        )),
-      ],
-    );
-  }
-
-  Column getChipsDistributesFields() {
-    List<Widget> chipsDistributesFields = [];
-    
-    _seriesAddEditCubit.series.chipsDistributes.forEach(
-      (ChipsDistribute distribute) {
-      chipsDistributesFields.add(Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // chips field
-          Expanded(child: FormIntegerField(
-            initialValue: distribute.chips == null ? null : 
-              distribute.chips.toString(),
-            onSaved: (String value) { 
-              distribute.chips = int.parse(value);
-            }
-          )),
-          SizedBox(width: 5),
-
-          // from field
-          Expanded(child: FormIntegerField(
-            initialValue: distribute.from == null ? null : 
-              distribute.from.toString(),
-            onSaved: (String value) { 
-              distribute.from = int.parse(value);
-            }
-          )),
-          SizedBox(width: 5),
-
-          // to field
-          Expanded(child: FormIntegerField(
-            initialValue: distribute.to == null ? null : distribute.to.toString(),
-            onSaved: (String value) { 
-              distribute.to = int.parse(value);
-            }
-          )),
-        ],
-      ));
-
-      chipsDistributesFields.add(SizedBox(height: 5));
-    });
-
-    return Column(children: chipsDistributesFields);
-  }
-
-  Row getChipsDistributesButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if(_seriesAddEditCubit.series.chipsDistributes.length > 1) IconButton(
-          icon: Icon(Icons.remove),
-          onPressed: _seriesAddEditCubit.removeChipsDistribute,
-        ),
-        if(_seriesAddEditCubit.series.chipsDistributes.length > 1) 
-          SizedBox(width: 30),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: _seriesAddEditCubit.addChipsDistribute,
-        )
       ],
     );
   }
@@ -244,6 +161,88 @@ class SeriesAddEdit extends StatelessWidget {
           ));
         }
       },
+    );
+  }
+
+  Row getChipsDistributesSubtitles() {
+    return Row(
+      children: [
+        Expanded(child: Padding(
+          padding: EdgeInsets.only(left: 4),
+          child: Text('Chips'),
+        )),
+        Expanded(child: Padding(
+          padding: EdgeInsets.only(left: 4),
+          child: Text('From'),
+        )),
+        Expanded(child: Padding(
+          padding: EdgeInsets.only(left: 4),
+          child: Text('To'),
+        )),
+      ],
+    );
+  }
+
+  Column getChipsDistributesFields() {
+    List<Widget> chipsDistributesFields = [];
+    
+    _seriesAddEditCubit.series.chipsDistributes.forEach((ChipsDistribute distribute) {
+      chipsDistributesFields.add(Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // chips field
+          Expanded(child: FormIntegerField(
+            initialValue: distribute.chips == null ? null : 
+              distribute.chips.toString(),
+            onSaved: (String value) { 
+              distribute.chips = int.parse(value);
+            }
+          )),
+          SizedBox(width: 5),
+
+          // from field
+          Expanded(child: FormIntegerField(
+            initialValue: distribute.from == null ? null : 
+              distribute.from.toString(),
+            onSaved: (String value) { 
+              distribute.from = int.parse(value);
+            }
+          )),
+          SizedBox(width: 5),
+
+          // to field
+          Expanded(child: FormIntegerField(
+            initialValue: distribute.to == null ? null : 
+              distribute.to.toString(),
+            onSaved: (String value) { 
+              distribute.to = int.parse(value);
+            }
+          )),
+        ],
+      ));
+
+      chipsDistributesFields.add(SizedBox(height: 5));
+    });
+
+    return Column(children: chipsDistributesFields);
+  }
+
+  Row getChipsDistributesButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if(_seriesAddEditCubit.series.chipsDistributes.length > 1) Column(children: [
+          IconButton(
+            icon: Icon(Icons.remove),
+            onPressed: _seriesAddEditCubit.removeChipsDistribute,
+          ),
+          SizedBox(width: 30),
+        ]),
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: _seriesAddEditCubit.addChipsDistribute,
+        )
+      ],
     );
   }
 }

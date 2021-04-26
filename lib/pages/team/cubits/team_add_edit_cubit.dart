@@ -1,29 +1,66 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/repositories/player_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
-import 'package:fantasy_cricket/utils/team_util.dart';
 import 'package:flutter/material.dart';
+
+// this enum will be used by TeamAddEditCubit() cubit to rebuild ui
+//
+// loading: fetching all players, adding and updating team to db, name checking
+// 
+// fetchError: failed to fetch all players from database
+// 
+// added: team added to db
+// 
+// updated: team update into db
+// 
+// duplicate: name already taken by one other team
+// 
+// failed: failed to add or update team
+// 
+// playerAdded: player added to team in the device, not in db
+// 
+// playerDelete: player deleted from team in the device, not in db
+// 
+// searched: players searching finished
+// 
+// validationError: team name is null or, '', or ' ',
+// 
+enum AddEditStatus {
+  loading,
+  fetchError,
+  added,
+  updated,
+  duplicate,
+  failed, 
+  playerAdded,
+  playerDeleted,
+  searched,
+  validationError,
+}
 
 class TeamAddEditCubit extends Cubit<AddEditStatus> {
   final Team team;
+  
+  // all players form databse will be added here to search player to add to team
+  final List<Player> allPlayers = [];
 
   TeamAddEditCubit(this.team) : super(null) {
     if(team.id == null) {
-      // this is done to add player ids to the list without checking it's null
-      // or not
-      this.team.playerIds = [];
+      // these are done to add values without checking the lists are null or not
+      this.team.playersNames = [];
+      this.team.playersRoles = [];
     }
 
     // emit state to show progress indicator because all players nedded to be
     // fetched from database
     emit(AddEditStatus.loading);
 
-    // get all players from db and set them to 'allPlayers' list and add team
-    // players to 'addedPlayers' to show team players on the ui
-    setAllPlayers();
+    // get all players from db and assign them to 'allPlayers' list
+    PlayerRepo.assignAllPlayers(allPlayers)
+      .catchError((dynamic error) => emit(AddEditStatus.fetchError))
+      .then((void value) => emit(null));
   }
 
   // form key and controllers for handling the team add edit form from here
@@ -31,70 +68,31 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   final TextEditingController addPlayerController = TextEditingController();
   final TextEditingController teamNameController = TextEditingController();
 
-  // all players form databse will be here to search player and get players of
-  // a team to show on the ui
-  final List<Player> allPlayers = [];
-
-  // all players already added or, will be added will be added to here to build
-  // player list ui
-  final List<Player> addedPlayers = [];
-
   // all name matched player when searching will be added here then the list
   // will be shown as search result
   final List<Player> matchedPlayers = [];
 
   // this wil be used for generating add player field msg on the ui
-  int get playersNeeded => 11 - addedPlayers.length;
-
-  // get all players from db and set them to 'allPLayers' to build player search
-  // result ui and team player list ui
-  Future<void> setAllPlayers() async {
-    try {
-      QuerySnapshot snapshot = await PlayerRepo.getAllPlayers();
-
-      snapshot.docs.forEach((DocumentSnapshot snapshot) {
-        allPlayers.add(Player.fromMap(snapshot.data(), snapshot.id));
-      });
-
-      // set 'addedPlayers' to show team players list on the ui
-      setAddedPlayers();
-
-      emit(null);
-    } catch (error) {
-      print(error);
-      // because of this state only a message will be shown on the ui, not form
-      emit(AddEditStatus.fetchError);
-    }
-  }
-
-  // setting 'addedPlayers' from 'allPlayers' by matching ids which are taken
-  // from 'team.playerIds'
-  void setAddedPlayers() {
-    Player player;
-
-    team.playerIds.forEach((String playerId) {
-      player = allPlayers.firstWhere((Player player) => player.id == playerId);
-      addedPlayers.add(player);
-    });
-  }
+  int get playersNeeded => 11 - team.playersNames.length;
 
   // this function deletes player from team, one at a time
-  void deletePlayer(Player player) {
-    team.playerIds.remove(player.id);
-    addedPlayers.remove(player);
+  void deletePlayer(String playerName) {
+    team.playersRoles.removeAt(team.playersNames.indexOf(playerName));
+    team.playersNames.remove(playerName);
 
     // emiiting same state doesn't rebuild ui, that's why different state will
     // be emitted everytime from here
-    if (state == AddEditStatus.playerDeleted)
+    if (state == AddEditStatus.playerDeleted) {
       emit(null);
-    else
+    } else {
       emit(AddEditStatus.playerDeleted);
+    }
   }
 
   // this function adds player to the team, one at a time
   void addPlayer(Player player) {
-    team.playerIds.add(player.id);
-    addedPlayers.add(player);
+    team.playersNames.add(player.name);
+    team.playersRoles.add(player.role);
     addPlayerController.clear();
 
     // emiiting same state doesn't rebuild ui, that's why different state will
@@ -108,13 +106,15 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
   // this function gets called when add player field is changed
   void searchPlayer(String name) {
-    matchedPlayers.clear(); // clear previous search matched players
+    // clear previous search matched players
+    matchedPlayers.clear();
+    
+    if(name != null && name.trim().isNotEmpty) {
+      name = name.trim().toLowerCase();
 
-    if (name != null && name != '') {
-      name = name.toLowerCase();
       allPlayers.forEach((Player player) {
-        if (player.name.toLowerCase().contains(name) &&
-            (team.playerIds.contains(player.id) == false)) {
+        if(player.name.toLowerCase().contains(name) &&
+          (team.playersNames.contains(player.name) == false)) {
           matchedPlayers.add(player);
         }
       });
@@ -139,12 +139,11 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
       // try catch block is used for handeling db functions exceptions
       try {
         if (await TeamRepo.checkTeamName(team)) {
-          print('rangan');
           if (team.id == null) {
             await TeamRepo.addTeam(team);
 
-            team.playerIds.clear();
-            addedPlayers.clear();
+            team.playersNames.clear();
+            team.playersRoles.clear();
             teamNameController.clear();
             addPlayerController.clear();
 

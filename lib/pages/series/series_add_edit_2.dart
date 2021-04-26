@@ -3,9 +3,9 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:fantasy_cricket/models/match_excerpt.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
+import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/match_util.dart';
-import 'package:fantasy_cricket/utils/series_util.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
@@ -16,12 +16,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeriesAddEdit2 extends StatelessWidget {
   // variable to manage state of this screen
-  final SeriesAddEdit2Cubit _seriesAddEditCubit;
+  final SeriesAddEdit2Cubit _cubit;
   
   // dropdown items for type dropdown field
   final List<DropdownMenuItem<String>> _typeDropdownList = [];
 
-  SeriesAddEdit2(this._seriesAddEditCubit) {
+  SeriesAddEdit2(this._cubit) {
     matchTypes.forEach((String type) {
       _typeDropdownList.add(DropdownMenuItem<String>(
         value: type,
@@ -33,7 +33,7 @@ class SeriesAddEdit2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SeriesAddEdit2Cubit, AddEditStatus>(
-      bloc: _seriesAddEditCubit,
+      bloc: _cubit,
       builder: (BuildContext context, AddEditStatus status) {
         if(status == AddEditStatus.loading) {
           return Loading();
@@ -44,10 +44,10 @@ class SeriesAddEdit2 extends StatelessWidget {
           );
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text(_seriesAddEditCubit.series.id == null ? 
+            appBar: AppBar(title: Text(_cubit.series.id == null ? 
               'Add Series' : 'Update Series')),
             body: Form(
-              key: _seriesAddEditCubit.formKey,
+              key: _cubit.formKey,
               child: ListView(
                 padding: Paddings.formPadding,
                 children: [
@@ -82,14 +82,14 @@ class SeriesAddEdit2 extends StatelessWidget {
     
     // dropdown items for team dropdown fields
     final List<DropdownMenuItem<String>> teamDropdownList = 
-      _seriesAddEditCubit.allTeams.map((Team team) {
+      _cubit.allTeams.map((Team team) {
         return DropdownMenuItem<String>(
           value: team.id,
           child: Text(team.name),
         );
       }).toList();
 
-    _seriesAddEditCubit.series.matchExcerpts.forEach((MatchExcerpt excerpt) {
+    _cubit.series.matchExcerpts.forEach((MatchExcerpt excerpt) {
       matchExcerptWidgets.add(Column(children: [
         // type field
         Row(
@@ -135,7 +135,7 @@ class SeriesAddEdit2 extends StatelessWidget {
           children: [
             getMatchExcerptTitle('Team 1'),
             Expanded(child: FormDropdownField(
-              value: excerpt.teamIds[0],
+              value: excerpt.teamsIds[0],
               hint: Text('Select a team'),
               items: teamDropdownList,
               validator: (dynamic value) { 
@@ -145,9 +145,12 @@ class SeriesAddEdit2 extends StatelessWidget {
                   // save the value here instead of [onSaved] allow us to check
                   // same team selection error in the team 2 field [validator]
                   // as team 2 [validator] will run after this [validator]
-                  excerpt.teamIds[0] = value;
+                  excerpt.teamsIds[0] = value;
                   return null;
                 }
+              },
+              onSaved: (dynamic value) {
+                excerpt.teamsNames[0] = _cubit.getTeamNameById(value);
               },
             )),
           ],
@@ -160,19 +163,22 @@ class SeriesAddEdit2 extends StatelessWidget {
           children: [
             getMatchExcerptTitle('Team 2'),
             Expanded(child: FormDropdownField(
-              value: excerpt.teamIds[1],
+              value: excerpt.teamsIds[1],
               hint: Text('Select a team'),
               items: teamDropdownList,
               validator: (dynamic value) {
                 if(value == null) {
                   return 'Team 2 is required.';
-                } else if(value == excerpt.teamIds[0]) {
+                } else if(value == excerpt.teamsIds[0]) {
                   return 'Two teams can\'t be same.';
                 } else {
                   return null;
                 }
               },
-              onSaved: (dynamic value) => excerpt.teamIds[1] = value,
+              onSaved: (dynamic value) {
+                excerpt.teamsIds[1] = value;
+                excerpt.teamsNames[1] = _cubit.getTeamNameById(value);
+              },
             )),
           ],
         ),
@@ -181,10 +187,11 @@ class SeriesAddEdit2 extends StatelessWidget {
         // time picker field
         DateTimePicker(
           type: DateTimePickerType.dateTime,
-          initialValue: excerpt.startTime == null ? null : 
+          initialValue: excerpt.startTime == null ? 
+            _cubit.series.times.start.toDate().toString() : 
             excerpt.startTime.toDate().toString(),
-          firstDate: _seriesAddEditCubit.series.times.start.toDate(),
-          lastDate: _seriesAddEditCubit.series.times.end.toDate(),
+          firstDate: _cubit.series.times.start.toDate(),
+          lastDate: _cubit.series.times.end.toDate(),
           dateLabelText: 'Starting Time',
           validator: (String value) {
             if(value.isEmpty) {
@@ -209,12 +216,12 @@ class SeriesAddEdit2 extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // remove button
-        if(_seriesAddEditCubit.series.matchExcerpts.length > 1 && 
-          _seriesAddEditCubit.series.matchExcerpts.last.id == null) 
+        if(_cubit.series.matchExcerpts.length > 1 && 
+          _cubit.series.matchExcerpts.last.id == null) 
         Row(children: [
           IconButton(
             icon: Icon(Icons.remove),
-            onPressed: _seriesAddEditCubit.removeMatchExcerpt,
+            onPressed: _cubit.removeMatchExcerpt,
           ),
           SizedBox(width: 30),
         ]),
@@ -222,7 +229,7 @@ class SeriesAddEdit2 extends StatelessWidget {
         // add button
         IconButton(
           icon: Icon(Icons.add),
-          onPressed: _seriesAddEditCubit.addMatchExcerpt,
+          onPressed: _cubit.addMatchExcerpt,
         )
       ],
     );
@@ -232,14 +239,14 @@ class SeriesAddEdit2 extends StatelessWidget {
     return FormSubmitButton(
       title: 'Submit',
       onPressed: () async {
-        if(await _seriesAddEditCubit.addUpdateSeriesInfo(context)) {
+        if(await _cubit.addUpdateSeriesInfo(context)) {
           String snackBarMsg;
 
-          if (_seriesAddEditCubit.state == AddEditStatus.updated) {
+          if (_cubit.state == AddEditStatus.updated) {
             snackBarMsg = 'Series is updated successfully.';
-          } else if (_seriesAddEditCubit.state == AddEditStatus.failed) {
+          } else if (_cubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';
-          } else if (_seriesAddEditCubit.state == AddEditStatus.duplicate) {
+          } else if (_cubit.state == AddEditStatus.duplicate) {
             snackBarMsg = 'Series name already exist.';
           }
 

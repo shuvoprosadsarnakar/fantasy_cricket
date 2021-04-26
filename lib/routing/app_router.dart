@@ -21,11 +21,7 @@ class AppRouter {
       case '/team':
         return MaterialPageRoute(
           builder: (_) => TeamAddEdit(
-              TeamAddEditCubit(Team(
-            id: '6IU4zbW3psbQaY9LsQ1C',
-            name: 'Bangladesh',
-            playerIds: ['RvLeWz8YfH8yhjiyaYIY'],
-          )),
+              TeamAddEditCubit(Team()),
         ));
       default:
         return null;

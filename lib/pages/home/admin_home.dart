@@ -1,5 +1,7 @@
-import 'package:fantasy_cricket/pages/contests/upcoming_contests_list.dart';
+import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
+import 'package:fantasy_cricket/pages/contests/contests_list.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:flutter/material.dart';
 
 class AdminHome extends StatelessWidget {
@@ -8,14 +10,22 @@ class AdminHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Admin Home')),
       body: ListView(
-        padding: EdgeInsets.all(20),
+        padding: Paddings.pagePadding,
         children: [
           // upcoming contests tile
           getAdminHomeTile(
             'Upcoming Contests',
             Icons.arrow_circle_down,
             Colors.blueAccent,
-            () => Navigator.pushNamed(context, UpcomingContestsList.routeName),
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return ContestsList(
+                  ContestsListCubit(),
+                  ContestStatuses.upcoming,
+                );
+              }),
+            ),
           ),
           SizedBox(height: 10),
 

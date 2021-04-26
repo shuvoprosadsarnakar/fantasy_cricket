@@ -5,7 +5,6 @@ import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
-import 'package:fantasy_cricket/utils/series_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,7 +31,10 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
   }
 
   void addMatchExcerpt() {
-    series.matchExcerpts.add(MatchExcerpt(teamIds: [null, null]));
+    series.matchExcerpts.add(MatchExcerpt(
+      teamsIds: [null, null],
+      teamsNames: [null, null],  
+    ));
 
     if(state == AddEditStatus.excerptAdded) {
       emit(null);
@@ -49,6 +51,10 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
     } else {
       emit(AddEditStatus.excerptRemoved);
     }
+  }
+
+  String getTeamNameById(String teamId) {
+    return allTeams.firstWhere((Team team) => team.id == teamId).name;
   }
 
   Future<bool> addUpdateSeriesInfo(BuildContext context) async {

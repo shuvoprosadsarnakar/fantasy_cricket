@@ -36,4 +36,9 @@ abstract class TeamRepo {
       allTeams.add(Team.fromMap(snapshot.data(), snapshot.id));
     });
   }
+
+  static Future<Team> getTeamById(String id) async {
+    DocumentSnapshot doc = await _teamCollection.doc(id).get();
+    return Team.fromMap(doc.data(), doc.id);
+  }
 }
