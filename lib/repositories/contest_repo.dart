@@ -33,4 +33,15 @@ class ContestRepo {
   static Future<void> updateContest(Contest contest) async {
     await _contests.doc(contest.id).update(contest.toMap());
   }
+
+  static Future<void> updateSeriesAndContest(Series series, Contest contest) 
+    async {
+    WriteBatch batch = _db.batch();
+    DocumentReference seriesRef = _db.collection('serieses').doc(series.id);
+    DocumentReference contestRef = _contests.doc(contest.id);
+
+    batch.update(seriesRef, series.toMap());
+    batch.update(contestRef, contest.toMap());
+    await batch.commit();
+  }
 }

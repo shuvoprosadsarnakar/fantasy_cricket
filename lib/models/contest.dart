@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/chips_distribute.dart';
+import 'package:fantasy_cricket/models/report.dart';
 
 // keys
 const String ID_KEY = 'id';
@@ -18,6 +19,8 @@ const String PLAYERS_REPORTS_KEY = 'playersReports';
 const String IS_PLAYINGS_KEY = 'isPlaying';
 const String SERIES_ID_KEY = 'seriesId';
 const String EXCERPT_INDEX_KEY = 'excerptIndex';
+const String TEAMS_SCORES_KEY = 'teamsScores';
+const String RESULT_KEY = 'result';
 
 class Contest {
   // contest id and excerpt id
@@ -39,6 +42,8 @@ class Contest {
   List<double> playersPoints;
   List<Report> playersReports;
   List<bool> isPlayings;
+  List<String> teamsScores;
+  String result;
   
   // to update excerpt match status and set excerpt id
   String seriesId;
@@ -55,6 +60,8 @@ class Contest {
     team1TotalPlayers = doc[TEAM_1_TOTAL_PLAYERS_KEY];
     seriesId = doc[SERIES_ID_KEY];
     excerptIndex = doc[EXCERPT_INDEX_KEY];
+    result = doc[RESULT_KEY];
+
     teamsNames = [];
     chipsDistributes = [];
     playersNames = [];
@@ -87,6 +94,11 @@ class Contest {
       doc[PLAYERS_REPORTS_KEY].forEach((dynamic reportMap) 
         => playersReports.add(Report.fromMap(reportMap)));
     }
+
+    if(doc[TEAMS_SCORES_KEY] != null) {
+      teamsScores = [];
+      doc[TEAMS_SCORES_KEY].forEach((dynamic score) => teamsScores.add(score));
+    }
     
     doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) => 
       isPlayings.add(isPlaying));
@@ -118,13 +130,8 @@ class Contest {
       IS_PLAYINGS_KEY: isPlayings,
       SERIES_ID_KEY: seriesId,
       EXCERPT_INDEX_KEY: excerptIndex,
+      TEAMS_SCORES_KEY: teamsScores,
+      RESULT_KEY: result,
     };
-  }
-}
-
-class Report {
-  Report.fromMap(Map<String, dynamic> map) {}
-  Map<String, dynamic> toMap() {
-    return {};
   }
 }

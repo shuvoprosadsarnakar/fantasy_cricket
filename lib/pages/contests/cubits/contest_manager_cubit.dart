@@ -190,8 +190,8 @@ class ContestManagerCubit extends Cubit<CubitState> {
       try {
         await SeriesRepo.updateSeries(_series);
         
-        // to remove this contest from [UpcomingContestsList] screen when we go
-        // back to that screen and rebuild it
+        // to remove this contest from [ContestsList] screen when we go back to
+        // that screen and rebuild it
         _series.matchExcerpts.removeAt(_excerptIndex);
 
         // if we don't emit [null] then if [failed] is emitted once, cubit  
