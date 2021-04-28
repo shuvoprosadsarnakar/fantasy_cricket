@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
+import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
@@ -26,7 +27,7 @@ class ContestEnder extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: Text('End Contest')),
             body: SingleChildScrollView(
-              padding: Paddings.pagePadding,
+              padding: Paddings.formPadding,
               child: Form(
                 key: _cubit.formKey,
                 child: Column(
@@ -46,6 +47,10 @@ class ContestEnder extends StatelessWidget {
                     Divider(),
                     getPlayerReportFields(_cubit.contest.team1TotalPlayers,
                       _cubit.contest.playersNames.length),
+                    SizedBox(height: 20),
+
+                    // man of the match field
+                    getPlayerOfTheMatchField(),
                     SizedBox(height: 20),
 
                     // match result field
@@ -121,7 +126,9 @@ class ContestEnder extends StatelessWidget {
                   _cubit.reportKeys[j]) + ': '),
                 SizedBox(
                   width: 100,
-                  child: FormIntegerField(onSaved: (String value) {
+                  child: FormIntegerField(
+                    initialValue: '1',
+                    onSaved: (String value) {
                     _cubit.playersReports[i][_cubit.reportKeys[j]] = 
                       int.parse(value);
                   }),
@@ -136,6 +143,29 @@ class ContestEnder extends StatelessWidget {
     }
 
     return Column(children: reportFieldsItems);
+  }
+
+  FormDropdownField getPlayerOfTheMatchField() {
+    List<DropdownMenuItem<String>> dropdownItems = _cubit.contest.playersNames
+      .map((String name) {
+        return DropdownMenuItem<String>(
+          value: name,
+          child: Text(name),
+        );
+      }).toList();
+
+    return FormDropdownField(
+      hint: Text('Select player of the match'),
+      items: dropdownItems,
+      validator: (dynamic value) {
+        if(value == null) {
+          return 'Player of the match is required.';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (dynamic value) => _cubit.contest.playerOfTheMatch = value,
+    );
   }
 
   Row getMatchResultField(BuildContext context) {

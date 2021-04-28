@@ -21,6 +21,7 @@ const String SERIES_ID_KEY = 'seriesId';
 const String EXCERPT_INDEX_KEY = 'excerptIndex';
 const String TEAMS_SCORES_KEY = 'teamsScores';
 const String RESULT_KEY = 'result';
+const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
 
 class Contest {
   // contest id and excerpt id
@@ -33,7 +34,7 @@ class Contest {
   int noByType;
   Timestamp startTime;
 
-  // to show match details
+  // to show match details and calculate contest result
   List<ChipsDistribute> chipsDistributes;
   int team1TotalPlayers;
   List<String> playersNames;
@@ -44,6 +45,7 @@ class Contest {
   List<bool> isPlayings;
   List<String> teamsScores;
   String result;
+  String playerOfTheMatch;
   
   // to update excerpt match status and set excerpt id
   String seriesId;
@@ -61,6 +63,7 @@ class Contest {
     seriesId = doc[SERIES_ID_KEY];
     excerptIndex = doc[EXCERPT_INDEX_KEY];
     result = doc[RESULT_KEY];
+    playerOfTheMatch = doc[PLAYER_OF_THE_MATCH_KEY];
 
     teamsNames = [];
     chipsDistributes = [];
@@ -132,6 +135,7 @@ class Contest {
       EXCERPT_INDEX_KEY: excerptIndex,
       TEAMS_SCORES_KEY: teamsScores,
       RESULT_KEY: result,
+      PLAYER_OF_THE_MATCH_KEY: playerOfTheMatch,
     };
   }
 }

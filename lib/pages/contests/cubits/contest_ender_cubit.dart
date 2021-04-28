@@ -80,9 +80,8 @@ class ContestEnderCubit extends Cubit<CubitState> {
       // update the status of the contest in series match excerpt
       _series.matchExcerpts[_excerptIndex].status = ContestStatuses.ended;
 
-      contest.playersReports = playersReports.map((Map<String, dynamic> map) {
-        return Report.fromMap(map);
-      }).toList();
+      // init [contest]'s [playersPoints] && [playersReports] properties
+      setPlayersPoints();
 
       try {
         await ContestRepo.updateSeriesAndContest(_series, contest);
@@ -101,6 +100,186 @@ class ContestEnderCubit extends Cubit<CubitState> {
       return true;
     } else {
       return false;
+    }
+  }
+
+  void setPlayersPoints() {
+    contest.playersPoints = <double>[];
+
+    contest.playersReports = playersReports.map((Map<String, dynamic> map) {
+      contest.playersPoints.add(0);
+      return Report.fromMap(map);
+    }).toList();
+
+    int totalPlayers = playersReports.length;
+      
+    switch(_series.matchExcerpts[_excerptIndex].type) {
+      case 'T20':
+        for(int i = 0; i < totalPlayers; i++) {
+          Report report = contest.playersReports[i];
+          
+          // batting points
+          contest.playersPoints[i] += 
+            report.runsTaken * 0.5 + 
+            report.foursHit * 0.5 +
+            report.sixesHit * 1 +
+            (report.runsTaken >= 50 && report.runsTaken < 100 ? 4 : 0) +
+            (report.runsTaken >= 100 ? 8 : 0);
+          
+          if(report.ballsFaced >= 10) {
+            double strikeRate = report.runsTaken / report.ballsFaced * 100;
+            int point;
+            
+            if(strikeRate <= 50) {
+              point = -3;
+            } else if(strikeRate <= 60) {
+              point = -2;
+            } else if(strikeRate <= 70) {
+              point = -1;
+            }
+
+            contest.playersPoints[i] += point;
+          }
+          
+          // bowiling points
+          contest.playersPoints[i] +=
+            report.wicketsTaken * 10 +
+            report.maidenOvers * 4 +
+            (report.wicketsTaken == 4 ? 4 : 0) +
+            (report.wicketsTaken >= 5 ? 8 : 0);
+          
+          if(report.ballsBowled >= 12) {
+            double economyRate = report.runsGiven / (report.ballsBowled / 6);
+            int point;
+
+            if(economyRate <= 4) {
+              point = 3;
+            } else if(economyRate <= 5) {
+              point = 2;
+            } else if(economyRate <= 7) {
+              point = 1;
+            } else if(economyRate <= 9) {
+              point = -1;
+            } else if(economyRate <= 11) {
+              point = -2;
+            } else {
+              point = -3;
+            }
+
+            contest.playersPoints[i] += point;
+          }
+
+          // fielding points
+          contest.playersPoints[i] += 
+            report.catches * 4 + 
+            report.stumpings * 6 + 
+            report.runOuts * 4;
+
+          // other points
+          contest.playersPoints[i] +=
+            (contest.isPlayings[i] ? 2 : 0) +
+            (contest.playerOfTheMatch == contest.playersNames[i] ? 10 : 0);
+        }
+      break;
+
+      case 'One Day':
+        for(int i = 0; i < totalPlayers; i++) {
+          Report report = contest.playersReports[i];
+        
+          // batting points
+          contest.playersPoints[i] += 
+            report.runsTaken * 0.5 + 
+            report.foursHit * 0.5 +
+            report.sixesHit * 1 +
+            (report.runsTaken >= 50 && report.runsTaken < 100 ? 2 : 0) +
+            (report.runsTaken >= 100 ? 4 : 0);
+          
+          if(report.ballsFaced >= 20) {
+            double strikeRate = report.runsTaken / report.ballsFaced * 100;
+            int point;
+            
+            if(strikeRate <= 40) {
+              point = -3;
+            } else if(strikeRate <= 50) {
+              point = -2;
+            } else if(strikeRate <= 60) {
+              point = -1;
+            }
+
+            contest.playersPoints[i] += point;
+          }
+          
+          // bowiling points
+          contest.playersPoints[i] +=
+            report.wicketsTaken * 12 +
+            (report.wicketsTaken == 4 ? 2 : 0) +
+            (report.wicketsTaken >= 5 ? 4 : 0) + 
+            report.maidenOvers * 2;
+          
+          if(report.ballsBowled >= 12) {
+            double economyRate = report.runsGiven / (report.ballsBowled / 6);
+            int point;
+
+            if(economyRate <= 2.5) {
+              point = 3;
+            } else if(economyRate <= 3.5) {
+              point = 2;
+            } else if(economyRate <= 4.5) {
+              point = 1;
+            } else if(economyRate >= 7 && economyRate <= 8) {
+              point = -1;
+            } else if(economyRate > 8 && economyRate <= 9) {
+              point = -2;
+            } else if(economyRate > 9) {
+              point = -3;
+            }
+
+            contest.playersPoints[i] += point;
+          }
+
+          // fielding points
+          contest.playersPoints[i] += 
+            report.catches * 4 + 
+            report.stumpings * 6 + 
+            report.runOuts * 4;
+
+          // other points
+          contest.playersPoints[i] +=
+            (contest.isPlayings[i] ? 2 : 0) +
+            (contest.playerOfTheMatch == contest.playersNames[i] ? 10 : 0);
+        }
+      break;
+
+      case 'Test':
+        for(int i = 0; i < totalPlayers; i++) {
+          Report report = contest.playersReports[i];
+
+          // batting points
+          contest.playersPoints[i] += 
+            report.runsTaken * 0.5 + 
+            report.foursHit * 0.5 +
+            report.sixesHit * 1 +
+            (report.runsTaken >= 50 && report.runsTaken < 100 ? 2 : 0) +
+            (report.runsTaken >= 100 ? 4 : 0);
+          
+          // bowiling points
+          contest.playersPoints[i] +=
+            report.wicketsTaken * 10 +
+            (report.wicketsTaken == 4 ? 2 : 0) +
+            (report.wicketsTaken >= 5 ? 4 : 0);
+
+          // fielding points
+          contest.playersPoints[i] += 
+            report.catches * 4 + 
+            report.stumpings * 6 + 
+            report.runOuts * 4;
+
+          // other points
+          contest.playersPoints[i] +=
+            (contest.isPlayings[i] ? 2 : 0) +
+            (contest.playerOfTheMatch == contest.playersNames[i] ? 10 : 0);
+        }
+      break;
     }
   }
 }
