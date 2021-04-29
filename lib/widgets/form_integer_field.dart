@@ -19,18 +19,11 @@ class FormIntegerField extends StatelessWidget {
           return 'Enter an integer.';
         }
 
-        int parsed;
-
         try { 
-          parsed = int.parse(value);
+          int.parse(value);
+          return null;
         } catch(error) {
           return 'Enter a valid integer.';
-        }
-
-        if(parsed <= 0) {
-          return 'Integer must be greater than zero.';
-        } else {
-          return null;
         }
       },
       onSaved: onSaved,

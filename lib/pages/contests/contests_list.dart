@@ -1,6 +1,8 @@
 import 'package:fantasy_cricket/models/match_excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
+import 'package:fantasy_cricket/pages/contests/contest_ender.dart';
 import 'package:fantasy_cricket/pages/contests/contest_manager.dart';
+import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart' as ceCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contest_manager_cubit.dart' as cmCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
@@ -28,7 +30,7 @@ class ContestsList extends StatelessWidget {
           } else if(state == CubitState.fetchError) {
             return FetchErrorMsg();
           } else {
-            List<InkWell> listItems = [];
+            final List<InkWell> listItems = <InkWell>[];
             initListItemsVar(context, listItems);
 
             return ListView.builder(
@@ -91,15 +93,17 @@ class ContestsList extends StatelessWidget {
             onTap: () async {   
               String snackBarText;
 
-              if(_contestStatus != ContestStatuses.locked) {
-                snackBarText = await Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return ContestManager(cmCubit.ContestManagerCubit(series, i));
-                  },
-                ));
-              } else {
-                snackBarText = 'Contest reporter screen needed to be set.';
-              }
+              snackBarText = await Navigator.push(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  if(_contestStatus != ContestStatuses.locked) {
+                    return ContestManager(
+                      cmCubit.ContestManagerCubit(series, i)
+                    );
+                  } else {
+                    return ContestEnder(ceCubit.ContestEnderCubit(series, i));
+                  }
+                },
+              ));
            
               if(snackBarText != null) {
                 _cubit.rebuildUi();
