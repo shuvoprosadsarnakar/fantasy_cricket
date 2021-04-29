@@ -55,7 +55,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       if (currentState is PlayerSuccess) {
         final players =
             await PlayerRepo.searchPlayers(event.searchKeyWord, limit);
-        if (players.isNotEmpty) {
+        if (players != null) {
           if (players.length < limit)
             yield PlayerSuccess(players: players, hasReachedMax: true);
           else
