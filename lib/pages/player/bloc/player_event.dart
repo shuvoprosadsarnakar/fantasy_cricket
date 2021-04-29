@@ -8,6 +8,8 @@ abstract class PlayerEvent extends Equatable {
 
 class PlayerFetched extends PlayerEvent {}
 
+class PlayerSearchClosed extends PlayerEvent {}
+
 class PlayerSearched extends PlayerEvent {
   final String searchKeyWord;
 

@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/models/team.dart';
+import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
@@ -11,6 +12,10 @@ class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     final GlobalKey<ScaffoldState> key = settings.arguments;
     switch (settings.name) {
+      case '/zzz':
+        return MaterialPageRoute(
+          builder: (_) => Home(),
+        );
       case '/':
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

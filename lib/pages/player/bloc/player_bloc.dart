@@ -50,23 +50,29 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         yield PlayerFailure();
       }
     }
-    if (event is PlayerSearched ) {
-      print("Player searched 2");
+    if (event is PlayerSearched) {
+      print("Player searched bloc");
       if (currentState is PlayerSuccess) {
         final players =
-            await PlayerRepo.searchPlayers(currentState.searchKey, limit);
-        if (players.length < limit)
-          yield PlayerSuccess(
-              players: players, hasReachedMax: true);
-        else
-          yield PlayerSuccess(
-              players: players, hasReachedMax: false);
+            await PlayerRepo.searchPlayers(event.searchKeyWord, limit);
+        if (players.isNotEmpty) {
+          if (players.length < limit)
+            yield PlayerSuccess(players: players, hasReachedMax: true);
+          else
+            yield PlayerSuccess(players: players, hasReachedMax: false);
+        }
       }
+    }
+    if (event is PlayerSearchClosed) {
+       final players = await PlayerRepo.fetchPlayers(0, limit);
+          if (players.length < limit)
+            yield PlayerSuccess(players: players, hasReachedMax: true);
+          else
+            yield PlayerSuccess(players: players, hasReachedMax: false);
     }
     if (event is PlayerDelete) {
       PlayerRepo.deletePlayer(event.player);
     }
-
   }
 
   bool _hasReachedMax(PlayerState state) =>

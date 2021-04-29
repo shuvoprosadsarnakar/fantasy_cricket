@@ -38,14 +38,27 @@ class _PlayerListState extends State<PlayerList> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _controller,
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  _controller.clear();
+                  _playerBloc.add(PlayerSearchClosed());
+                },
+              )),
               onSubmitted: (value) {
                 print(value);
-                _playerBloc.add(PlayerSearched(value));
+                // if(value.length>0)
+                // _playerBloc.add(PlayerSearched(value));
+                // else
+                // _playerBloc.add(PlayerSearchClosed());
               },
               onChanged: (value) {
-                if(value.length <1)
-                
-                _playerBloc.add(PlayerFetched());
+                print(value);
+                if (value.length > 0)
+                  _playerBloc.add(PlayerSearched(value));
+                else
+                  _playerBloc.add(PlayerSearchClosed());
               },
             ),
           ),

@@ -44,7 +44,9 @@ abstract class PlayerRepo {
   static Future<List<Player>> fetchPlayers(int startIndex, int limit) async {
     if (startIndex == 0) {
       QuerySnapshot documentList =
-          await _playerCollection.orderBy("name").limit(limit).get();
+          await _playerCollection.orderBy("name").limit(limit).get(GetOptions(source: Source.cache));
+          if(documentList.docs.isEmpty)
+          await _playerCollection.orderBy("name").limit(limit).get(GetOptions(source: Source.server));
       lastDocument = documentList.docs.last;
 
       return documentList.docs
@@ -64,10 +66,11 @@ abstract class PlayerRepo {
   }
 
   static Future<List<Player>> searchPlayers(String searchKey, int limit) async {
+    String endingSearchKey = incrementLastChar(searchKey);
     try {
       QuerySnapshot documentList = await _playerCollection
-          .where('name', isGreaterThanOrEqualTo:"wa")
-          .where('name', isLessThan:"wb")
+          .where('name', isGreaterThanOrEqualTo: searchKey)
+          .where('name', isLessThan: endingSearchKey)
           .get();
       print(documentList.docs.first.data());
       return documentList.docs
@@ -84,5 +87,17 @@ abstract class PlayerRepo {
     snapshot.docs.forEach((DocumentSnapshot snapshot) {
       allPlayers.add(Player.fromMap(snapshot.data(), snapshot.id));
     });
+  }
+
+  static String incrementLastChar(String x) {
+    String s = x;
+    if (x != null && x.length > 0) {
+      s = s.toLowerCase();
+      String a = s.substring(s.length - 1);
+      int lastChar = a.codeUnits[0];
+      lastChar++;
+      s = s.substring(0, s.length - 1) + String.fromCharCode(lastChar);
+    }
+    return (s);
   }
 }
