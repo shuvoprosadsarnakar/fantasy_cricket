@@ -1,7 +1,4 @@
 import 'package:fantasy_cricket/pages/auth/cubits/sign_in_cubit.dart';
-import 'package:fantasy_cricket/pages/auth/password_reset.dart';
-import 'package:fantasy_cricket/pages/auth/sign_up.dart';
-import 'package:fantasy_cricket/pages/auth/verify_email.dart';
 import 'package:fantasy_cricket/repositories/auth_repo.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
@@ -9,12 +6,25 @@ import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   static final String routeName = 'sign_in';
   final SignInCubit _cubit;
 
   SignIn(this._cubit);
+
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  final myController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    loadSavedEmail();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,7 @@ class SignIn extends StatelessWidget {
         actions: [getSignUpButton(context)],
       ),
       body: Form(
-        key: _cubit.formKey,
+        key: widget._cubit.formKey,
         child: ListView(
           padding: Paddings.pagePadding,
           children: [
@@ -48,6 +58,18 @@ class SignIn extends StatelessWidget {
     );
   }
 
+  loadSavedEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      myController.text=prefs.getString('email') ?? '';
+    });
+  }
+
+  saveEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', email);
+  }
+
   TextButton getSignUpButton(BuildContext context) {
     return TextButton(
       onPressed: () => Navigator.popAndPushNamed(context, signUp),
@@ -60,8 +82,9 @@ class SignIn extends StatelessWidget {
 
   FormTextField getEmailField() {
     return FormTextField(
-      initialValue: _cubit.email,
+      initialValue: widget._cubit.email,
       keyboardType: TextInputType.emailAddress,
+      controller: myController,
       validator: (String value) {
         if (value.trim().isEmpty) {
           return 'Email is required.';
@@ -69,13 +92,13 @@ class SignIn extends StatelessWidget {
           return null;
         }
       },
-      onSaved: (String value) => _cubit.email = value,
+      onSaved: (String value) => widget._cubit.email = value,
     );
   }
 
   FormTextField getPasswordField() {
     return FormTextField(
-      initialValue: _cubit.password,
+      initialValue: widget._cubit.password,
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
       validator: (String value) {
@@ -85,7 +108,7 @@ class SignIn extends StatelessWidget {
           return null;
         }
       },
-      onSaved: (String value) => _cubit.password = value,
+      onSaved: (String value) => widget._cubit.password = value,
     );
   }
 
@@ -93,15 +116,16 @@ class SignIn extends StatelessWidget {
     return FormSubmitButton(
       title: 'Sign In',
       onPressed: () async {
-        if (await _cubit.signInUser()) {
+        if (await widget._cubit.signInUser()) {
           if (await AuthRepo.isEmailVerified()) {
-            print('home page');
+            saveEmail(widget._cubit.email);
+            Navigator.popAndPushNamed(context, home);
           } else {
             Navigator.popAndPushNamed(context, verifyEmail);
           }
-        } else if (_cubit.state == CubitState.signInError) {
+        } else if (widget._cubit.state == CubitState.signInError) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(_cubit.errorMsg)));
+              .showSnackBar(SnackBar(content: Text(widget._cubit.errorMsg)));
         }
       },
     );
@@ -114,7 +138,7 @@ class SignIn extends StatelessWidget {
         style: TextStyle(color: Theme.of(context).primaryColor),
       ),
       onPressed: () {
-        Navigator.popAndPushNamed(context, PasswordReset.routeName);
+        Navigator.popAndPushNamed(context, passwordReset);
       },
     );
   }

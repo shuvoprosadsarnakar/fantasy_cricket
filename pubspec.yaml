@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  shared_preferences: ^2.0.5
+  
   # firebase
   firebase_core: ^1.0.3
   firebase_analytics: 8.0.0

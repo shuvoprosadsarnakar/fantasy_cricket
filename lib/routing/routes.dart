@@ -11,6 +11,7 @@ const String signUp = '/signup';
 const String player = '/player';
 const String team = '/team';
 const String verifyEmail = '/verifyEmail';
+const String passwordReset = '/passwordReset';
 const String home = '/home';
 
 final Map<String, WidgetBuilder> routes = {
@@ -20,8 +21,5 @@ final Map<String, WidgetBuilder> routes = {
   },
   SignIn.routeName: (BuildContext context) {
     return SignIn(SignInCubit());
-  },
-  PasswordReset.routeName: (BuildContext context) {
-    return PasswordReset(PasswordResetCubit());
-  },
+  }
 };

@@ -1,7 +1,9 @@
 import 'package:fantasy_cricket/models/team.dart';
+import 'package:fantasy_cricket/pages/auth/cubits/password_reset_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/cubits/sign_in_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/cubits/sign_up_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/cubits/verify_email_cubit.dart';
+import 'package:fantasy_cricket/pages/auth/password_reset.dart';
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/pages/auth/sign_up.dart';
 import 'package:fantasy_cricket/pages/auth/verify_email.dart';
@@ -29,6 +31,10 @@ class AppRouter {
       case verifyEmail:
         return MaterialPageRoute(
           builder: (_) => VerifyEmail(VerifyEmailCubit()),
+        );
+      case passwordReset:
+        return MaterialPageRoute(
+          builder: (_) => PasswordReset(PasswordResetCubit()),
         );
       case home:
         return MaterialPageRoute(

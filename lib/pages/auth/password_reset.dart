@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/pages/auth/cubits/password_reset_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PasswordReset extends StatelessWidget {
-  static final String routeName = 'reset_password';
   final PasswordResetCubit _cubit;
   final String msgForUser = 'A password reset email is sent to your account. ' +
     'Reset your password and then sign in.';
@@ -99,13 +99,13 @@ class PasswordReset extends StatelessWidget {
   FormSubmitButton getSignInButton(BuildContext context) {
     return FormSubmitButton(
       title: 'Sign In',
-      onPressed: () => Navigator.popAndPushNamed(context, SignIn.routeName),
+      onPressed: () => Navigator.popAndPushNamed(context, signIn),
     );
   }
 
   TextButton getSignInAppBarButton(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.popAndPushNamed(context, SignIn.routeName),
+      onPressed: () => Navigator.popAndPushNamed(context, signIn),
       child: Text(
         'Sign In',
         style: TextStyle(color: Colors.white),
