@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/pages/auth/cubits/sign_up_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/pages/auth/verify_email.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUp extends StatelessWidget {
-  static final String routeName = 'sign_up';
   final SignUpCubit _cubit;
 
   SignUp(this._cubit);
@@ -61,7 +61,7 @@ class SignUp extends StatelessWidget {
 
   TextButton getSignInButton(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.popAndPushNamed(context, SignIn.routeName),
+      onPressed: () => Navigator.popAndPushNamed(context, signIn),
       child: Text(
         'Sign In',
         style: TextStyle(color: Colors.white),

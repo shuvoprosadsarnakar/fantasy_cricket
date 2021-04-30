@@ -4,6 +4,7 @@ import 'package:fantasy_cricket/pages/auth/sign_up.dart';
 import 'package:fantasy_cricket/pages/auth/verify_email.dart';
 import 'package:fantasy_cricket/repositories/auth_repo.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
@@ -14,7 +15,7 @@ class SignIn extends StatelessWidget {
   final SignInCubit _cubit;
 
   SignIn(this._cubit);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,7 @@ class SignIn extends StatelessWidget {
 
   TextButton getSignUpButton(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.popAndPushNamed(context, SignUp.routeName),
+      onPressed: () => Navigator.popAndPushNamed(context, signUp),
       child: Text(
         'Sign Up',
         style: TextStyle(color: Colors.white),
@@ -62,7 +63,7 @@ class SignIn extends StatelessWidget {
       initialValue: _cubit.email,
       keyboardType: TextInputType.emailAddress,
       validator: (String value) {
-        if(value.trim().isEmpty) {
+        if (value.trim().isEmpty) {
           return 'Email is required.';
         } else {
           return null;
@@ -78,7 +79,7 @@ class SignIn extends StatelessWidget {
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
       validator: (String value) {
-        if(value.trim().isEmpty) {
+        if (value.trim().isEmpty) {
           return 'Password is required.';
         } else {
           return null;
@@ -92,16 +93,15 @@ class SignIn extends StatelessWidget {
     return FormSubmitButton(
       title: 'Sign In',
       onPressed: () async {
-        if(await _cubit.signInUser()) {
-          if(await AuthRepo.isEmailVerified()) {
+        if (await _cubit.signInUser()) {
+          if (await AuthRepo.isEmailVerified()) {
             print('home page');
           } else {
-            Navigator.popAndPushNamed(context, VerifyEmail.routeName);
+            Navigator.popAndPushNamed(context, verifyEmail);
           }
-        } else if(_cubit.state == CubitState.signInError) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(_cubit.errorMsg)
-          ));
+        } else if (_cubit.state == CubitState.signInError) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(_cubit.errorMsg)));
         }
       },
     );
