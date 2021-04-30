@@ -120,7 +120,7 @@ class SignUp extends StatelessWidget {
       title: 'Sign Up',
       onPressed: () async {
         if(await _cubit.createUserAndVerifyEmail()) {
-          Navigator.popAndPushNamed(context, VerifyEmail.routeName);
+          Navigator.popAndPushNamed(context, verifyEmail);
         } else if(_cubit.state == CubitState.duplicate) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Given username is alreday taken.'))
