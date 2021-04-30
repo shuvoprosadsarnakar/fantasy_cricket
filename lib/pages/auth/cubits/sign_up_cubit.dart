@@ -30,11 +30,19 @@ class SignUpCubit extends Cubit<CubitState> {
       if(await UserRepo.checkUsername(user.username)) {
         try {
           UserCredential cred = await AuthRepo.createUser(email, password);
-          await cred.user.sendEmailVerification();
-          // [true] is returned here instead of emitting state to go to the
-          // [VerifyEmail] screen whithout rebuilding [SignUp] screen when 
-          // everything is successfully done
-          return true;
+          user.id = cred.user.uid;
+          try {
+            await UserRepo.addUser(user);
+            await cred.user.sendEmailVerification();
+            // [true] is returned here instead of emitting state to go to the
+            // [VerifyEmail] screen whithout rebuilding [SignUp] screen when 
+            // everything is successfully done
+            return true;
+          } catch(error) {
+            await cred.user.delete().catchError((error) => null);
+            errorMsg = error.message;
+            emit(CubitState.signUpError);
+          }
         } catch(error) {
           errorMsg = error.message;
           emit(CubitState.signUpError);
