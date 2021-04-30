@@ -3,14 +3,14 @@ const String CHIPS_KEY = 'chips';
 const String FROM_KEY = 'from';
 const String TO_KEY = 'to';
 
-class ChipsDistribute {
+class Distribute {
   int chips;
   int from;
   int to;
 
-  ChipsDistribute({this.chips, this.from, this.to});
+  Distribute({this.chips, this.from, this.to});
 
-  ChipsDistribute.fromMap(Map<String, dynamic> map) {
+  Distribute.fromMap(Map<String, dynamic> map) {
     chips = map[CHIPS_KEY];
     from = map[FROM_KEY];
     to = map[TO_KEY];

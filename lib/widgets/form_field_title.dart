@@ -9,12 +9,15 @@ class FormFieldTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.only(
+        left: 5,
+        bottom: 5,
+      ),
       child: Text(
         _title,
         style: TextStyle(
           color: ColorPallate.ebonyClay,
-          fontSize: 20,
+          fontSize: 18,
         ),
       ),
     );

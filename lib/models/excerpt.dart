@@ -9,7 +9,7 @@ const String TEAMS_NAMES_KEY = 'teamsNames';
 const String START_TIME_KEY = 'startTime';
 const String STATUS_KEY = 'status';
 
-class MatchExcerpt {
+class Excerpt {
   String id;
   String type;
   int no;
@@ -18,7 +18,7 @@ class MatchExcerpt {
   Timestamp startTime;
   String status;
 
-  MatchExcerpt({
+  Excerpt({
     this.id,
     this.type,
     this.no,
@@ -28,7 +28,7 @@ class MatchExcerpt {
     this.status = 'Upcoming',
   });
 
-  MatchExcerpt.fromMap(Map<String, dynamic> map) {
+  Excerpt.fromMap(Map<String, dynamic> map) {
     id = map[ID_KEY];
     type = map[TYPE_KEY];
     no = map[NO_KEY];

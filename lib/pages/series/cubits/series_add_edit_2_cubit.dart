@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/models/match_excerpt.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
@@ -31,7 +31,7 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
   }
 
   void addMatchExcerpt() {
-    series.matchExcerpts.add(MatchExcerpt(
+    series.matchExcerpts.add(Excerpt(
       teamsIds: [null, null],
       teamsNames: [null, null],  
     ));

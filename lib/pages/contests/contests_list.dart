@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/models/match_excerpt.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/pages/contests/contest_ender.dart';
 import 'package:fantasy_cricket/pages/contests/contest_manager.dart';
@@ -46,7 +46,7 @@ class ContestsList extends StatelessWidget {
 
   void initListItemsVar(BuildContext context, List<InkWell> listItems) {
     int totalExcerpts;
-    MatchExcerpt excerpt;
+    Excerpt excerpt;
 
     _cubit.notEndedSerieses.forEach((Series series) {
       totalExcerpts = series.matchExcerpts.length;

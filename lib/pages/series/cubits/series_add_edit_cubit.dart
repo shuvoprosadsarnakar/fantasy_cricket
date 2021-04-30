@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:fantasy_cricket/models/chips_distribute.dart';
-import 'package:fantasy_cricket/models/match_excerpt.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/times.dart';
 import 'package:flutter/material.dart';
@@ -48,9 +48,9 @@ class SeriesAddEditCubit extends Cubit<AddEditStatus> {
     if(series.id == null) {
       // these assignments are needed to build the [SeriesAddEdit] & 
       // [SeriesAddEdit2] screen
-      series.chipsDistributes = [ChipsDistribute()];
+      series.chipsDistributes = [Distribute()];
       series.times = Times();
-      series.matchExcerpts = [MatchExcerpt(
+      series.matchExcerpts = [Excerpt(
         teamsIds: [null, null],
         teamsNames: [null, null],
       )];
@@ -63,7 +63,7 @@ class SeriesAddEditCubit extends Cubit<AddEditStatus> {
   // adds a [ChipsDistribute] class object to [series] object's 
   // [chipsDistributes] list
   void addChipsDistribute() {
-    series.chipsDistributes.add(ChipsDistribute());
+    series.chipsDistributes.add(Distribute());
 
     if(state == AddEditStatus.distributeAdded) {
       emit(null);

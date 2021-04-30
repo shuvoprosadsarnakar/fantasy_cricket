@@ -1,11 +1,11 @@
-import 'package:fantasy_cricket/models/chips_distribute.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:flutter/material.dart';
 
 class FormDistributesField extends StatelessWidget {
-  final List<ChipsDistribute> _chipsDistributes;
+  final List<Distribute> _chipsDistributes;
   final Function _removeChipsDistribute;
   final Function _addChipsDistribute;
 
@@ -53,7 +53,7 @@ class FormDistributesField extends StatelessWidget {
   Column getChipsDistributesFields() {
     List<Widget> chipsDistributesFields = [];
     
-    _chipsDistributes.forEach((ChipsDistribute distribute) {
+    _chipsDistributes.forEach((Distribute distribute) {
       chipsDistributesFields.add(Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

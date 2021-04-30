@@ -27,7 +27,7 @@ class ContestEnder extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: Text('End Contest')),
             body: SingleChildScrollView(
-              padding: Paddings.formPadding,
+              padding: Paddings.pagePadding,
               child: Form(
                 key: _cubit.formKey,
                 child: Column(

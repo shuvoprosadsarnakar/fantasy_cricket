@@ -9,6 +9,7 @@ class FormTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final FormFieldValidator<String> validator;
   final FormFieldSetter<String> onSaved;
+  final bool obscureText;
 
   const FormTextField({
     this.hintText,
@@ -18,6 +19,7 @@ class FormTextField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.onSaved,
+    this.obscureText = false,
   });
 
   @override
@@ -45,6 +47,7 @@ class FormTextField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       onSaved: onSaved,
+      obscureText: obscureText,
     );
   }
 }

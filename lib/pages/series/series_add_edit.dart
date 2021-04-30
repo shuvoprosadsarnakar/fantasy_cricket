@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fantasy_cricket/models/chips_distribute.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/times.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
@@ -41,7 +41,7 @@ class SeriesAddEdit extends StatelessWidget {
             }
 
             return ListView(
-              padding: Paddings.formPadding,
+              padding: Paddings.pagePadding,
               children: [
                 // series name
                 getNameFieldWithTitle(),
@@ -186,7 +186,7 @@ class SeriesAddEdit extends StatelessWidget {
   Column getChipsDistributesFields() {
     List<Widget> chipsDistributesFields = [];
     
-    _seriesAddEditCubit.series.chipsDistributes.forEach((ChipsDistribute distribute) {
+    _seriesAddEditCubit.series.chipsDistributes.forEach((Distribute distribute) {
       chipsDistributesFields.add(Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

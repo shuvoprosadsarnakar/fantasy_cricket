@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/models/chips_distribute.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
@@ -34,7 +34,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.noByType = _series.matchExcerpts[_excerptIndex].no;
       contest.startTime = _series.matchExcerpts[_excerptIndex].startTime;
       contest.excerptIndex = _excerptIndex;
-      contest.chipsDistributes = [ChipsDistribute()];
+      contest.chipsDistributes = [Distribute()];
 
       // fetch the two team's players and set players needed info
       setPlayersInfo(_series.matchExcerpts[_excerptIndex].teamsIds);
@@ -102,7 +102,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
   // adds a [ChipsDistribute] class object to [contest] object's 
   // [chipsDistributes] list
   void addChipsDistribute() {
-    contest.chipsDistributes.add(ChipsDistribute());
+    contest.chipsDistributes.add(Distribute());
 
     // to rebuild the UI
     if(state == CubitState.distributeAdded) {

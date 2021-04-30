@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:fantasy_cricket/models/match_excerpt.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
@@ -49,7 +49,7 @@ class SeriesAddEdit2 extends StatelessWidget {
             body: Form(
               key: _cubit.formKey,
               child: ListView(
-                padding: Paddings.formPadding,
+                padding: Paddings.pagePadding,
                 children: [
                   FormFieldTitle('Matche Excerpts'),
                   Divider(),
@@ -89,7 +89,7 @@ class SeriesAddEdit2 extends StatelessWidget {
         );
       }).toList();
 
-    _cubit.series.matchExcerpts.forEach((MatchExcerpt excerpt) {
+    _cubit.series.matchExcerpts.forEach((Excerpt excerpt) {
       matchExcerptWidgets.add(Column(children: [
         // type field
         Row(

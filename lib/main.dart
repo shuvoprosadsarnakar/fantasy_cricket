@@ -1,4 +1,6 @@
+import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/resources/routes.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Fantasy Cricket',
-      onGenerateRoute: AppRouter.onGenerateRoute,
-      //home: SeriesAddEdit(SeriesAddEditCubit(Series())),
+      // onGenerateRoute: AppRouter.onGenerateRoute,
+      initialRoute: SignIn.routeName,
+      routes: routes,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

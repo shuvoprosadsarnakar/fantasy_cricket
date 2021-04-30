@@ -30,7 +30,7 @@ class ContestManager extends StatelessWidget {
             appBar: AppBar(title: Text(_cubit.contest.id == null ? 
               'Run Contest' : 'Update or Lock Contest')),
             body: SingleChildScrollView(
-              padding: Paddings.formPadding,
+              padding: Paddings.pagePadding,
               child: Form(
                 key: _cubit.formKey,
                 child: Column(

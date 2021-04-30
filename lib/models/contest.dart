@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fantasy_cricket/models/chips_distribute.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/report.dart';
 
 // keys
@@ -35,7 +35,7 @@ class Contest {
   Timestamp startTime;
 
   // to show match details and calculate contest result
-  List<ChipsDistribute> chipsDistributes;
+  List<Distribute> chipsDistributes;
   int team1TotalPlayers;
   List<String> playersNames;
   List<String> playersRoles;
@@ -75,7 +75,7 @@ class Contest {
     doc[TEAMS_NAMES_KEY].forEach((dynamic name) => teamsNames.add(name));
     
     doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic distributeMap) => 
-      chipsDistributes.add(ChipsDistribute.fromMap(distributeMap)));
+      chipsDistributes.add(Distribute.fromMap(distributeMap)));
     
     doc[PLAYERS_NAMES_KEY].forEach((dynamic name) => playersNames.add(name));
     
@@ -115,7 +115,7 @@ class Contest {
       NO_BY_TYPE_KEY: noByType,
       START_TIME_KEY: startTime,
       
-      CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((ChipsDistribute distribute) {
+      CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((Distribute distribute) {
         return distribute.toMap();
       }).toList(),
       
