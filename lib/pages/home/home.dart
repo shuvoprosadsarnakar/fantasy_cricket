@@ -3,6 +3,7 @@ import 'package:fantasy_cricket/pages/home/tabs/fantasy_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/leaderboard_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/news_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/prediction.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -22,8 +23,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: ColorPallate.pomegranate,
         elevation: 0.0,
+        actions: [
+          PopupMenuButton<int>(
+              onSelected: (value) => _onMenuItemSelected(context, value),
+              itemBuilder: (context) => [
+                    PopupMenuItem(value: 0, child: Text("Chips")),
+                    PopupMenuItem(value: 1, child: Text("Settings")),
+                    PopupMenuItem(value: 2, child: Text("Admin panel"))
+                  ])
+        ],
       ),
       body: IndexedStack(
         index: _selectedPage,
@@ -65,5 +75,19 @@ class _HomeState extends State<Home> {
     setState(() {
       _selectedPage = index;
     });
+  }
+
+  void _onMenuItemSelected(BuildContext context, int value) {
+    switch (value) {
+      case 0:
+        print("Chips clicked");
+        break;
+      case 1:
+        print("Settings clicked");
+        break;
+      case 2:
+      Navigator.pushNamed(context, adminHome);
+        break;
+    }
   }
 }

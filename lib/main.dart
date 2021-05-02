@@ -1,10 +1,6 @@
-import 'package:fantasy_cricket/pages/auth/sign_in.dart';
-import 'package:fantasy_cricket/pages/contests/contests_list.dart';
-import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      //home: ContestsList(ContestsListCubit(), ContestStatuses.upcoming),
+      initialRoute: home,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

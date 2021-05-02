@@ -7,6 +7,7 @@ import 'package:fantasy_cricket/pages/auth/password_reset.dart';
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/pages/auth/sign_up.dart';
 import 'package:fantasy_cricket/pages/auth/verify_email.dart';
+import 'package:fantasy_cricket/pages/home/admin_home.dart';
 import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
@@ -39,6 +40,10 @@ class AppRouter {
       case home:
         return MaterialPageRoute(
           builder: (_) => Home(),
+        );
+      case adminHome:
+        return MaterialPageRoute(
+          builder: (_) => AdminHome(),
         );
       case player:
         return MaterialPageRoute(
