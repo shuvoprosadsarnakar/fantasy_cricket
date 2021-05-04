@@ -15,9 +15,17 @@ class ContestsListCubit extends Cubit<CubitState> {
   ContestsListCubit() : super(null) {
     emit(CubitState.loading);
     
-    SeriesRepo.assignNotEndedSerieses(notEndedSerieses)
-      .catchError((dynamic error) => emit(CubitState.fetchError))
-      .then((void value) => emit(null));
+    initNotEndedSeireses();
+  }
+
+  void initNotEndedSeireses() async {
+    try {
+      await SeriesRepo.assignNotEndedSerieses(notEndedSerieses);
+      emit(null);
+    } catch(error) {
+      print(error);
+      emit(CubitState.fetchError);
+    }
   }
 
   // this function emit a state to rebuild ui

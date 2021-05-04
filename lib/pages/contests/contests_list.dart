@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/pages/contests/contest_ender.dart';
@@ -31,7 +32,7 @@ class ContestsList extends StatelessWidget {
             return FetchErrorMsg();
           } else {
             final List<InkWell> listItems = <InkWell>[];
-            initListItemsVar(context, listItems);
+            initListItems(context, listItems);
 
             return ListView.builder(
               padding: Paddings.pagePadding,
@@ -44,77 +45,115 @@ class ContestsList extends StatelessWidget {
     );
   }
 
-  void initListItemsVar(BuildContext context, List<InkWell> listItems) {
-    int totalExcerpts;
-    Excerpt excerpt;
-
+  void initListItems(BuildContext context, List<InkWell> listItems) {
     _cubit.notEndedSerieses.forEach((Series series) {
-      totalExcerpts = series.matchExcerpts.length;
+      int totalExcerpts = series.matchExcerpts.length;
 
       for(int i = 0; i < totalExcerpts; i++) {
-        excerpt = series.matchExcerpts[i];
+        Excerpt excerpt = series.matchExcerpts[i];
 
         if(excerpt.status == _contestStatus) {
-          // add list item
           listItems.add(InkWell(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // starting time
-                Text(
-                  excerpt.startTime.toDate().toString(),
-                  style: TextStyle(fontStyle: FontStyle.italic),  
-                ),
+                getStartingTime(excerpt.startTime),
                 SizedBox(height: 5),
-                
-                // team names
-                Text(
-                  '${excerpt.teamsNames[0]} VS ${excerpt.teamsNames[1]}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                    color: Theme.of(context).primaryColor,
-                  ),  
-                ),
+                getTeamNames(excerpt.teamsNames, context),
                 SizedBox(height: 5),
-                
-                // match type and typewise no
-                Text('No.${excerpt.no} ${excerpt.type}'),
+                getMatchTypeAndNo(excerpt.no, excerpt.type),
                 SizedBox(height: 5),
-                
-                // series name and divider
-                Text(
-                  series.name,
-                  style: Theme.of(context).textTheme.subtitle2,
-                ),
+                getSeriesName(series.name, context),
+                SizedBox(height: 5),
+                if(_contestStatus != ContestStatuses.upcoming) 
+                  getContestPrice(excerpt),
+                if(_contestStatus != ContestStatuses.upcoming)
+                  SizedBox(height: 5),
+                getSeriesPrice(series),
                 Divider(height: 30),
               ],
             ),
-            onTap: () async {   
-              String snackBarText;
-
-              snackBarText = await Navigator.push(context, MaterialPageRoute(
-                builder: (BuildContext context) {
-                  if(_contestStatus != ContestStatuses.locked) {
-                    return ContestManager(
-                      cmCubit.ContestManagerCubit(series, i)
-                    );
-                  } else {
-                    return ContestEnder(ceCubit.ContestEnderCubit(series, i));
-                  }
-                },
-              ));
-           
-              if(snackBarText != null) {
-                _cubit.rebuildUi();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(snackBarText),
-                ));
-              }
-            },
+            onTap: getOnTap(context, series, i),
           ));
         }
       }
     });
+  }
+
+  Text getStartingTime(Timestamp startTime) {
+    return Text(
+      'Match Time: ' + startTime.toDate().toString(),
+      style: TextStyle(fontStyle: FontStyle.italic),  
+    );
+  }
+
+  Text getTeamNames(List<String> teamsNames, BuildContext context) {
+    return Text(
+      '${teamsNames[0]} VS ${teamsNames[1]}',
+      style: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 18,
+        color: Theme.of(context).primaryColor,
+      ),  
+    );
+  }
+
+  Text getMatchTypeAndNo(int no, String type) {
+    return Text('No.$no $type');
+  }
+
+  Text getSeriesName(String seriesName, BuildContext context) {
+    return Text(
+      seriesName,
+      style: Theme.of(context).textTheme.subtitle2,
+    );
+  }
+
+  Function getOnTap(BuildContext context, Series series, int excerptIndex) {
+    return () async {
+      String snackBarText = await Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            if(_contestStatus != ContestStatuses.locked) {
+              return ContestManager(
+                cmCubit.ContestManagerCubit(series, excerptIndex)
+              );
+            } else {
+              return ContestEnder(
+                ceCubit.ContestEnderCubit(series, excerptIndex)
+              );
+            }
+          },
+        ),
+      );
+    
+      if(snackBarText != null) {
+        _cubit.rebuildUi();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(snackBarText),
+        ));
+      }
+    };
+  }
+
+  Text getSeriesPrice(Series series) {
+    int totalChips = 0;
+    int totalDistributes = series.chipsDistributes.length;
+    
+    for(int i = 0; i < totalDistributes; i++) {
+      totalChips += series.chipsDistributes[i].chips;
+    }
+
+    return Text(
+      'Series: $totalChips Chips & ' + 
+        '${series.chipsDistributes[totalDistributes - 1].to} Winners',
+    );
+  }
+
+  Text getContestPrice(Excerpt excerpt) {
+    return Text(
+      'Match: ${excerpt.totalChips} Chips & ${excerpt.totalWinners} Winners'
+    );
   }
 }

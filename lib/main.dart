@@ -1,6 +1,10 @@
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/pages/contests/contests_list.dart';
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/running_contests.dart';
+import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      //home: ContestsList(ContestsListCubit(), ContestStatuses.upcoming),
+      home: RunningContests(RunningContestsCubit()),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

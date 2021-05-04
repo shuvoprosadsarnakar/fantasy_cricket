@@ -19,4 +19,9 @@ class UserRepo {
   static Future<void> addUser(User user) async {
     await _users.doc(user.id).set(user.toMap());
   }
+
+  static Future<User> getUserById(String id) async {
+    DocumentSnapshot snapshot = await _users.doc(id).get();
+    return User.fromMap(snapshot.data(), id);
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/series.dart';
 
 class ContestRepo {
@@ -17,6 +18,13 @@ class ContestRepo {
     // edit series excerpt
     series.matchExcerpts[excerptIndex].id = docRef.id;
     series.matchExcerpts[excerptIndex].status = 'Running';
+    series.matchExcerpts[excerptIndex].totalChips = 0;
+    series.matchExcerpts[excerptIndex].totalWinners = contest
+      .chipsDistributes[contest.chipsDistributes.length - 1].to;
+
+    contest.chipsDistributes.forEach((Distribute distribute) {
+      series.matchExcerpts[excerptIndex].totalChips += distribute.chips;
+    });
 
     // update series excerpt
     docRef = _db.collection('serieses').doc(series.id);
