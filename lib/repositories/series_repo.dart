@@ -39,4 +39,9 @@ class SeriesRepo {
       notEndedSerieses.add(Series.fromMap(doc.data(), doc.id));
     });
   }
+
+  static Future<Series> getSeriesById(String id) async {
+    DocumentSnapshot snapshot = await _seriesCollection.doc(id).get();
+    return Series.fromMap(snapshot.data(), snapshot.id);
+  }
 }

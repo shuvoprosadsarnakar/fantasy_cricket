@@ -14,7 +14,7 @@ class Fantasy {
   String contestId;
   String username;
   List<String> playersNames = [];
-  double totalPoints;
+  double totalPoints = 0;
   Timestamp createdAt;
   String captain;
   String viceCaptain;

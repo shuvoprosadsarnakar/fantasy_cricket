@@ -11,6 +11,17 @@ class FantasyRepo {
     return Fantasy.fromMap(snapshot.data(), snapshot.id);
   }
 
+  static Future<List<Fantasy>> getFantasiesByContestId(String contestId) async {
+    QuerySnapshot snapshot = await _fantasies
+      .where('contestId', isEqualTo: contestId)
+      .orderBy(TOTAL_POINTS_KEY)
+      .get();
+
+    return snapshot.docs.map((QueryDocumentSnapshot snapshot) {
+      return Fantasy.fromMap(snapshot.data(), snapshot.id);
+    }).toList();
+  }
+
   static Future<void> addFantasy(Fantasy fantasy, User user, String contestId) 
     async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;

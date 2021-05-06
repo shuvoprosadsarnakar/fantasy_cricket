@@ -291,6 +291,8 @@ class TeamManager extends StatelessWidget {
           snackBarText = 'Team is added successfully.';
         } else if(_cubit.state == CubitState.updated) {
           snackBarText = 'Team is updated successfully.';
+        } else if(_cubit.state == CubitState.timeOver) {
+          snackBarText = 'Team submition time is over.';
         }
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -1,6 +1,8 @@
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart' as tmCubit;
+import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
@@ -31,7 +33,7 @@ class ContestDetails extends StatelessWidget {
               children: [
                 getContestDetilsHeader(),
                 Divider(color: Theme.of(context).primaryColor),
-                getMatchPrizes(),
+                getMatchPrizes(context),
                 Divider(color: Theme.of(context).primaryColor),
                 getSeriesPrizes(),
                 SizedBox(height: 50), // for floating action button
@@ -97,7 +99,7 @@ class ContestDetails extends StatelessWidget {
     }
   }
 
-  Column getMatchPrizes() {
+  Column getMatchPrizes(BuildContext context) {
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +113,17 @@ class ContestDetails extends StatelessWidget {
               'Leaderboard',
               style: TextStyle(color: Colors.green),  
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return MatchLeaderboard(
+                  mlCubit.MatchLeaderboardCubit(
+                    _cubit.contest,
+                    _cubit.user,
+                    _cubit.excerpt.status,
+                  )
+                );
+              },
+            )),
           ),
         ],
       ),
@@ -192,7 +204,7 @@ class ContestDetails extends StatelessWidget {
   TextButton getJoinContestButton(BuildContext context) {
     String buttonText;
     
-    if(_cubit.user.contestsIds.contains(_cubit.excerpt.id)) {
+    if(_cubit.user.contestIds.contains(_cubit.excerpt.id)) {
       buttonText = 'Update Team';
     } else {
       buttonText = 'Create Team';

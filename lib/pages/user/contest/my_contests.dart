@@ -4,17 +4,16 @@ import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart' as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RunningContests extends StatelessWidget {
+class MyContests extends StatelessWidget {
   final RunningContestsCubit _cubit;
   
-  RunningContests(this._cubit);
+  MyContests(this._cubit);
   
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class RunningContests extends StatelessWidget {
           return FetchErrorMsg();
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text('Running Contests')),
+            appBar: AppBar(title: Text('My Contests')),
             body: ListView(
               padding: Paddings.pagePadding,
               children: getListItems(context),
@@ -46,8 +45,7 @@ class RunningContests extends StatelessWidget {
     // init [runningContestsExcerpts] & [runningContestsSerieses] variables
     _cubit.notEndedSerieses.forEach((Series series) {
       series.matchExcerpts.forEach((Excerpt excerpt) {
-        if(excerpt.status == ContestStatuses.running && 
-          _cubit.user.contestIds.contains(excerpt.id) == false) {
+        if(_cubit.user.contestIds.contains(excerpt.id)) {
           runningContestsExcerpts.add(excerpt);
           runningContestsSerieses.add(series);
         }
@@ -62,21 +60,15 @@ class RunningContests extends StatelessWidget {
           runningContestsExcerpts[i],
           runningContestsSerieses[i],
         ),
-        onTap: () async {
-          await Navigator.push(context, MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ContestDetails(cdCubit.ContestDetialsCubit(
-                runningContestsSerieses[i],
-                runningContestsExcerpts[i],
-                _cubit.user,
-              ));
-            },
-          ));
-
-          // rebuild UI to update running contests list if user has joined the 
-          // contest
-          _cubit.rebuildUi();
-        },
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context) {
+            return ContestDetails(cdCubit.ContestDetialsCubit(
+              runningContestsSerieses[i],
+              runningContestsExcerpts[i],
+              _cubit.user,
+            ));
+          },
+        )),
       ));
     }
 

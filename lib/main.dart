@@ -1,4 +1,6 @@
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
+import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
 import 'package:fantasy_cricket/pages/user/contest/running_contests.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      home: RunningContests(RunningContestsCubit()),
+      home: MyContests(RunningContestsCubit()),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
