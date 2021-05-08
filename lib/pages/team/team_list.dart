@@ -62,29 +62,28 @@ class _TeamListState extends State<TeamList> {
           ),
           Expanded(
             child: BlocBuilder<TeamBloc, TeamState>(
+              // ignore: missing_return
               builder: (context, state) {
+                if(state is TeamSuccess){
                 return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2),
+                        itemCount: state.teams.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
                         decoration: BoxDecoration(
-                          // border: Border.all(
-                          //   color: ColorPallate.pomegranate,
-                          //   width: 1,
-                          // ),
                           borderRadius: BorderRadius.circular(12),
                           color: ColorPallate.mercury,
                         ),
                         child: Center(
-                          child: Text(
-                            'Item  fff',
+                          child: Text(state.teams[index].name,
                             style: Theme.of(context).textTheme.headline5,
                           ),
                         ),
                       );
                     });
+                }
               },
             ),
           ),
