@@ -79,6 +79,7 @@ abstract class PlayerRepo {
     } catch (error) {
       print(error);
     }
+    return null;
   }
 
   static Future<void> assignAllPlayers(List<Player> allPlayers) async {

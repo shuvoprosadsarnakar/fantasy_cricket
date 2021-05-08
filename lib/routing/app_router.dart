@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/models/team.dart';
+
 import 'package:fantasy_cricket/pages/auth/cubits/password_reset_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/cubits/sign_in_cubit.dart';
 import 'package:fantasy_cricket/pages/auth/cubits/sign_up_cubit.dart';
@@ -12,8 +12,9 @@ import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
-import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
-import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
+import 'package:fantasy_cricket/pages/team/bloc/team_bloc.dart';
+import 'package:fantasy_cricket/pages/team/bloc/team_event.dart';
+import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,9 +55,10 @@ class AppRouter {
         );
       case team:
         return MaterialPageRoute(
-            builder: (_) => TeamAddEdit(
-                  TeamAddEditCubit(Team()),
-                ));
+            builder: (_) => BlocProvider(
+            create: (context) => TeamBloc()..add(TeamFetched()),
+            child: TeamList(),
+          ),);
       default:
         return null;
     }

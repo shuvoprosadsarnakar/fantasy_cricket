@@ -6,9 +6,7 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  //final CollectionReference playerCollection =Firestore.instance.collection('player');
-  //Future<List<DocumentSnapshot>> documentList;
-  //DocumentSnapshot lastDocument;
+
   final int limit = 20;
   PlayerBloc() : super(PlayerInitial());
 
