@@ -64,25 +64,43 @@ class _TeamListState extends State<TeamList> {
             child: BlocBuilder<TeamBloc, TeamState>(
               // ignore: missing_return
               builder: (context, state) {
-                if(state is TeamSuccess){
-                return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                        itemCount: state.teams.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: ColorPallate.mercury,
-                        ),
-                        child: Center(
-                          child: Text(state.teams[index].name,
-                            style: Theme.of(context).textTheme.headline5,
+                if (state is TeamSuccess) {
+                  return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      itemCount: state.teams.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: ColorPallate.mercury,
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'lib/resources/images/australia-flag.png'))),
+                          child: Container(
+                            margin: EdgeInsets.all(50),
+                            
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),color: Colors.white70,),
+                                                      child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  state.teams[index].name,
+                                  style: TextStyle(
+                                      fontSize: 32, fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  "Players: " +
+                                      state.teams[index].playersNames.length
+                                          .toString(),
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    });
+                        );
+                      });
                 }
               },
             ),
