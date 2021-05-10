@@ -8,6 +8,7 @@ const String TOTAL_POINTS_KEY = 'totalPoints';
 const String PLAYERS_NAMES_KEY = 'playersNames';
 const String CAPTAIN_KEY = 'captain';
 const String VICE_CAPTAIN_KEY = 'viceCaptain';
+const String RANK_KEY = 'rank';
 
 class Fantasy {
   String id;
@@ -18,6 +19,7 @@ class Fantasy {
   Timestamp createdAt;
   String captain;
   String viceCaptain;
+  int rank;
 
   Fantasy();
 
@@ -29,6 +31,7 @@ class Fantasy {
     createdAt = doc[CREATED_AT_KEY];
     captain = doc[CAPTAIN_KEY];
     viceCaptain = doc[VICE_CAPTAIN_KEY];
+    rank = doc[RANK_KEY];
 
     doc[PLAYERS_NAMES_KEY].forEach((dynamic playerName) {
       playersNames.add(playerName);
@@ -44,6 +47,7 @@ class Fantasy {
       CREATED_AT_KEY: createdAt,
       CAPTAIN_KEY: captain,
       VICE_CAPTAIN_KEY: viceCaptain,
+      RANK_KEY: rank,
     };
   }
 }

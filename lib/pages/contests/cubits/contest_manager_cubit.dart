@@ -144,6 +144,8 @@ class ContestManagerCubit extends Cubit<CubitState> {
 
   Future<bool> runContest() async {
     if(validateAndSaveForm()) {
+      emit(CubitState.loading);
+
       try {
         await ContestRepo.addContest(contest, _series, _excerptIndex);
         
@@ -166,7 +168,8 @@ class ContestManagerCubit extends Cubit<CubitState> {
 
   Future<bool> updateContest() async {
     if(validateAndSaveForm()) {
-      
+      emit(CubitState.loading);
+
       try {
         await ContestRepo.updateContest(contest);
         
@@ -185,6 +188,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
 
   Future<bool> lockContest() async {
     if(validateAndSaveForm()) {
+      emit(CubitState.loading);
       _series.matchExcerpts[_excerptIndex].status = ContestStatuses.locked;
 
       try {

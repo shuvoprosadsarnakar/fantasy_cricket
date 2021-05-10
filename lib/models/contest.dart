@@ -22,6 +22,7 @@ const String EXCERPT_INDEX_KEY = 'excerptIndex';
 const String TEAMS_SCORES_KEY = 'teamsScores';
 const String RESULT_KEY = 'result';
 const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
+const String TOTAL_CONTESTENTS_KEY = 'totalContestents';
 
 class Contest {
   // contest id and excerpt id
@@ -51,6 +52,9 @@ class Contest {
   String seriesId;
   int excerptIndex;
 
+  // to give contestents a initial rank
+  int totalContestents = 0;
+
   Contest();
 
   Contest.fromMap(Map<String, dynamic> doc, String docId) {
@@ -64,6 +68,7 @@ class Contest {
     excerptIndex = doc[EXCERPT_INDEX_KEY];
     result = doc[RESULT_KEY];
     playerOfTheMatch = doc[PLAYER_OF_THE_MATCH_KEY];
+    totalContestents = doc[TOTAL_CONTESTENTS_KEY];
 
     teamsNames = [];
     chipsDistributes = [];
@@ -114,6 +119,7 @@ class Contest {
       MATCH_TYPE_KEY: matchType,
       NO_BY_TYPE_KEY: noByType,
       START_TIME_KEY: startTime,
+      TOTAL_CONTESTENTS_KEY: totalContestents,
       
       CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((Distribute distribute) {
         return distribute.toMap();

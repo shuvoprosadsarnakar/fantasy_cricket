@@ -1,8 +1,10 @@
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart' as tmCubit;
 import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
+import 'package:fantasy_cricket/pages/user/contest/series_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
@@ -35,7 +37,7 @@ class ContestDetails extends StatelessWidget {
                 Divider(color: Theme.of(context).primaryColor),
                 getMatchPrizes(context),
                 Divider(color: Theme.of(context).primaryColor),
-                getSeriesPrizes(),
+                getSeriesPrizes(context),
                 SizedBox(height: 50), // for floating action button
               ],
             ),
@@ -140,7 +142,7 @@ class ContestDetails extends StatelessWidget {
     ]);
   }
 
-  Column getSeriesPrizes() {
+  Column getSeriesPrizes(BuildContext context) {
     int totalWinners = _cubit.series.chipsDistributes.last.to;
     int totalChips = 0;
     
@@ -161,7 +163,14 @@ class ContestDetails extends StatelessWidget {
               'Leaderboard',
               style: TextStyle(color: Colors.green),  
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return SeriesLeaderboard(slCubit.SeriesLeaderboardCubit(
+                  _cubit.series,
+                  _cubit.user,
+                ));
+              },
+            )),
           ),
         ],
       ),

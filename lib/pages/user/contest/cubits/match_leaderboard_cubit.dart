@@ -14,17 +14,17 @@ class MatchLeaderboardCubit extends Cubit<CubitState> {
   final Contest contest;
   final User user;
   final String contestStatus;
-  List<Fantasy> matchFantasies;
+  Fantasy userFantasy;
 
   MatchLeaderboardCubit(this.contest, this.user, this.contestStatus) : 
     super(null) {
     emit(CubitState.loading);
-    getAllMatchFantasies();
+    getUserFantasy();
   }
 
-  void getAllMatchFantasies() async {
+  void getUserFantasy() async {
     try {
-      matchFantasies = await FantasyRepo.getFantasiesByContestId(contest.id);
+      userFantasy = await FantasyRepo.getFantasyById(user.id + contest.id);
       emit(CubitState.fetched);
     } catch(error) {
       emit(CubitState.fetchError);

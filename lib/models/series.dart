@@ -7,6 +7,7 @@ const String NAME_KEY = 'name';
 const String CHIPS_DISTRIBUTES_KEY = 'chipsDistributes';
 const String TIMES_KEY = 'times';
 const String MATCH_EXCERPTS_KEY = 'matchExcerpts';
+const String TOTAL_CONTESTENTS_KEY = 'totalContestents';
 
 class Series {
   String id;
@@ -14,6 +15,7 @@ class Series {
   List<Distribute> chipsDistributes = [];
   Times times;
   List<Excerpt> matchExcerpts = [];
+  int totalContestents = 0;
 
   Series({
     this.id,
@@ -21,11 +23,13 @@ class Series {
     this.chipsDistributes,
     this.times,
     this.matchExcerpts,
+    this.totalContestents,
   });
 
   Series.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;
     name = doc[NAME_KEY];
+    totalContestents = doc[TOTAL_CONTESTENTS_KEY];
 
     doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic map) {
       chipsDistributes.add(Distribute.fromMap(map));
@@ -41,6 +45,7 @@ class Series {
   Map<String, dynamic> toMap() {
     return {
       NAME_KEY: name,
+      TOTAL_CONTESTENTS_KEY: totalContestents,
       
       CHIPS_DISTRIBUTES_KEY: chipsDistributes
         .map((Distribute chipsDistribute) {
@@ -58,6 +63,7 @@ class Series {
   @override
   String toString() {
     return '{ id: $id, name: $name, chipsDistributes: $chipsDistributes, ' + 
-      'times: $times, matchExcerpts: $matchExcerpts }';
+      'times: $times, matchExcerpts: $matchExcerpts, ' + 
+      'totalContestents: $totalContestents }';
   }
 }

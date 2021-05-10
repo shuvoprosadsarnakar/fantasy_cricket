@@ -58,44 +58,6 @@ class MatchLeaderboard extends StatelessWidget {
   }
 
   ListView getRanking(BuildContext context) {
-    List<Widget> rankRows = [];
-    int totalRanks = _cubit.matchFantasies.length;
-    int userRank;
-
-    for(int i = 0; i < totalRanks; i++) {
-      if(_cubit.user.username == _cubit.matchFantasies[i].username) {
-        userRank = i;
-      }
-      
-      rankRows.add(InkWell(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Row(children: [
-            Expanded(
-              flex: 1,
-              child: Text((i + 1).toString()),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 3,
-              child: Text(_cubit.matchFantasies[i].username),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 1,
-              child: Text(_cubit.matchFantasies[i].totalPoints.toString()),
-            ),
-          ]),
-        ),
-        onTap: () => Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return TeamPlayersPoints(_cubit.contest, _cubit.matchFantasies[i]);
-          },
-        )),
-      ));
-      rankRows.add(Divider());
-    }
-
     return ListView(
       padding: Paddings.pagePadding,
       children: [
@@ -125,7 +87,7 @@ class MatchLeaderboard extends StatelessWidget {
             child: Row(children: [
               Expanded(
                 flex: 1,
-                child: Text((userRank + 1).toString()),
+                child: Text((_cubit.userFantasy.rank).toString()),
               ),
               SizedBox(width: 10),
               Expanded(
@@ -135,8 +97,7 @@ class MatchLeaderboard extends StatelessWidget {
               SizedBox(width: 10),
               Expanded(
                 flex: 1,
-                child: Text(_cubit.matchFantasies[userRank].totalPoints
-                  .toString()),
+                child: Text(_cubit.userFantasy.totalPoints.toString()),
               ),
             ]),
           ),
@@ -144,15 +105,14 @@ class MatchLeaderboard extends StatelessWidget {
             builder: (BuildContext context) {
               return TeamPlayersPoints(
                 _cubit.contest,
-                _cubit.matchFantasies[userRank],
+                _cubit.userFantasy,
               );
             },
           )),
         ),
         Divider(color: Colors.grey),
 
-        // all user rankings
-        Column(children: rankRows),
+        // all rankings needs to be set here
       ],
     );
   }
