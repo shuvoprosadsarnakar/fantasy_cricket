@@ -1,6 +1,8 @@
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/pages/contests/contests_list.dart';
+import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:flutter/material.dart';
 
@@ -55,13 +57,31 @@ class AdminHome extends StatelessWidget {
             () {},
           ),
           SizedBox(height: 10),
+          getAdminHomeTile(
+            'Players List',
+            Icons.person,
+            Colors.cyan,
+            () {
+              Navigator.pushNamed(context, player);
+            },
+          ),
+          SizedBox(height: 10),
+          getAdminHomeTile(
+            'Team List',
+            Icons.people,
+            Colors.blueGrey,
+            () {
+              Navigator.pushNamed(context, team);
+            },
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );
   }
 
-  Card getAdminHomeTile(String titleText, IconData iconData, Color tileColor,
-    Function onTap) {
+  Card getAdminHomeTile(
+      String titleText, IconData iconData, Color tileColor, Function onTap) {
     return Card(
       elevation: 10,
       clipBehavior: Clip.hardEdge,

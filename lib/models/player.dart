@@ -5,13 +5,14 @@ const String NAME_KEY = 'name';
 const String ROLE_KEY = 'role';
 const String PHOTO_KEY = 'photo';
 
+// ignore: must_be_immutable
 class Player extends Equatable {
   String id;
   String name;
   String role;
   String photo;
 
-  Player({ this.id, this.name, this.role});
+  Player({ this.id, this.name, this.role, this.photo});
 
   Player.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;

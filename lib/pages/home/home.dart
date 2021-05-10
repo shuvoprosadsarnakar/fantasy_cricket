@@ -4,6 +4,7 @@ import 'package:fantasy_cricket/pages/home/tabs/leaderboard_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/news_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/prediction.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -31,7 +32,8 @@ class _HomeState extends State<Home> {
               itemBuilder: (context) => [
                     PopupMenuItem(value: 0, child: Text("Chips")),
                     PopupMenuItem(value: 1, child: Text("Settings")),
-                    PopupMenuItem(value: 2, child: Text("Admin panel"))
+                    PopupMenuItem(value: 2, child: Text("Sign out")),
+                    PopupMenuItem(value: 3, child: Text("Admin panel"))
                   ])
         ],
       ),
@@ -86,7 +88,11 @@ class _HomeState extends State<Home> {
         print("Settings clicked");
         break;
       case 2:
-      Navigator.pushNamed(context, adminHome);
+        FirebaseAuth.instance.signOut();
+        Navigator.pushNamedAndRemoveUntil(context, signIn, (route) => false);
+        break;
+      case 3:
+        Navigator.pushNamed(context, adminHome);
         break;
     }
   }
