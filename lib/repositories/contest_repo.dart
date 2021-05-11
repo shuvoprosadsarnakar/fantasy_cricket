@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
+import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/series.dart';
+import 'package:fantasy_cricket/models/series_rank.dart';
+import 'package:fantasy_cricket/models/user.dart';
 
 class ContestRepo {
   static final _db = FirebaseFirestore.instance;
@@ -42,14 +45,45 @@ class ContestRepo {
     await _contests.doc(contest.id).update(contest.toMap());
   }
 
-  static Future<void> updateSeriesAndContest(Series series, Contest contest) 
-    async {
+  static Future<void> endContest(
+    Contest contest,
+    Series series,
+    List<Fantasy> contestFantasies,
+    List<SeriesRank> seriesRanks,
+    List<User> contestWinnerUsers,
+    List<User> seriesWinnerUsers,
+  ) async {
     WriteBatch batch = _db.batch();
-    DocumentReference seriesRef = _db.collection('serieses').doc(series.id);
-    DocumentReference contestRef = _contests.doc(contest.id);
+    DocumentReference docRef;
+    
+    docRef = _contests.doc(contest.id);
+    batch.update(docRef, contest.toMap());
 
-    batch.update(seriesRef, series.toMap());
-    batch.update(contestRef, contest.toMap());
+    docRef = _db.collection('serieses').doc(series.id);
+    batch.update(docRef, series.toMap());
+
+    contestFantasies.forEach((Fantasy fantasy) {
+      docRef = _db.collection('fantasies').doc(fantasy.id);
+      batch.update(docRef, fantasy.toMap());
+    });
+
+    seriesRanks.forEach((SeriesRank seriesRank) {
+      docRef = _db.collection('seriesRanks').doc(seriesRank.id);
+      batch.update(docRef, seriesRank.toMap());
+    });
+
+    contestWinnerUsers.forEach((User user) {
+      docRef = _db.collection('users').doc(user.id);
+      batch.update(docRef, user.toMap());
+    });
+
+    seriesWinnerUsers.forEach((User user) {
+      if(user != null) {
+        docRef = _db.collection('users').doc(user.id);
+        batch.update(docRef, user.toMap());
+      }
+    });
+
     await batch.commit();
   }
 }

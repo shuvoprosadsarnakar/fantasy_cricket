@@ -24,4 +24,13 @@ class UserRepo {
     DocumentSnapshot snapshot = await _users.doc(id).get();
     return User.fromMap(snapshot.data(), id);
   }
+
+  static Future<User> getUserByUsername(String username) async {
+    QuerySnapshot snapshot = await _users
+      .where('username', isEqualTo: username)
+      .get();
+    QueryDocumentSnapshot doc = snapshot.docs.first;
+
+    return User.fromMap(doc.data(), doc.id);
+  }
 }
