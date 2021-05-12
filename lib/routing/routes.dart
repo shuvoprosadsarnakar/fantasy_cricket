@@ -8,6 +8,7 @@ const String signIn = '/signin';
 const String signUp = '/signup';
 const String player = '/player';
 const String team = '/team';
+const String series = '/series';
 const String verifyEmail = '/verifyEmail';
 const String passwordReset = '/passwordReset';
 const String home = '/home';

@@ -61,7 +61,7 @@ class _SignInState extends State<SignIn> {
   loadSavedEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      myController.text=prefs.getString('email') ?? '';
+      myController.text = prefs.getString('email') ?? '';
     });
   }
 
@@ -121,6 +121,7 @@ class _SignInState extends State<SignIn> {
             saveEmail(widget._cubit.email);
             Navigator.popAndPushNamed(context, home);
           } else {
+            await AuthRepo.getCurrentUser().sendEmailVerification();
             Navigator.popAndPushNamed(context, verifyEmail);
           }
         } else if (widget._cubit.state == CubitState.signInError) {
