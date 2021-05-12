@@ -54,7 +54,7 @@ class _TeamAddEditState extends State<TeamAddEdit> {
                 ),
                 children: [
                   // team name field
-                  getNameField(),
+                  getNameFieldWithTitle(),
                   // this is done due to validation is not working in regular 
                   // way for unknown reason
                   if(status == AddEditStatus.validationError)
@@ -62,6 +62,10 @@ class _TeamAddEditState extends State<TeamAddEdit> {
                       'Team name is required.',
                       Theme.of(context).errorColor,
                     ),
+                  SizedBox(height: 15),
+
+                  // team photo field
+                  getPhotoFieldWithTitle(),
                   SizedBox(height: 15),
 
                   // stack of add player field and player search results
@@ -102,12 +106,32 @@ class _TeamAddEditState extends State<TeamAddEdit> {
     );
   }
 
-  Column getNameField() {
+  Column getNameFieldWithTitle() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormFieldTitle('Name'),
-        FormTextField(controller: _cubit.teamNameController),
+        FormTextField(
+          hintText: 'Enter team name',
+          controller: _cubit.teamNameController,
+        ),
+      ],
+    );
+  }
+
+  Column getPhotoFieldWithTitle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FormFieldTitle('Photo'),
+        FormTextField(
+          keyboardType: TextInputType.url,
+          hintText: 'Enter team photo url',
+          initialValue: _cubit.team.photo,
+          onSaved: (String value) {
+            _cubit.team.photo = value.trim();
+          },
+        ),
       ],
     );
   }

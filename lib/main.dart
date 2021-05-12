@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/models/player.dart';
+import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/contests/contests_list.dart';
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
@@ -6,6 +7,11 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
+import 'package:fantasy_cricket/pages/team/bloc/team_bloc.dart';
+import 'package:fantasy_cricket/pages/team/bloc/team_event.dart';
+import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
+import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
+import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
@@ -30,10 +36,7 @@ class MyApp extends StatelessWidget {
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
       //initialRoute: FirebaseAuth.instance.currentUser==null ? signIn : home,
-      home: BlocProvider(
-            create: (context) => PlayerBloc()..add(PlayerFetched()),
-            child: PlayerList(),
-          ),
+      home: TeamAddEdit(TeamAddEditCubit(Team())),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

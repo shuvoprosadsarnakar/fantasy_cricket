@@ -146,6 +146,7 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
             team.playersRoles.clear();
             teamNameController.clear();
             addPlayerController.clear();
+            team.photo = null;
 
             // after emitting this state TeamAddEdit() screen form will be shown
             // again with empty form fields and a success message will be shown
