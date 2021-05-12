@@ -43,19 +43,23 @@ class SeriesAddEdit extends StatelessWidget {
             return ListView(
               padding: Paddings.pagePadding,
               children: [
-                // series name
+                // series name field
                 getNameFieldWithTitle(),
+                SizedBox(height: 20),
+
+                // series photo field
+                getPhotoFieldWithTitle(),
                 SizedBox(height: 20),
                 
                 // chips distributes fields
-                  FormFieldTitle('Chips Distributes'),
-                  SizedBox(height: 15),
-                  getChipsDistributesSubtitles(),
-                  SizedBox(height: 5),
-                  getChipsDistributesFields(),
-                  SizedBox(height: 10),
-                  getChipsDistributesButtons(),
-                  SizedBox(height: 10),
+                FormFieldTitle('Chips Distributes'),
+                SizedBox(height: 15),
+                getChipsDistributesSubtitles(),
+                SizedBox(height: 5),
+                getChipsDistributesFields(),
+                SizedBox(height: 10),
+                getChipsDistributesButtons(),
+                SizedBox(height: 10),
 
                 // date pickers
                 FormFieldTitle('Times'),
@@ -89,6 +93,23 @@ class SeriesAddEdit extends StatelessWidget {
           },
           onSaved: (String value) {
             _seriesAddEditCubit.series.name = value.trim();
+          },
+        ),
+      ],
+    );
+  }
+
+  Column getPhotoFieldWithTitle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FormFieldTitle('Photo'),
+        FormTextField(
+          hintText: 'Enter series photo url',
+          keyboardType: TextInputType.url,
+          initialValue: _seriesAddEditCubit.series.photo,
+          onSaved: (String value) {
+            _seriesAddEditCubit.series.photo = value.trim();
           },
         ),
       ],
