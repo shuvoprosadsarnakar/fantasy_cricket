@@ -8,8 +8,8 @@ class Team {
   String id;
   String name;
   String photo;
-  List<String> playersNames = [];
-  List<String> playersRoles = [];
+  List<String> playersNames;
+  List<String> playersRoles;
 
   Team({
     this.id,
@@ -17,7 +17,10 @@ class Team {
     this.photo,
     this.playersNames,
     this.playersRoles,
-  });
+  }) {
+    if(playersNames == null) playersNames = [];
+    if(playersRoles == null) playersRoles = [];
+  }
 
   Team.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;

@@ -41,18 +41,12 @@ enum AddEditStatus {
 }
 
 class TeamAddEditCubit extends Cubit<AddEditStatus> {
-  final Team team;
+  Team team;
   
   // all players form databse will be added here to search player to add to team
   final List<Player> allPlayers = [];
 
   TeamAddEditCubit(this.team) : super(null) {
-    if(team.id == null) {
-      // these are done to add values without checking the lists are null or not
-      this.team.playersNames = [];
-      this.team.playersRoles = [];
-    }
-
     // emit state to show progress indicator because all players nedded to be
     // fetched from database
     emit(AddEditStatus.loading);
@@ -66,7 +60,6 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   // form key and controllers for handling the team add edit form from here
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController addPlayerController = TextEditingController();
-  final TextEditingController teamNameController = TextEditingController();
 
   // all name matched player when searching will be added here then the list
   // will be shown as search result
@@ -129,9 +122,8 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
   // add or update team to database
   Future<void> addUpdateTeam() async {
-    if (teamNameController.text == null ||
-        teamNameController.text.trim() != '') {
-      team.name = teamNameController.text.trim();
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
 
       // after emitting this state a progress animation will be shown on the ui
       emit(AddEditStatus.loading);
@@ -142,11 +134,8 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
           if (team.id == null) {
             await TeamRepo.addTeam(team);
 
-            team.playersNames.clear();
-            team.playersRoles.clear();
-            teamNameController.clear();
+            team = Team();
             addPlayerController.clear();
-            team.photo = null;
 
             // after emitting this state TeamAddEdit() screen form will be shown
             // again with empty form fields and a success message will be shown
