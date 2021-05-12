@@ -17,6 +17,7 @@ import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
+import 'package:fantasy_cricket/pages/user/profile/profile.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
       //initialRoute: FirebaseAuth.instance.currentUser==null ? signIn : home,
-      home: TeamAddEdit(TeamAddEditCubit(Team())),
+      home: Profile(),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
