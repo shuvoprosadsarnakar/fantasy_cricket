@@ -44,8 +44,7 @@ class PlayerAddEditCubit extends Cubit<AddEditStatus> {
             // because after emitting next state the PlayerAddEdit() screen     
             // form will be shown again where name and role field should be 
             // empty
-            player.name = null;
-            player.role = null;
+            player.name = player.role = player.photo = null;
 
             // after emitting this state PlayerAddEdit() screen form will be  
             // shown again with empty form fields and a success message will be 

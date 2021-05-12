@@ -48,6 +48,8 @@ class PlayerAddEdit extends StatelessWidget {
                   getNameFieldWithTitle(),
                   SizedBox(height: 15),
                   getRoleFieldWithTitle(),
+                  SizedBox(height: 15),
+                  getPhotoFieldWithTitle(),
                   SizedBox(height: 20),
                   getFormSubmitButton(context),
                 ],
@@ -99,6 +101,23 @@ class PlayerAddEdit extends StatelessWidget {
             }
           },
           onSaved: (dynamic value) => _playerAddEditCubit.player.role = value,
+        ),
+      ],
+    );
+  }
+
+  Column getPhotoFieldWithTitle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FormFieldTitle('Photo'),
+        FormTextField(
+          keyboardType: TextInputType.url,
+          hintText: 'Enter player photo url',
+          initialValue: _playerAddEditCubit.player.photo,
+          onSaved: (String value) {
+            _playerAddEditCubit.player.photo = value.trim();
+          },
         ),
       ],
     );

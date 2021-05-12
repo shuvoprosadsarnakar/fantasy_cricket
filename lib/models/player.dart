@@ -12,7 +12,12 @@ class Player extends Equatable {
   String role;
   String photo;
 
-  Player({ this.id, this.name, this.role, this.photo});
+  Player({
+    this.id,
+    this.name,
+    this.role,
+    this.photo,
+  });
 
   Player.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;
@@ -31,9 +36,4 @@ class Player extends Equatable {
 
   @override  
   List<Object> get props => [id, name, role, photo];
-
-  @override
-  String toString() {
-    return '{ id: $id, name: $name, role: $role, photo: $photo }';
-  }
 }
