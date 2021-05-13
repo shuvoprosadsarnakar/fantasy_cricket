@@ -75,6 +75,15 @@ class AdminHome extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
+          getAdminHomeTile(
+            'Series List',
+            Icons.device_unknown_sharp,
+            Colors.teal,
+            () {
+              Navigator.pushNamed(context, series);
+            },
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );

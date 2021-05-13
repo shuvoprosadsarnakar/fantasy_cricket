@@ -5,6 +5,7 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -97,6 +98,17 @@ class _PlayerListState extends State<PlayerList> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PlayerAddEdit(PlayerAddEditCubit(Player()))),
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 
@@ -159,8 +171,8 @@ class PostWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => 
-                      PlayerAddEdit(PlayerAddEditCubit(player))),
+                    builder: (context) =>
+                        PlayerAddEdit(PlayerAddEditCubit(player))),
               );
             },
           )),

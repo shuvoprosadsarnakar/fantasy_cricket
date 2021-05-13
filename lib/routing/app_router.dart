@@ -12,6 +12,9 @@ import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/player_list.dart';
+import 'package:fantasy_cricket/pages/series/bloc/series_bloc.dart';
+import 'package:fantasy_cricket/pages/series/bloc/series_event.dart';
+import 'package:fantasy_cricket/pages/series/series_list.dart';
 import 'package:fantasy_cricket/pages/team/bloc/team_bloc.dart';
 import 'package:fantasy_cricket/pages/team/bloc/team_event.dart';
 import 'package:fantasy_cricket/pages/team/team_list.dart';
@@ -58,7 +61,15 @@ class AppRouter {
             builder: (_) => BlocProvider(
             create: (context) => TeamBloc()..add(TeamFetched()),
             child: TeamList(),
-          ),);
+          ),
+        );
+      case series:
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+            create: (context) => SeriesBloc()..add(SeriesFetched()),
+            child: SeriesList(),
+          ),
+        );
       default:
         return null;
     }
