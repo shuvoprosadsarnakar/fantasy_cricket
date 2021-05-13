@@ -30,7 +30,7 @@ abstract class TeamRepo {
     await _teamCollection.doc(team.id).update(team.toMap());
   }
 
-    static Future<void> deleteTeam(Team team) async {
+  static Future<void> deleteTeam(Team team) async {
     await _teamCollection.doc(team.id).delete().whenComplete(() {
       print("team deleted");
       return true;
@@ -66,6 +66,7 @@ abstract class TeamRepo {
             .get(GetOptions(source: Source.server));
       lastDocument = documentList.docs.last;
 
+      print(documentList.docs.first.data());
       return documentList.docs
           .map((doc) => Team.fromMap(doc.data(), doc.id))
           .toList();
