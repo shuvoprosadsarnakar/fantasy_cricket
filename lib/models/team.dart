@@ -26,6 +26,8 @@ class Team {
     id = docId;
     name = doc[NAME_KEY];
     photo = doc[PHOTO_KEY];
+    playersNames = [];
+    playersRoles = [];
 
     // list in firestore is always [dynamic] even if we insert a [String] typed 
     // array, that's why we can't do playersNames = dco[PLAYERs_NAMES_KY]

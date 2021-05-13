@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/pages/user/profile/cubits/profile_cubit.dart';
+import 'package:fantasy_cricket/pages/user/profile/earning_history.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -33,7 +34,7 @@ class Profile extends StatelessWidget {
                   title: 'Total Earned Chips',
                   value: _cubit.user.earnedChips.toString(),
                   buttonText: 'Earning History',
-                  page: null,
+                  page: EarningHistory(_cubit.user),
                 ),
                 Divider(height: 50),
 
