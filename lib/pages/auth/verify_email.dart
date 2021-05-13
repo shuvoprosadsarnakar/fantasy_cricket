@@ -10,7 +10,7 @@ class VerifyEmail extends StatelessWidget {
   static final String routeName = 'verify_email';
   final VerifyEmailCubit _cubit;
   final String msgForUser = 'A verification email is sent to your email ' +
-      'account. Please verfiy your email amd then click the play button.';
+      'account. Please verfiy your email and then click the play button.';
 
   VerifyEmail(this._cubit);
 

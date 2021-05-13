@@ -1,44 +1,63 @@
+import 'package:fantasy_cricket/pages/user/profile/cubits/profile_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Profile extends StatelessWidget {
+  final ProfileCubit _cubit;
+
+  Profile(this._cubit);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
-      body: ListView(
-        padding: Paddings.pagePadding,
-        children: [
-          getUsername(context),
-          SizedBox(height: 30),
+    return BlocBuilder(
+      bloc: _cubit,
+      builder: (BuildContext context, CubitState state) {
+        if(state == CubitState.loading) {
+          return Loading();
+        } else if(state == CubitState.fetchError) {
+          return FetchErrorMsg();
+        } else {
+          return Scaffold(
+            appBar: AppBar(title: Text('Profile')),
+            body: ListView(
+              padding: Paddings.pagePadding,
+              children: [
+                getUsername(context),
+                SizedBox(height: 30),
 
-          getProfileInfo(
-            context: context,
-            title: 'Total Earned Chips',
-            value: '1000',
-            buttonText: 'Earning History',
-            page: null,
-          ),
-          Divider(height: 50),
+                getProfileInfo(
+                  context: context,
+                  title: 'Total Earned Chips',
+                  value: _cubit.user.earnedChips.toString(),
+                  buttonText: 'Earning History',
+                  page: null,
+                ),
+                Divider(height: 50),
 
-          getProfileInfo(
-            context: context,
-            title: 'Total Exchanged Chips',
-            value: '1000',
-            buttonText: 'Exchanging History',
-            page: null,
-          ),
-          Divider(height: 50),
+                getProfileInfo(
+                  context: context,
+                  title: 'Total Exchanged Chips',
+                  value: _cubit.getExchangedChips().toString(),
+                  buttonText: 'Exchanging History',
+                  page: null,
+                ),
+                Divider(height: 50),
 
-          getProfileInfo(
-            context: context,
-            title: 'Remaining Chips',
-            value: '1000',
-            buttonText: 'Exchange Chips',
-            page: null,
-          ),
-        ],
-      ),
+                getProfileInfo(
+                  context: context,
+                  title: 'Remaining Chips',
+                  value: _cubit.user.remainingChips.toString(),
+                  buttonText: 'Exchange Chips',
+                  page: null,
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
