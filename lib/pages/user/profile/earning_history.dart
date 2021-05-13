@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/models/user.dart';
+import 'package:fantasy_cricket/models/win_info.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +16,16 @@ class EarningHistory extends StatelessWidget {
         padding: Paddings.pagePadding,
         child: Column(
           children: [
-            getTitles(context),
+            getTitlesRow(context),
             SizedBox(height: 15),
             ListView.builder(
               shrinkWrap: true,
               itemCount: user.earningHistory.length,
               itemBuilder: (BuildContext context, int i) {
-                return ;
+                return Column(children: [
+                  getHistoryRow(user.earningHistory[i]),
+                  Divider(),
+                ]);
               },
             ),
           ],
@@ -30,25 +34,44 @@ class EarningHistory extends StatelessWidget {
     );
   }
 
-  Row getTitles(BuildContext context) {
+  Row getTitlesRow(BuildContext context) {
     return Row(children: [
-      makeTitle(context, 1, 'Date'),
+      getTitle(context, 1, 'Date'),
       SizedBox(width: 10),
-      makeTitle(context, 3, 'Date'),
+      getTitle(context, 2, 'Details'),
       SizedBox(width: 10),
-      makeTitle(context, 1, 'Date'),
+      getTitle(context, 1, 'Rank'),
       SizedBox(width: 10),
-      makeTitle(context, 1, 'Date'),
+      getTitle(context, 1, 'Rewards'),
     ]);
   }
 
-  Expanded makeTitle(BuildContext context, int flex, String title) {
+  Expanded getTitle(BuildContext context, int flex, String title) {
     return Expanded(
       flex: flex,
       child: Text(
         title,
-        style: Theme.of(context).textTheme.subtitle1,  
+        style: Theme.of(context).textTheme.subtitle2,  
       ),
+    );
+  }
+
+  Row getHistoryRow(WinInfo winInfo) {
+    return Row(children: [
+      getHistoryContent(1, winInfo.date.toDate().toString().substring(0, 16)),
+      SizedBox(width: 10),
+      getHistoryContent(2, winInfo.details),
+      SizedBox(width: 10),
+      getHistoryContent(1, winInfo.rank.toString()),
+      SizedBox(width: 10),
+      getHistoryContent(1, winInfo.rewards.toString())
+    ]);
+  }
+
+  Expanded getHistoryContent(int flex, String text) {
+    return Expanded(
+      flex: flex,
+      child: Text(text),
     );
   }
 }
