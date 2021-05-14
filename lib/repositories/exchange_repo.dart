@@ -15,4 +15,14 @@ class ExchangeRepo {
     batch.update(UserRepo.usersCollection.doc(user.id), user.toMap());
     await batch.commit();
   }
+
+  static Future<List<Exchange>> getExchangesByUserId(String userId) async {
+    QuerySnapshot snapshot = await exchangesCollection
+      .where('userId', isEqualTo: userId)
+      .get();
+
+    return snapshot.docs.map((QueryDocumentSnapshot snapshot) {
+      return Exchange.fromMap(snapshot.data(), snapshot.id);
+    }).toList();
+  }
 }

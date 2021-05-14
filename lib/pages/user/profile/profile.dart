@@ -1,7 +1,9 @@
 import 'package:fantasy_cricket/pages/user/profile/cubits/exchange_form_cubit.dart' as efCubit;
+import 'package:fantasy_cricket/pages/user/profile/cubits/exchange_history_cubit.dart' as ehCubit;
 import 'package:fantasy_cricket/pages/user/profile/cubits/profile_cubit.dart';
 import 'package:fantasy_cricket/pages/user/profile/earning_history.dart';
 import 'package:fantasy_cricket/pages/user/profile/exchange_form.dart';
+import 'package:fantasy_cricket/pages/user/profile/exchange_history.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -45,7 +47,8 @@ class Profile extends StatelessWidget {
                   title: 'Total Exchanged Chips',
                   value: _cubit.getExchangedChips().toString(),
                   buttonText: 'Exchanging History',
-                  page: null,
+                  page: ExchangeHistory(
+                    ehCubit.ExchangeHistoryCubit(_cubit.user.id)),
                 ),
                 Divider(height: 50),
 
