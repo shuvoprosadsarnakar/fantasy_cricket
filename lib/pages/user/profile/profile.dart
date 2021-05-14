@@ -1,5 +1,7 @@
+import 'package:fantasy_cricket/pages/user/profile/cubits/exchange_form_cubit.dart' as efCubit;
 import 'package:fantasy_cricket/pages/user/profile/cubits/profile_cubit.dart';
 import 'package:fantasy_cricket/pages/user/profile/earning_history.dart';
+import 'package:fantasy_cricket/pages/user/profile/exchange_form.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -52,7 +54,7 @@ class Profile extends StatelessWidget {
                   title: 'Remaining Chips',
                   value: _cubit.user.remainingChips.toString(),
                   buttonText: 'Exchange Chips',
-                  page: null,
+                  page: ExchangeForm(efCubit.ExchangeFormCubit(_cubit.user)),
                 ),
               ],
             ),
@@ -96,6 +98,7 @@ class Profile extends StatelessWidget {
                 return page;
               },
             ));
+            _cubit.refreshUi();
           },
           child: Text(
             buttonText,

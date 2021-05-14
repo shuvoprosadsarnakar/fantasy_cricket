@@ -7,6 +7,7 @@ enum CubitState {
   loading,
   loaded,
   fetchError,
+  refresh,
 }
 
 class ProfileCubit extends Cubit<CubitState> {
@@ -30,5 +31,13 @@ class ProfileCubit extends Cubit<CubitState> {
 
   int getExchangedChips() {
     return user.earnedChips - user.remainingChips;
+  }
+
+  void refreshUi() {
+    if(state == CubitState.refresh) {
+      emit(null);
+    } else {
+      emit(CubitState.refresh);
+    }
   }
 }

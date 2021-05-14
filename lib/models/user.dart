@@ -7,14 +7,12 @@ const String SERIES_IDS_KEY = 'seriesIds';
 const String EARNED_CHIPS_KEY = 'earnedChips';
 const String REMAINING_CHIPS_KEY = 'remainingChips';
 const String EARNING_HISTORY_KEY = 'earningHistory';
-const String EXCHANGING_CHIPS_KEY = 'exchangingChips';
 
 class User {
   String id;
   String username;
   int earnedChips;
   int remainingChips;
-  int exchangingChips;
   List<String> contestIds;
   List<String> seriesIds;
   List<WinInfo> earningHistory;
@@ -24,7 +22,6 @@ class User {
     this.username,
     this.earnedChips = 0,
     this.remainingChips = 0,
-    this.exchangingChips = 0,
     this.contestIds,
     this.seriesIds,
     this.earningHistory,
@@ -39,7 +36,6 @@ class User {
     username = doc[USERNAME_KEY];
     earnedChips = doc[EARNED_CHIPS_KEY];
     remainingChips = doc[REMAINING_CHIPS_KEY];
-    exchangingChips = doc[EXCHANGING_CHIPS_KEY];
     contestIds = <String>[];
     seriesIds = <String>[];
     earningHistory = <WinInfo>[];
@@ -65,7 +61,6 @@ class User {
       SERIES_IDS_KEY: seriesIds,
       EARNED_CHIPS_KEY: earnedChips,
       REMAINING_CHIPS_KEY: remainingChips,
-      EXCHANGING_CHIPS_KEY: exchangingChips,
       EARNING_HISTORY_KEY: earningHistory.map((WinInfo winInfo) {
         return winInfo.toMap();
       }).toList(),

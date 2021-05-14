@@ -1,0 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fantasy_cricket/models/exchange.dart';
+import 'package:fantasy_cricket/models/user.dart';
+import 'package:fantasy_cricket/repositories/user_repo.dart';
+
+class ExchangeRepo {
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static final CollectionReference exchangesCollection = 
+    _db.collection('exchanges');
+
+  static Future<void> addExchange(Exchange exchange, User user) async {
+    WriteBatch batch = _db.batch();
+    
+    batch.set(exchangesCollection.doc(), exchange.toMap());
+    batch.update(UserRepo.usersCollection.doc(user.id), user.toMap());
+    await batch.commit();
+  }
+}
