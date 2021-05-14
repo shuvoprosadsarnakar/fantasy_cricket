@@ -19,10 +19,25 @@ class ExchangeRepo {
   static Future<List<Exchange>> getExchangesByUserId(String userId) async {
     QuerySnapshot snapshot = await exchangesCollection
       .where('userId', isEqualTo: userId)
+      .orderBy('dateTime', descending: true)
       .get();
 
     return snapshot.docs.map((QueryDocumentSnapshot snapshot) {
       return Exchange.fromMap(snapshot.data(), snapshot.id);
     }).toList();
+  }
+
+  static Future<List<Exchange>> getAllExchanges() async {
+    QuerySnapshot snapshot = await exchangesCollection
+      .orderBy('dateTime', descending: true)
+      .get();
+
+    return snapshot.docs.map((QueryDocumentSnapshot snapshot) {
+      return Exchange.fromMap(snapshot.data(), snapshot.id);
+    }).toList();
+  }
+
+  static Future<void> updateExchange(Exchange exchange) async {
+    await exchangesCollection.doc(exchange.id).update(exchange.toMap());
   }
 }

@@ -1,3 +1,5 @@
+import 'package:fantasy_cricket/pages/exchange/cubits/exchanges_list_cubit.dart';
+import 'package:fantasy_cricket/pages/exchange/exchanges_list.dart';
 import 'package:fantasy_cricket/pages/user/profile/cubits/profile_cubit.dart';
 import 'package:fantasy_cricket/pages/user/profile/profile.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
       //initialRoute: FirebaseAuth.instance.currentUser==null ? signIn : home,
-      home: Profile(ProfileCubit()),
+      home: ExchangesList(ExchangesListCubit()),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
