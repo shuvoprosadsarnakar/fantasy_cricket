@@ -36,7 +36,7 @@ class TeamManager extends StatelessWidget {
                 SizedBox(height: 30),
                 getTeam2Players(context),
                 SizedBox(height: 30),
-                if(_cubit.fantasy.playersNames.length == 11 &&
+                if(_cubit.fantasy.playerNames.length == 11 &&
                   _cubit.fantasy.captain != null && 
                   _cubit.fantasy.viceCaptain != null) 
                   getTeamSubmitButton(context),
@@ -58,7 +58,7 @@ class TeamManager extends StatelessWidget {
         ),
         getSelectionResultColumn(
           'Players',
-          _cubit.fantasy.playersNames.length.toString() + '/11',
+          _cubit.fantasy.playerNames.length.toString() + '/11',
         ),
         getSelectionResultColumn(
           'Credits',
@@ -195,7 +195,7 @@ class TeamManager extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Captain and vice captain can\'t be same.'),
               ));
-            } else if(_cubit.fantasy.playersNames.contains(playerName) == false) 
+            } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
               {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Captain can\'t be an unselected player.'),
@@ -216,7 +216,7 @@ class TeamManager extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Captain and vice captain can\'t be same.'),
               ));
-            } else if(_cubit.fantasy.playersNames.contains(playerName) == false) 
+            } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
               {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Vice captain can\'t be an unselected player.'),
@@ -231,12 +231,12 @@ class TeamManager extends StatelessWidget {
 
         // slection field
         Expanded(child: Checkbox(
-          value: _cubit.fantasy.playersNames.contains(playerName),
+          value: _cubit.fantasy.playerNames.contains(playerName),
           onChanged: (bool value) {
             if(value) {
               String snackBarText;
 
-              if(_cubit.fantasy.playersNames.length == 11) {
+              if(_cubit.fantasy.playerNames.length == 11) {
                 snackBarText = '11 player is selected. Can\'t add more player';
               } else if((i < _cubit.contest.team1TotalPlayers && _cubit.team1TotalPlayers == 7) ||
                 (i >= _cubit.contest.team1TotalPlayers && _cubit.team2TotalPlayers == 7)) {
@@ -251,7 +251,7 @@ class TeamManager extends StatelessWidget {
                 snackBarText = 'Can\'t add more than 3 all rounders.';
               } else if(playerRole == 'Bowler' && _cubit.totalBowlers == 5) {
                 snackBarText = 'Can\'t add more than five bowlers.';
-              } else if(_cubit.fantasy.playersNames.length == 10 && 
+              } else if(_cubit.fantasy.playerNames.length == 10 && 
                 _cubit.totalWicketKeepers == 0 && 
                 playerRole != 'Wicket Keeper') {
                 snackBarText = 'Have to select 1 wicket keeper minimum.';

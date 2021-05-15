@@ -232,6 +232,7 @@ class ContestDetails extends StatelessWidget {
         await Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext context) {
             return TeamManager(tmCubit.TeamManagerCubit(
+              _cubit.series,
               _cubit.contest, 
               _cubit.user,
             ));

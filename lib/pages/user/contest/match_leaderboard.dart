@@ -57,63 +57,66 @@ class MatchLeaderboard extends StatelessWidget {
     );
   }
 
-  ListView getRanking(BuildContext context) {
-    return ListView(
+  Padding getRanking(BuildContext context) {
+    return Padding(
       padding: Paddings.pagePadding,
-      children: [
-        // ranking titles
-        Row(children: [
-          Expanded(
-            flex: 1,
-            child: Text('Rank'),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 3,
-            child: Text('User'),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 1,
-            child: Text('Points'),
-          ),
-        ]),
-        Divider(),
+      child: Column(
+        children: [
+          // ranking titles
+          Row(children: [
+            Expanded(
+              flex: 1,
+              child: Text('Rank'),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 3,
+              child: Text('User'),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 1,
+              child: Text('Points'),
+            ),
+          ]),
+          Divider(),
 
-        // user's ranking
-        InkWell(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Row(children: [
-              Expanded(
-                flex: 1,
-                child: Text((_cubit.userFantasy.rank).toString()),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                flex: 3,
-                child: Text(_cubit.user.username),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                flex: 1,
-                child: Text(_cubit.userFantasy.totalPoints.toString()),
-              ),
-            ]),
+          // user's ranking
+          InkWell(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(_cubit.userRank.toString()),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 3,
+                  child: Text(_cubit.user.username),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  flex: 1,
+                  child: Text(_cubit.contest.ranks[_cubit.userRankIndex]
+                    .totalPoints.toString()),
+                ),
+              ]),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return TeamPlayersPoints(
+                  _cubit.contest,
+                  _cubit.userFantasy,
+                );
+              },
+            )),
           ),
-          onTap: () => Navigator.push(context, MaterialPageRoute(
-            builder: (BuildContext context) {
-              return TeamPlayersPoints(
-                _cubit.contest,
-                _cubit.userFantasy,
-              );
-            },
-          )),
-        ),
-        Divider(color: Colors.grey),
+          Divider(color: Colors.grey),
 
-        // all rankings needs to be set here
-      ],
+          // all rankings needs to be set here
+        ],
+      ),
     );
   }
 

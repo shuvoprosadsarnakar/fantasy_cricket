@@ -1,49 +1,52 @@
+import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
-import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/series.dart';
-import 'package:fantasy_cricket/models/series_rank.dart';
+import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/user.dart';
-import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
-import 'package:fantasy_cricket/repositories/series_rank_repo.dart';
+import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CubitState {
   loading,
   fetchError,
-  fetched,
+  loaded,
 }
 
 class SeriesLeaderboardCubit extends Cubit<CubitState> {
-  Series series;
-  User user;
-  SeriesRank seriesRank;
-  List<Fantasy> seriesFantasies = [];
+  final Series series;
+  final User user;
+  List<Rank> userContestRanks = <Rank>[];
 
   SeriesLeaderboardCubit(this.series, this.user) : super(null) {
     emit(CubitState.loading);
-    initCubit();
+    _getuserContestRanks();
   }
 
-  void initCubit() async {
-    try {
-      seriesRank = await SeriesRankRepo.getSeriesRankById(user.id + series.id);
-    } catch(error) {
-      emit(CubitState.fetchError);
-      return;
-    }
+  Future<void> _getuserContestRanks() async {
+    List<Contest> seriesContests = <Contest>[];
+    int totalExcerpts = series.matchExcerpts.length;
 
-    series.matchExcerpts.forEach((Excerpt excerpt) async {
+    for(int i = 0; i < totalExcerpts; i++) {
+      Excerpt excerpt = series.matchExcerpts[i];
+
       try {
-        seriesFantasies.add(
-          await FantasyRepo.getFantasyById(user.id + excerpt.id)
-        );
-
-        if(series.matchExcerpts.length == seriesFantasies.length) {
-          emit(CubitState.fetched);
-        }
+        seriesContests.add(await ContestRepo.getContestById(excerpt.id));
       } catch(error) {
         emit(CubitState.fetchError);
+        return;
       }
+    }
+
+    seriesContests.forEach((Contest contest) {
+      userContestRanks.add(contest.ranks.firstWhere((Rank rank) {
+        return rank.username == user.username;
+      }));
     });
+
+    emit(CubitState.loaded);
+  }
+
+  int getRank(int rankIndex) {
+    return rankIndex + 1;
   }
 }

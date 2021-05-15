@@ -4,12 +4,11 @@ import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/report.dart';
 import 'package:fantasy_cricket/models/series.dart';
-import 'package:fantasy_cricket/models/series_rank.dart';
+import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/models/win_info.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
-import 'package:fantasy_cricket/repositories/series_rank_repo.dart';
 import 'package:fantasy_cricket/repositories/user_repo.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +25,20 @@ class ContestEnderCubit extends Cubit<CubitState> {
   final List<Map<String, dynamic>> playersReports = <Map<String, dynamic>>[];
   final Series series;
   final int excerptIndex;
+  final List<String> reportKeys = <String>[
+    RUNS_TAKEN_KEY,
+    FOURS_HIT_KEY,
+    SIXES_HIT_KEY,
+    BALLS_FACED_KEY,
+    WICKETS_TAKEN_KEY,
+    MAIDEN_OVERS_KEY,
+    BALLS_BOWLED_KEY,
+    RUNS_GIVEN_KEY,
+    CATCHES_KEY,
+    STUMPINGS_KEY,
+    RUN_OUTS_KEY,
+  ];
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   ContestEnderCubit(this.series, this.excerptIndex) : super(null) {
     emit(CubitState.loading);
@@ -48,29 +61,12 @@ class ContestEnderCubit extends Cubit<CubitState> {
       });
   }
 
-  final List<String> reportKeys = <String>[
-    RUNS_TAKEN_KEY,
-    FOURS_HIT_KEY,
-    SIXES_HIT_KEY,
-    BALLS_FACED_KEY,
-    WICKETS_TAKEN_KEY,
-    MAIDEN_OVERS_KEY,
-    BALLS_BOWLED_KEY,
-    RUNS_GIVEN_KEY,
-    CATCHES_KEY,
-    STUMPINGS_KEY,
-    RUN_OUTS_KEY,
-  ];
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
   String mapKeyToFieldTitle(String mapKey) {
     int length = mapKey.length;
     String capitalized = mapKey[0].toUpperCase();
-    int codeUnit;
 
     for(int i = 1; i < length; i++) {
-      codeUnit = mapKey[i].codeUnits[0];
+      int codeUnit = mapKey[i].codeUnits[0];
       
       if(codeUnit >= 65 && codeUnit <= 90) {
         capitalized += ' ';
@@ -84,42 +80,31 @@ class ContestEnderCubit extends Cubit<CubitState> {
 
   Future<bool> endContest() async {
     if(formKey.currentState.validate()) {
-      formKey.currentState.save();
       emit(CubitState.loading);
+      formKey.currentState.save();
+
+      // init contest's [playersPoints] && [playersReports] properties
+      _setPlayersPoints();
 
       // update the status of the contest in series match excerpt
       series.matchExcerpts[excerptIndex].status = ContestStatuses.ended;
-
-      // init [contest]'s [playersPoints] && [playersReports] properties
-      _setPlayersPoints();
-
+      
       try {
-        // update contestents fantasy and give chips to contest winners
-        // update contestents seriesRank and give chips to series winners
-        // update series and contest
+        // update contest and series's [ranks] property
+        await _updateContestAndSeriesRanks();
 
-        // get all contest fantasies, update fantasy total points and rank
-        List<Fantasy> contestFantasies = await _getUpdatedContestFantasies();
-
-        // get all series ranks, update series rank total points and rank
-        List<SeriesRank> seriesRanks = await _getUpdatedSeriesRanks(
-          contestFantasies);
-
-        // get contest winner users, update earned chips and earning history
-        List<User> contestWinnerUsers = await _getUpdatedContestWinnerUsers(
-          contestFantasies);
-
-        // get series winner users, update earned chips and earning history
-        List<User> seriesWinnerUsers = await _getUpdatedSeriesWinnersUsers(
-          seriesRanks, contestWinnerUsers);
+        // give chips to contest winners and get them 
+        List<User> contestWinners = await _getUpdatedContestWinners();
+        
+        // give chips to series winners and get them
+        List<User> seriesWinners 
+          = await _getUpdatedSeriesWinners(contestWinners);
 
         await ContestRepo.endContest(
           contest,
           series,
-          contestFantasies,
-          seriesRanks,
-          contestWinnerUsers,
-          seriesWinnerUsers,
+          contestWinners, 
+          seriesWinners,
         );
 
         // if we don't emit [null] then if [failed] is emitted once, cubit  
@@ -134,6 +119,154 @@ class ContestEnderCubit extends Cubit<CubitState> {
     } else {
       return false;
     }
+  }
+
+  Future<void> _updateContestAndSeriesRanks() async {
+    // get all contest fantasies
+    List<Fantasy> contestFantasies
+      = await FantasyRepo.getFantasiesByContestId(contest.id);
+
+    contestFantasies.forEach((Fantasy fantasy) {
+      double totalPoints = 0;
+
+      // calculate total points of a fantasy
+      fantasy.playerNames.forEach((String name) {
+        int playerIndex = contest.playersNames.indexOf(name);
+        double playerPoints = contest.playersPoints[playerIndex];
+
+        if(name == fantasy.captain) {
+          playerPoints *= 2;
+        } else if(name == fantasy.viceCaptain) {
+          playerPoints *= 1.5;
+        }
+
+        totalPoints += playerPoints;
+      });
+
+      // update contest rank's total points
+      contest.ranks.firstWhere((Rank rank) {
+        return rank.username == fantasy.username;
+      }).totalPoints = totalPoints;
+
+      // update series rank's total points
+      series.ranks.firstWhere((Rank rank) {
+        return rank.username == fantasy.username;
+      }).totalPoints = totalPoints;
+    });
+
+    // sort contest ranks
+    contest.ranks.sort((Rank a, Rank b) {
+      if(a.totalPoints > b.totalPoints) {
+        return -1;
+      } else if(a.totalPoints == b.totalPoints) {
+        return a.joinedAt.compareTo(b.joinedAt);
+      } else {
+        return 1;
+      }
+    });
+
+    // sort series ranks
+    series.ranks.sort((Rank a, Rank b) {
+      if(a.totalPoints > b.totalPoints) {
+        return -1;
+      } else if(a.totalPoints == b.totalPoints) {
+        return a.joinedAt.compareTo(b.joinedAt);
+      } else {
+        return 1;
+      }
+    });
+  }
+
+  Future<List<User>> _getUpdatedContestWinners() async {
+    List<User> contestWinners = <User>[];
+    int totalContestents = contest.ranks.length;
+    int totalWinners = contest.chipsDistributes.last.to;
+    int totalDistributes = contest.chipsDistributes.length;
+
+    // get the contest winners
+    for(int i = 0; i < totalWinners && i < totalContestents; i++) {
+      contestWinners.add(
+        await UserRepo.getUserByUsername(contest.ranks[i].username)
+      );
+    }
+
+    // update the contest winners
+    for(int i = 0; i < totalDistributes; i++) {
+      Distribute distribute = contest.chipsDistributes[i];
+
+      for(int j = distribute.from - 1; 
+        j < distribute.to && j < totalContestents; j++)
+      {
+        contestWinners[j].earnedChips += distribute.chips;
+        contestWinners[j].remainingChips += distribute.chips;
+        contestWinners[j].earningHistory.add(WinInfo(
+          date: Timestamp.fromDate(DateTime.now()),
+          details: 'Match Prize',
+          rank: j + 1,
+          rewards: distribute.chips,
+        ));
+      }
+    }
+
+    return contestWinners;
+  }
+
+  Future<List<User>> _getUpdatedSeriesWinners(List<User> contestWinners) async {
+    List<User> seriesWinners = [];
+    int totalContestents = series.ranks.length;
+    int totalWinners = series.chipsDistributes.last.to;
+    int totalDistributes = series.chipsDistributes.length;
+
+    // get series winners
+    for(int i = 0; i < totalWinners && i < totalContestents; i++) {
+      Rank seriesRank = series.ranks[i];
+      int contestWinnerIndex = contestWinners.indexWhere((User user) {
+        return user.username == seriesRank.username;
+      });
+
+      if(contestWinnerIndex == -1) {
+        seriesWinners.add(
+          await UserRepo.getUserByUsername(seriesRank.username)
+        );
+      } else {
+        seriesWinners.add(null);
+      }
+    }
+
+    // update series winners
+    for(int i = 0; i < totalDistributes; i++) {
+      Distribute distribute = series.chipsDistributes[i];
+
+      for(int j = distribute.from - 1;
+        j < distribute.to && j < totalContestents; j++)
+      {
+        if(seriesWinners[j] != null) {
+          seriesWinners[j].earnedChips += distribute.chips;
+          seriesWinners[j].remainingChips += distribute.chips;
+          seriesWinners[j].earningHistory.add(WinInfo(
+            date: Timestamp.fromDate(DateTime.now()),
+            details: 'Series Prize',
+            rank: j + 1,
+            rewards: distribute.chips,
+          ));
+        } else {
+          int contestWinnerIndex = contestWinners.indexWhere((User user) {
+            return user.username == series.ranks[j].username;
+          });
+
+          contestWinners[contestWinnerIndex].earnedChips += distribute.chips;
+          contestWinners[contestWinnerIndex].remainingChips += distribute.chips;
+          contestWinners[contestWinnerIndex].earningHistory.add(WinInfo(
+            date: Timestamp.fromDate(DateTime.now()),
+            details: 'Series Prize',
+            rank: j + 1,
+            rewards: distribute.chips,
+          ));
+        }
+      }
+    }
+
+    return seriesWinners;
   }
 
   void _setPlayersPoints() {
@@ -314,175 +447,5 @@ class ContestEnderCubit extends Cubit<CubitState> {
         }
       break;
     }
-  }
-
-  Future<List<Fantasy>> _getUpdatedContestFantasies() async {
-    List<Fantasy> contestFantasies = 
-      await FantasyRepo.getFantasiesByContestId(contest.id);
-    int totalFantasies = contestFantasies.length;
-
-    contestFantasies.forEach((Fantasy fantasy) {
-      fantasy.playersNames.forEach((String name) {
-        int playerIndex = contest.playersNames.indexOf(name);
-        double playerPoints = contest.playersPoints[playerIndex];
-
-        if(name == fantasy.captain) {
-          playerPoints *= 2;
-        } else if(name == fantasy.viceCaptain) {
-          playerPoints *= 1.5;
-        }
-
-        fantasy.totalPoints += playerPoints;
-      });
-    });
-
-    contestFantasies.sort((a, b) {
-      if(a.totalPoints < b.totalPoints) {
-        return -1;
-      } else if(a.totalPoints == b.totalPoints) {
-        return 0;
-      } else {
-        return 1;
-      }
-    });
-
-    for(int i = 0; i < totalFantasies; i++) {
-      contestFantasies[i].rank = i + 1;
-    }
-
-    return contestFantasies;
-  }
-
-  Future<List<SeriesRank>> _getUpdatedSeriesRanks(List<Fantasy> contestFantasies
-    ) async {
-    List<SeriesRank> seriesRanks = 
-      await SeriesRankRepo.getSeriesRanksBySeriesId(series.id);
-    int totalSeriesRanks = seriesRanks.length;
-
-    seriesRanks.forEach((SeriesRank seriesRank) {
-      int fantasyIndex = contestFantasies.indexWhere((Fantasy fantasy) {
-        if(fantasy.username == seriesRank.username) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if(fantasyIndex != -1) {
-        seriesRank.totalPoints += 
-          contestFantasies[fantasyIndex].totalPoints;
-      }
-    });
-
-    seriesRanks.sort((a, b) {
-      if(a.totalPoints < b.totalPoints) {
-        return -1;
-      } else if(a.totalPoints == b.totalPoints) {
-        return 0;
-      } else {
-        return 1;
-      }
-    });
-
-    for(int i = 0; i < totalSeriesRanks; i++) {
-      seriesRanks[i].rank = i + 1;
-    }
-
-    return seriesRanks;
-  }
-
-  Future<List<User>> _getUpdatedContestWinnerUsers(
-    List<Fantasy> contestFantasies) async {
-    List<User> contestWinnerUsers = [];
-    int totalWinners = 
-      contestFantasies.length < contest.chipsDistributes.last.to ? 
-      contestFantasies.length : contest.chipsDistributes.last.to;
-
-    for(int i = 0; i < totalWinners; i++) {
-      contestWinnerUsers.add(
-        await UserRepo.getUserByUsername(contestFantasies[i].username)
-      );
-    }
-
-    for(int i = 0; i < contest.chipsDistributes.length; i++) {
-      Distribute distribute = contest.chipsDistributes[i];
-
-      for(int j = distribute.from - 1; j < distribute.to && j < totalWinners; 
-        j++) {
-        contestWinnerUsers[j].earnedChips += distribute.chips;
-        contestWinnerUsers[j].remainingChips += distribute.chips;
-        contestWinnerUsers[j].earningHistory.add(WinInfo(
-          date: Timestamp.fromDate(DateTime.now()),
-          details: 'Match Prize',
-          rank: j + 1,
-          rewards: distribute.chips,
-        ));
-      }
-    }
-
-    return contestWinnerUsers;
-  }
-
-  Future<List<User>> _getUpdatedSeriesWinnersUsers(List<SeriesRank> seriesRanks, 
-    List<User> contestWinnerUsers) async {
-    List<User> seriesWinnerUsers = [];
-    int totalWinners = 
-      seriesRanks.length < series.chipsDistributes.last.to ? 
-      seriesRanks.length : series.chipsDistributes.last.to;
-
-    for(int i = 0; i < totalWinners; i++) {
-      int contestWinnerIndex = contestWinnerUsers.indexWhere((User user) {
-        if(user.username == seriesRanks[i].username) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if(contestWinnerIndex == -1) {
-        seriesWinnerUsers.add(
-          await UserRepo.getUserByUsername(seriesRanks[i].username)
-        );
-      } else {
-        seriesWinnerUsers.add(null);
-      }
-    }
-
-    for(int i = 0; i < series.chipsDistributes.length; i++) {
-      Distribute distribute = series.chipsDistributes[i];
-
-      for(int j = distribute.from - 1; j < distribute.to && j < totalWinners; 
-        j++) {
-        if(seriesWinnerUsers[j] != null) {
-          seriesWinnerUsers[j].earnedChips += distribute.chips;
-          seriesWinnerUsers[j].remainingChips += distribute.chips;
-          seriesWinnerUsers[j].earningHistory.add(WinInfo(
-            date: Timestamp.fromDate(DateTime.now()),
-            details: 'Series Prize',
-            rank: j + 1,
-            rewards: distribute.chips,
-          ));
-        } else {
-          int index = contestWinnerUsers.indexWhere((User user) {
-            if(user.username == seriesRanks[j].username) {
-              return true;
-            } else {
-              return false;
-            }
-          });
-
-          contestWinnerUsers[index].earnedChips += distribute.chips;
-          contestWinnerUsers[index].remainingChips += distribute.chips;
-          contestWinnerUsers[index].earningHistory.add(WinInfo(
-            date: Timestamp.fromDate(DateTime.now()),
-            details: 'Series Prize',
-            rank: j + 1,
-            rewards: distribute.chips,
-          ));
-        }
-      }
-    }
-
-    return seriesWinnerUsers;
   }
 }

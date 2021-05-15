@@ -1,5 +1,5 @@
 import 'package:fantasy_cricket/models/excerpt.dart';
-import 'package:fantasy_cricket/models/fantasy.dart';
+import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -54,6 +54,10 @@ class SeriesLeaderboard extends StatelessWidget {
   }
 
   ListView getRanking(BuildContext context) {
+    int userRankIndex = _cubit.series.ranks.indexWhere((Rank rank) {
+      return _cubit.user.username == rank.username;
+    });
+
     return ListView(
       padding: Paddings.pagePadding,
       children: [
@@ -82,17 +86,18 @@ class SeriesLeaderboard extends StatelessWidget {
           child: Row(children: [
             Expanded(
               flex: 1,
-              child: Text(_cubit.seriesRank.rank.toString()),
+              child: Text(_cubit.getRank(userRankIndex).toString()),
             ),
             SizedBox(width: 10),
             Expanded(
               flex: 3,
-              child: Text(_cubit.seriesRank.username),
+              child: Text(_cubit.user.username),
             ),
             SizedBox(width: 10),
             Expanded(
               flex: 1,
-              child: Text(_cubit.seriesRank.totalPoints.toString()),
+              child: Text(_cubit.series.ranks[userRankIndex].totalPoints
+                .toString()),
             ),
           ]),
         ),
@@ -104,8 +109,8 @@ class SeriesLeaderboard extends StatelessWidget {
   }
 
   ListView getMatches() {
-    List<Widget> matchWidgets = [];
-    int totalMatches = _cubit.seriesFantasies.length;
+    List<Widget> matchWidgets = <Widget>[];
+    int totalMatches = _cubit.series.matchExcerpts.length;
     
     for(int i = 0; i < totalMatches; i++) {
       Excerpt excerpt = _cubit.series.matchExcerpts[i];
@@ -122,11 +127,13 @@ class SeriesLeaderboard extends StatelessWidget {
           Expanded(child: Text(excerpt.teamsNames[0] + ' vs ' + 
             excerpt.teamsNames[1])),
           SizedBox(width: 5),
-          Expanded(child: Text(_cubit.seriesFantasies[i] != null ?
-            _cubit.seriesFantasies[i].totalPoints.toString() : '-')),
+          Expanded(child: Text(_cubit.userContestRanks[i] != null ?
+            _cubit.userContestRanks[i].totalPoints.toString() : '-')),
           SizedBox(width: 5),
-          Expanded(child: Text(_cubit.seriesFantasies[i] != null ?
-            _cubit.seriesFantasies[i].rank.toString() : '-')),
+          Expanded(child: Text(_cubit.userContestRanks[i] != null ?
+            _cubit.getRank(
+              _cubit.userContestRanks.indexOf(_cubit.userContestRanks[i])
+            ).toString() : '-')),
         ],
       ));
       matchWidgets.add(Divider());

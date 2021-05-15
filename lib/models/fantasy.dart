@@ -1,40 +1,39 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 // keys
 const String CONTEST_ID_KEY = 'contestId';
-const String CREATED_AT_KEY = 'createdAt';
 const String USERNAME_KEY = 'username';
-const String TOTAL_POINTS_KEY = 'totalPoints';
-const String PLAYERS_NAMES_KEY = 'playersNames';
+const String PLAYER_NAMES_KEY = 'playerNames';
 const String CAPTAIN_KEY = 'captain';
 const String VICE_CAPTAIN_KEY = 'viceCaptain';
-const String RANK_KEY = 'rank';
 
 class Fantasy {
   String id;
   String contestId;
   String username;
-  List<String> playersNames = [];
-  double totalPoints = 0;
-  Timestamp createdAt;
+  List<String> playerNames;
   String captain;
   String viceCaptain;
-  int rank;
 
-  Fantasy();
+  Fantasy({
+    this.id,
+    this.contestId,
+    this.username,
+    this.playerNames,
+    this.captain,
+    this.viceCaptain,
+  }) {
+    if(playerNames == null) playerNames = <String>[];
+  }
 
   Fantasy.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;
     contestId = doc[CONTEST_ID_KEY];
     username = doc[USERNAME_KEY];
-    totalPoints = doc[TOTAL_POINTS_KEY];
-    createdAt = doc[CREATED_AT_KEY];
+    playerNames = <String>[];
     captain = doc[CAPTAIN_KEY];
     viceCaptain = doc[VICE_CAPTAIN_KEY];
-    rank = doc[RANK_KEY];
 
-    doc[PLAYERS_NAMES_KEY].forEach((dynamic playerName) {
-      playersNames.add(playerName);
+    doc[PLAYER_NAMES_KEY].forEach((dynamic playerName) {
+      playerNames.add(playerName);
     });
   }
 
@@ -42,12 +41,9 @@ class Fantasy {
     return {
       CONTEST_ID_KEY: contestId,
       USERNAME_KEY: username,
-      PLAYERS_NAMES_KEY: playersNames,
-      TOTAL_POINTS_KEY: totalPoints,
-      CREATED_AT_KEY: createdAt,
+      PLAYER_NAMES_KEY: playerNames,
       CAPTAIN_KEY: captain,
       VICE_CAPTAIN_KEY: viceCaptain,
-      RANK_KEY: rank,
     };
   }
 }

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/fantasy.dart';
+import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/series.dart';
-import 'package:fantasy_cricket/models/series_rank.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
@@ -23,6 +23,8 @@ enum CubitState {
 class TeamManagerCubit extends Cubit<CubitState> {
   final Contest contest;
   final User user;
+  final Series series;
+
   Fantasy fantasy;
   int team1TotalPlayers = 0;
   int team2TotalPlayers = 0;
@@ -32,11 +34,11 @@ class TeamManagerCubit extends Cubit<CubitState> {
   int totalAllRounders = 0;
   int totalBowlers = 0;
 
-  TeamManagerCubit(this.contest, this.user) : super(null) {
+  TeamManagerCubit(this.series, this.contest, this.user) : super(null) {
     emit(CubitState.loading);
 
     if(user.contestIds.contains(contest.id)) {
-      FantasyRepo.getFantasyById(user.id + contest.id)
+      FantasyRepo.getFantasyByUsername(user.username)
         .catchError((dynamic error) {
           emit(CubitState.fetchError);
           return null;
@@ -44,7 +46,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
         .then((Fantasy fantasy) {
           this.fantasy = fantasy;
 
-          fantasy.playersNames.forEach((String playerName) {
+          fantasy.playerNames.forEach((String playerName) {
             initCubitAtPlayerAdd(contest.playersNames.indexOf(playerName));
           });
 
@@ -84,12 +86,12 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   void addPlayer(int playerIndex) {
-    fantasy.playersNames.add(contest.playersNames[playerIndex]);
+    fantasy.playerNames.add(contest.playersNames[playerIndex]);
     initCubitAtPlayerAdd(playerIndex);
   }
 
   void removePlayer(int playerIndex) {
-    fantasy.playersNames.remove(contest.playersNames[playerIndex]);
+    fantasy.playerNames.remove(contest.playersNames[playerIndex]);
     initCubitAtPlayerRemove(playerIndex);
   }
 
@@ -134,6 +136,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
       series = await SeriesRepo.getSeriesById(contest.seriesId);
     } catch(error) {
       emit(CubitState.fetchError);
+      return;
     }
 
     String contestStatus = series.matchExcerpts[contest.excerptIndex].status;
@@ -150,23 +153,36 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   Future<void> addFantasy() async {
-    // add [SeriesRank] if not added already with a initial rank
-    // increase series's [totalContestents] property by 1 and update the series
-    
-    // update the user to save the contest and series id inside user's 
-    // [contestIds] array
-    
-    // add the [Fantasy] with initial ranking
-    // increase contests's [totalContestents] property by 1 and update the 
-    // contest
+    // add the fantasy
+    // update series's [ranks] property if user hasn't joined the series already
+    // update contest's [ranks] property
+    // update user's [contestIds] & [seriesIds] properties
+
+    bool hasJoinedSeries = user.seriesIds.contains(contest.seriesId);
+    Rank rank = Rank(
+      username: user.username,
+      totalPoints: 0,
+      joinedAt: Timestamp.fromDate(DateTime.now()),
+    );
 
     user.contestIds.add(contest.id);
+    contest.ranks.add(rank);
+
+    if(!hasJoinedSeries) {
+      user.seriesIds.add(contest.seriesId);
+      series.ranks.add(rank);
+    }
 
     try {
-      await FantasyRepo.addFantasy(fantasy, user);
+      await FantasyRepo.addFantasy(fantasy, user, contest, series);
       emit(CubitState.added);
     } catch(error) {
-      user.contestIds.remove(contest.id);
+      user.contestIds.removeLast();
+      contest.ranks.removeLast();
+      if(!hasJoinedSeries) {
+        user.seriesIds.removeLast();
+        series.ranks.removeLast();
+      }
       emit(CubitState.addFailed);
     }
   }

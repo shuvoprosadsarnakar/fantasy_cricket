@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
+import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/report.dart';
 
 // keys
@@ -22,20 +23,15 @@ const String EXCERPT_INDEX_KEY = 'excerptIndex';
 const String TEAMS_SCORES_KEY = 'teamsScores';
 const String RESULT_KEY = 'result';
 const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
-const String TOTAL_CONTESTENTS_KEY = 'totalContestents';
+const String RANKS_KEY = 'ranks';
 
 class Contest {
-  // contest id and excerpt id
   String id;
-
-  // to create contests list ui item except upcoming contests list
   String seriesName;
   List<String> teamsNames;
   String matchType;
   int noByType;
   Timestamp startTime;
-
-  // to show match details and calculate contest result
   List<Distribute> chipsDistributes;
   int team1TotalPlayers;
   List<String> playersNames;
@@ -47,15 +43,43 @@ class Contest {
   List<String> teamsScores;
   String result;
   String playerOfTheMatch;
-  
-  // to update excerpt match status and set excerpt id
   String seriesId;
   int excerptIndex;
+  List<Rank> ranks;
 
-  // to give contestents a initial rank
-  int totalContestents = 0;
-
-  Contest();
+  Contest({
+    this.id,
+    this.seriesName,
+    this.teamsNames,
+    this.matchType,
+    this.noByType,
+    this.startTime,
+    this.chipsDistributes,
+    this.team1TotalPlayers,
+    this.playersNames,
+    this.playersRoles,
+    this.playersCredits,
+    this.playersPoints,
+    this.playersReports,
+    this.isPlayings,
+    this.teamsScores,
+    this.result,
+    this.playerOfTheMatch,
+    this.seriesId,
+    this.excerptIndex,
+    this.ranks,
+  }) {
+    if(teamsNames == null) teamsNames = <String>[];
+    if(chipsDistributes == null) chipsDistributes = <Distribute>[];
+    if(playersNames == null) playersNames = <String>[];
+    if(playersRoles == null) playersRoles = <String>[];
+    if(playersCredits == null) playersCredits = <double>[];
+    if(isPlayings == null) isPlayings = <bool>[];
+    if(ranks == null) ranks = <Rank>[];
+    if(playersPoints == null) playersPoints = <double>[];
+    if(playersReports == null) playersReports = <Report>[];
+    if(teamsScores == null) teamsScores = <String>[];
+  }
 
   Contest.fromMap(Map<String, dynamic> doc, String docId) {
     id = docId;
@@ -68,48 +92,49 @@ class Contest {
     excerptIndex = doc[EXCERPT_INDEX_KEY];
     result = doc[RESULT_KEY];
     playerOfTheMatch = doc[PLAYER_OF_THE_MATCH_KEY];
-    totalContestents = doc[TOTAL_CONTESTENTS_KEY];
+    teamsNames = <String>[];
+    chipsDistributes = <Distribute>[];
+    playersNames = <String>[];
+    playersRoles = <String>[];
+    playersCredits = <double>[];
+    isPlayings = <bool>[];
+    ranks = <Rank>[];
+    playersPoints = <double>[];
+    playersReports = <Report>[];
+    teamsScores = <String>[];
 
-    teamsNames = [];
-    chipsDistributes = [];
-    playersNames = [];
-    playersRoles = [];
-    playersCredits = [];
-    isPlayings = [];
+    doc[TEAMS_NAMES_KEY].forEach((dynamic name) 
+      => teamsNames.add(name));
+    
+    doc[PLAYERS_NAMES_KEY].forEach((dynamic name) 
+      => playersNames.add(name));
+    
+    doc[PLAYERS_ROLES_KEY].forEach((dynamic role) 
+      => playersRoles.add(role));
+    
+    doc[PLAYERS_CREDITS_KEY].forEach((dynamic credits) 
+      => playersCredits.add(credits));
 
-    doc[TEAMS_NAMES_KEY].forEach((dynamic name) => teamsNames.add(name));
+    doc[PLAYERS_POINTS_KEY].forEach((dynamic points) 
+      => playersPoints.add(points));
+      
+    doc[TEAMS_SCORES_KEY].forEach((dynamic score) 
+      => teamsScores.add(score));
     
-    doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic distributeMap) => 
-      chipsDistributes.add(Distribute.fromMap(distributeMap)));
-    
-    doc[PLAYERS_NAMES_KEY].forEach((dynamic name) => playersNames.add(name));
-    
-    doc[PLAYERS_ROLES_KEY].forEach((dynamic role) => playersRoles.add(role));
-    
-    doc[PLAYERS_CREDITS_KEY].forEach((dynamic credits) => 
-      playersCredits.add(credits));
-    
-    if(doc[PLAYERS_POINTS_KEY] != null) {
-      playersPoints = [];
+    doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) 
+      => isPlayings.add(isPlaying));
 
-      doc[PLAYERS_POINTS_KEY].forEach((dynamic points) => 
-        playersPoints.add(points));
-    }
-    
-    if(doc[PLAYERS_REPORTS_KEY] != null) {
-      playersReports = [];
+    doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) 
+      => isPlayings.add(isPlaying));
 
-      doc[PLAYERS_REPORTS_KEY].forEach((dynamic reportMap) 
-        => playersReports.add(Report.fromMap(reportMap)));
-    }
+    doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic distributeMap) 
+      => chipsDistributes.add(Distribute.fromMap(distributeMap)));
 
-    if(doc[TEAMS_SCORES_KEY] != null) {
-      teamsScores = [];
-      doc[TEAMS_SCORES_KEY].forEach((dynamic score) => teamsScores.add(score));
-    }
-    
-    doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) => 
-      isPlayings.add(isPlaying));
+    doc[PLAYERS_REPORTS_KEY].forEach((dynamic reportMap) 
+      => playersReports.add(Report.fromMap(reportMap)));
+
+    doc[RANKS_KEY].forEach((dynamic rankMap) 
+      => ranks.add(Rank.fromMap(rankMap)));
   }
 
   Map<String, dynamic> toMap() {
@@ -119,29 +144,29 @@ class Contest {
       MATCH_TYPE_KEY: matchType,
       NO_BY_TYPE_KEY: noByType,
       START_TIME_KEY: startTime,
-      TOTAL_CONTESTENTS_KEY: totalContestents,
-      
-      CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((Distribute distribute) {
-        return distribute.toMap();
-      }).toList(),
-      
       TEAM_1_TOTAL_PLAYERS_KEY: team1TotalPlayers,
       PLAYERS_NAMES_KEY: playersNames,
       PLAYERS_ROLES_KEY: playersRoles,
       PLAYERS_CREDITS_KEY: playersCredits,
       PLAYERS_POINTS_KEY: playersPoints,
-      
-      PLAYERS_REPORTS_KEY: playersReports != null ? 
-        playersReports.map((Report report) {
-          return report.toMap();
-        }).toList() : null,
-      
       IS_PLAYINGS_KEY: isPlayings,
       SERIES_ID_KEY: seriesId,
       EXCERPT_INDEX_KEY: excerptIndex,
       TEAMS_SCORES_KEY: teamsScores,
       RESULT_KEY: result,
       PLAYER_OF_THE_MATCH_KEY: playerOfTheMatch,
+      
+      RANKS_KEY: ranks.map((Rank rank) {
+        return rank.toMap();
+      }).toList(),
+
+      CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((Distribute distribute) {
+        return distribute.toMap();
+      }).toList(),
+      
+      PLAYERS_REPORTS_KEY: playersReports.map((Report report) {
+        return report.toMap();
+      }).toList(),
     };
   }
 }

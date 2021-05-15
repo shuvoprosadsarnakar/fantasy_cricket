@@ -34,7 +34,7 @@ class TeamPlayersPoints extends StatelessWidget {
   }
 
   Column getPlayerPoints() {
-    List<Widget> pointsRows = _fantasy.playersNames.map((String playerName) {
+    List<Widget> pointsRows = _fantasy.playerNames.map((String playerName) {
       int pointsIndex = _contest.playersNames.indexOf(playerName);
 
       return Column(
