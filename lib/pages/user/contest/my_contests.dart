@@ -25,10 +25,13 @@ class MyContests extends StatelessWidget {
         } else if(state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
-          return ListView(
+          return Scaffold(
+            appBar: AppBar(title: Text('My Contests')),
+            body: ListView(
               padding: Paddings.pagePadding,
               children: getListItems(context),
-            );
+            ),
+          );
         }
       },
     );

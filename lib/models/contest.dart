@@ -124,9 +124,6 @@ class Contest {
     doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) 
       => isPlayings.add(isPlaying));
 
-    doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) 
-      => isPlayings.add(isPlaying));
-
     doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic distributeMap) 
       => chipsDistributes.add(Distribute.fromMap(distributeMap)));
 
