@@ -25,9 +25,7 @@ class Profile extends StatelessWidget {
         } else if(state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
-          return Scaffold(
-            appBar: AppBar(title: Text('Profile')),
-            body: ListView(
+          return  ListView(
               padding: Paddings.pagePadding,
               children: [
                 getUsername(context),
@@ -60,7 +58,7 @@ class Profile extends StatelessWidget {
                   page: ExchangeForm(efCubit.ExchangeFormCubit(_cubit.user)),
                 ),
               ],
-            ),
+            
           );
         }
       },
