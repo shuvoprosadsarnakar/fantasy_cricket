@@ -1,6 +1,5 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/pages/home/tabs/first_tab.dart';
-import 'package:fantasy_cricket/pages/home/tabs/third_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
@@ -14,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedPage = 0;
- final List<String> titleList = ["My contests", "Running contests", "Upcoming", "Profile"];
+ final List<String> titleList = ["My contests", "Running contests", "Profile"];
  String currentTitle;
   @override
   void initState() {
@@ -33,16 +32,15 @@ class _HomeState extends State<Home> {
           PopupMenuButton<int>(
               onSelected: (value) => _onMenuItemSelected(context, value),
               itemBuilder: (context) => [
-                    PopupMenuItem(value: 0, child: Text("Chips")),
+                    PopupMenuItem(value: 3, child: Text("Admin panel")),
                     PopupMenuItem(value: 1, child: Text("Settings")),
                     PopupMenuItem(value: 2, child: Text("Sign out")),
-                    PopupMenuItem(value: 3, child: Text("Admin panel"))
                   ])
         ],
       ),
       body: IndexedStack(
         index: _selectedPage,
-        children: [FirstTab(), SecondTab(), ThirdTab(), ProfileTab()],
+        children: [FirstTab(), SecondTab(), ProfileTab()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -62,11 +60,7 @@ class _HomeState extends State<Home> {
             label: 'Running',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.my_library_books),
-            label: 'Upcoming',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
@@ -85,9 +79,6 @@ class _HomeState extends State<Home> {
 
   void _onMenuItemSelected(BuildContext context, int value) {
     switch (value) {
-      case 0:
-        print("Chips clicked");
-        break;
       case 1:
         print("Settings clicked");
         break;

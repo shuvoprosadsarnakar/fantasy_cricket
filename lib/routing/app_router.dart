@@ -7,6 +7,8 @@ import 'package:fantasy_cricket/pages/auth/password_reset.dart';
 import 'package:fantasy_cricket/pages/auth/sign_in.dart';
 import 'package:fantasy_cricket/pages/auth/sign_up.dart';
 import 'package:fantasy_cricket/pages/auth/verify_email.dart';
+import 'package:fantasy_cricket/pages/contests/contests_list.dart';
+import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/pages/home/admin_home.dart';
 import 'package:fantasy_cricket/pages/home/home.dart';
 import 'package:fantasy_cricket/pages/player/bloc/player_bloc.dart';
@@ -19,6 +21,7 @@ import 'package:fantasy_cricket/pages/team/bloc/team_bloc.dart';
 import 'package:fantasy_cricket/pages/team/bloc/team_event.dart';
 import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
+import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -69,6 +72,21 @@ class AppRouter {
             create: (context) => SeriesBloc()..add(SeriesFetched()),
             child: SeriesList(),
           ),
+        );
+      case runningContestList:
+        return MaterialPageRoute(
+            builder: (_) => ContestsList(ContestsListCubit(), ContestStatuses.running),
+          
+        );
+      case lockedContestList:
+        return MaterialPageRoute(
+            builder: (_) => ContestsList(ContestsListCubit(), ContestStatuses.locked),
+          
+        );
+      case endedContestList:
+        return MaterialPageRoute(
+            builder: (_) => ContestsList(ContestsListCubit(), ContestStatuses.ended),
+          
         );
       default:
         return null;

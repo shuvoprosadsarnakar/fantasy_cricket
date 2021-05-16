@@ -36,7 +36,9 @@ class AdminHome extends StatelessWidget {
             'Running Contests',
             Icons.run_circle,
             Colors.redAccent,
-            () {},
+            () {
+              Navigator.pushNamed(context, runningContestList);
+            },
           ),
           SizedBox(height: 10),
 
@@ -45,7 +47,9 @@ class AdminHome extends StatelessWidget {
             'Locked Contests',
             Icons.lock_rounded,
             Colors.yellow.shade800,
-            () {},
+            () {
+              Navigator.pushNamed(context, lockedContestList);
+            },
           ),
           SizedBox(height: 10),
 
@@ -54,7 +58,9 @@ class AdminHome extends StatelessWidget {
             'Ended Contests',
             Icons.arrow_circle_up,
             Colors.deepPurpleAccent,
-            () {},
+            () {
+              Navigator.pushNamed(context, endedContestList);
+            },
           ),
           SizedBox(height: 10),
           getAdminHomeTile(
