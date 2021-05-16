@@ -1,6 +1,6 @@
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart' as rcCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart' as tmCubit;
 import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
@@ -8,6 +8,7 @@ import 'package:fantasy_cricket/pages/user/contest/series_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -33,27 +34,27 @@ class ContestDetails extends StatelessWidget {
             body: ListView(
               padding: Paddings.pagePadding,
               children: [
-                getContestDetilsHeader(),
+                _getContestDetilsHeader(),
                 Divider(color: Theme.of(context).primaryColor),
-                getMatchPrizes(context),
+                _getMatchPrizes(context),
                 Divider(color: Theme.of(context).primaryColor),
-                getSeriesPrizes(context),
+                _getSeriesPrizes(context),
                 SizedBox(height: 50), // for floating action button
               ],
             ),
             floatingActionButton: _cubit.excerpt.status == 
-              ContestStatuses.running ? getJoinContestButton(context) : null,
+              ContestStatuses.running ? _getJoinContestButton(context) : null,
           );
         }
       },
     );
   }
 
-  Row getContestDetilsHeader() {
+  Row _getContestDetilsHeader() {
     return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        getTeamImage('https://www.bing.com/th?id=AMMS_5c876f9fd7bc3055e55bc35a4ee71a26&w=110&h=110&c=7&rs=1&qlt=95&pcl=f9f9f9&cdv=1&pid=16.1'),
+        _getTeamImage(_cubit.excerpt.teamImages[0]),
         SizedBox(width: 10),
         
         Column(children: [
@@ -65,7 +66,9 @@ class ContestDetails extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          Text('${_cubit.excerpt.no}${getNoSuffix(_cubit.excerpt.no)} Match'),
+          Text(_cubit.excerpt.no.toString()
+            + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
+            + _cubit.excerpt.type + ' Match'),
           SizedBox(height: 5),
           Text(_cubit.series.name),
           SizedBox(height: 5),
@@ -75,12 +78,12 @@ class ContestDetails extends StatelessWidget {
         ]),
         SizedBox(width: 10),
         
-        getTeamImage('https://www.bing.com/th?id=AMMS_b161ce1c295b4dc5cced0a19bc9d156c&w=110&h=110&c=7&rs=1&qlt=95&pcl=f9f9f9&cdv=1&pid=16.1'),
+        _getTeamImage(_cubit.excerpt.teamImages[1]),
       ],
     );
   }
 
-  Image getTeamImage(String imageLink) {
+  Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
       height: 50,
@@ -88,20 +91,7 @@ class ContestDetails extends StatelessWidget {
     );
   }
 
-  String getNoSuffix(int no) {
-    switch(no % 10) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-       return 'rd';
-      default:
-        return 'th';
-    }
-  }
-
-  Column getMatchPrizes(BuildContext context) {
+  Column _getMatchPrizes(BuildContext context) {
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,11 +108,9 @@ class ContestDetails extends StatelessWidget {
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
                 return MatchLeaderboard(
-                  mlCubit.MatchLeaderboardCubit(
-                    _cubit.contest,
-                    _cubit.user,
-                    _cubit.excerpt.status,
-                  )
+                  contest: _cubit.contest,
+                  excerpt: _cubit.excerpt,
+                  user: _cubit.user,
                 );
               },
             )),
@@ -138,18 +126,11 @@ class ContestDetails extends StatelessWidget {
         ],
       ),
       Divider(),
-      getWinnersWiseChipsRows(_cubit.contest.chipsDistributes),
+      _getWinnersWiseChipsRows(_cubit.contest.chipsDistributes),
     ]);
   }
 
-  Column getSeriesPrizes(BuildContext context) {
-    int totalWinners = _cubit.series.chipsDistributes.last.to;
-    int totalChips = 0;
-    
-    _cubit.series.chipsDistributes.forEach((Distribute distribute) {
-      totalChips += distribute.chips;
-    });
-
+  Column _getSeriesPrizes(BuildContext context) {
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,16 +159,17 @@ class ContestDetails extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$totalWinners Total Winners'),
-          Text('$totalChips Total Chips'),
+          Text('${_cubit.series.chipsDistributes.last.to} Total Winners'),
+          Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)
+            .toString() + ' Total Chips'),
         ],
       ),
       Divider(),
-      getWinnersWiseChipsRows(_cubit.series.chipsDistributes),
+      _getWinnersWiseChipsRows(_cubit.series.chipsDistributes),
     ]);
   }
 
-  Column getWinnersWiseChipsRows(List<Distribute> distributes) {
+  Column _getWinnersWiseChipsRows(List<Distribute> distributes) {
     List<Row> distributeRows = <Row>[];
     int totalDistributes = distributes.length;
 
@@ -199,8 +181,9 @@ class ContestDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            from.toString() + getNoSuffix(from) 
-              + (from != to ? ' - ' + to.toString() + getNoSuffix(to) : ''),
+            from.toString() + ContestsListItem.getNoSuffix(from) 
+              + (from != to ? ' - ' + to.toString() 
+              + ContestsListItem.getNoSuffix(to) : ''),
           ),
           Text(distributes[i].chips.toString() + ' Chips'),
         ],
@@ -210,7 +193,7 @@ class ContestDetails extends StatelessWidget {
     return Column(children: distributeRows);
   }
 
-  TextButton getJoinContestButton(BuildContext context) {
+  TextButton _getJoinContestButton(BuildContext context) {
     String buttonText;
     
     if(_cubit.user.contestIds.contains(_cubit.excerpt.id)) {

@@ -59,6 +59,7 @@ class MyContests extends StatelessWidget {
         child: ContestsListItem(
           runningContestsExcerpts[i],
           runningContestsSerieses[i],
+          RunningContestsCubit.getSeriesTotalChips(runningContestsSerieses[i]),
         ),
         onTap: () => Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext context) {

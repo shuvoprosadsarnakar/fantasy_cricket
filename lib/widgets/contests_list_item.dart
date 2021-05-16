@@ -6,30 +6,25 @@ import 'package:flutter/material.dart';
 class ContestsListItem extends StatelessWidget {
   final Excerpt _excerpt;
   final Series _series;
+  final int _seriesTotalChips;
 
   ContestsListItem(
     this._excerpt,
     this._series,
+    this._seriesTotalChips,
   );
   
   @override
   Widget build(BuildContext context) {
-    int seriesTotalChips = 0;
-    int seriesTotalWinners = _series.chipsDistributes.last.to;
-
-    _series.chipsDistributes.forEach((Distribute distribute) {
-      seriesTotalChips += distribute.chips;
-    });
-
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          getTeamImage('https://www.bing.com/th?id=AMMS_5c876f9fd7bc3055e55bc35a4ee71a26&w=110&h=110&c=7&rs=1&qlt=95&pcl=f9f9f9&cdv=1&pid=16.1'),
+          _getTeamImage(_excerpt.teamImages[0]),
           SizedBox(width: 10),
-          getMatchInfo(),
+          _getMatchInfo(),
           SizedBox(width: 10),
-          getTeamImage('https://www.bing.com/th?id=AMMS_b161ce1c295b4dc5cced0a19bc9d156c&w=110&h=110&c=7&rs=1&qlt=95&pcl=f9f9f9&cdv=1&pid=16.1'),
+          _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
       
@@ -38,14 +33,14 @@ class ContestsListItem extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          getChipsAndWinnerInfo(
+          _getChipsAndWinnerInfo(
             _excerpt.totalChips,
             _excerpt.totalWinners,
             'Match',
           ),
-          getChipsAndWinnerInfo(
-            seriesTotalChips,
-            seriesTotalWinners,
+          _getChipsAndWinnerInfo(
+            _seriesTotalChips,
+            _series.chipsDistributes.last.to,
             'Series',
           ),
         ],
@@ -55,7 +50,7 @@ class ContestsListItem extends StatelessWidget {
     ]);
   }
 
-  Image getTeamImage(String imageLink) {
+  Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
       height: 50,
@@ -63,7 +58,7 @@ class ContestsListItem extends StatelessWidget {
     );
   }
 
-  Column getMatchInfo() {
+  Column _getMatchInfo() {
     return Column(children: [
       Text(
         '${_excerpt. teamsNames[0]} vs ${_excerpt.teamsNames[1]}',
@@ -73,7 +68,7 @@ class ContestsListItem extends StatelessWidget {
         ),
       ),
       SizedBox(height: 5),
-      Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} Match'),
+      Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ${_excerpt.type} Match'),
       SizedBox(height: 5),
       Text(_series.name),
       SizedBox(height: 5),
@@ -81,7 +76,7 @@ class ContestsListItem extends StatelessWidget {
     ]);
   }
 
-  String getNoSuffix(int no) {
+  static String getNoSuffix(int no) {
     switch(no % 10) {
       case 1:
         return 'st';
@@ -94,7 +89,7 @@ class ContestsListItem extends StatelessWidget {
     }
   }
 
-  Column getChipsAndWinnerInfo(int chips, int winners, String contestType) {
+  Column _getChipsAndWinnerInfo(int chips, int winners, String contestType) {
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,

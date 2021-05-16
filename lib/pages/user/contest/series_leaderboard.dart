@@ -81,12 +81,13 @@ class SeriesLeaderboard extends StatelessWidget {
         Divider(),
 
         // user's ranking
-        Padding(
+        if(userRankIndex != -1) Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Row(children: [
             Expanded(
               flex: 1,
-              child: Text(_cubit.getRank(userRankIndex).toString()),
+              child: Text(SeriesLeaderboardCubit.getRank(userRankIndex)
+                .toString()),
             ),
             SizedBox(width: 10),
             Expanded(
@@ -101,9 +102,38 @@ class SeriesLeaderboard extends StatelessWidget {
             ),
           ]),
         ),
-        Divider(color: Colors.grey),
+        if(userRankIndex != -1) Divider(color: Colors.grey),
 
-        // all rankings needs to be set here
+        // all rankings including the user
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: _cubit.series.ranks.length,
+          itemBuilder: (BuildContext context, int i) {
+            return Column(children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Row(children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(SeriesLeaderboardCubit.getRank(i).toString()),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 3,
+                    child: Text(_cubit.series.ranks[i].username),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 1,
+                    child: Text(_cubit.series.ranks[i].totalPoints
+                      .toString()),
+                  ),
+                ]),
+              ),
+              Divider(),
+            ]);
+          },
+        ),
       ],
     );
   }
@@ -131,7 +161,7 @@ class SeriesLeaderboard extends StatelessWidget {
             _cubit.userContestRanks[i].totalPoints.toString() : '-')),
           SizedBox(width: 5),
           Expanded(child: Text(_cubit.userContestRanks[i] != null ?
-            _cubit.getRank(
+            SeriesLeaderboardCubit.getRank(
               _cubit.userContestRanks.indexOf(_cubit.userContestRanks[i])
             ).toString() : '-')),
         ],

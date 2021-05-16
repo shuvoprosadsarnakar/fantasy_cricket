@@ -13,13 +13,9 @@ enum CubitState {
 }
 
 class ContestDetialsCubit extends Cubit<CubitState> {
-  final Series series; // to show series prizes details
-  final Excerpt excerpt; // to get contest id to get contest
-  
-  // to check whether user is joined the contest or not, on that basis the 
-  // floating action button's text (create/update) will be decided 
+  final Series series;
+  final Excerpt excerpt;
   final User user;
-  
   Contest contest;
 
   ContestDetialsCubit(this.series, this.excerpt, this.user) : super(null) {

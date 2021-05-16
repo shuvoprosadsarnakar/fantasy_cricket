@@ -38,15 +38,18 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
     }
 
     seriesContests.forEach((Contest contest) {
-      userContestRanks.add(contest.ranks.firstWhere((Rank rank) {
-        return rank.username == user.username;
-      }));
+      userContestRanks.add(contest.ranks.firstWhere(
+        (Rank rank) {
+          return rank.username == user.username;
+        },
+        orElse: () => null,
+      ));
     });
 
     emit(CubitState.loaded);
   }
 
-  int getRank(int rankIndex) {
+  static int getRank(int rankIndex) {
     return rankIndex + 1;
   }
 }

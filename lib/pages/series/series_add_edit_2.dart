@@ -19,7 +19,8 @@ class SeriesAddEdit2 extends StatelessWidget {
   final SeriesAddEdit2Cubit _cubit;
   
   // dropdown items for type dropdown field
-  final List<DropdownMenuItem<String>> _typeDropdownList = [];
+  final List<DropdownMenuItem<dynamic>> _typeDropdownList 
+    = <DropdownMenuItem<dynamic>>[];
 
   SeriesAddEdit2(this._cubit) {
     matchTypes.forEach((String type) {
@@ -78,7 +79,7 @@ class SeriesAddEdit2 extends StatelessWidget {
   }
 
   Column getMatchExcerptsFields(BuildContext context) {
-    final List<Column> matchExcerptWidgets = [];
+    final List<Column> matchExcerptWidgets = <Column>[];
     
     // dropdown items for team dropdown fields
     final List<DropdownMenuItem<String>> teamDropdownList = 
@@ -151,6 +152,9 @@ class SeriesAddEdit2 extends StatelessWidget {
               },
               onSaved: (dynamic value) {
                 excerpt.teamsNames[0] = _cubit.getTeamNameById(value);
+                excerpt.teamImages[0] = _cubit.allTeams.firstWhere((Team team) {
+                  return team.name == excerpt.teamsNames[0];
+                }).photo;
               },
             )),
           ],
@@ -178,6 +182,9 @@ class SeriesAddEdit2 extends StatelessWidget {
               onSaved: (dynamic value) {
                 excerpt.teamsIds[1] = value;
                 excerpt.teamsNames[1] = _cubit.getTeamNameById(value);
+                excerpt.teamImages[1] = _cubit.allTeams.firstWhere((Team team) {
+                  return team.name == excerpt.teamsNames[1];
+                }).photo;
               },
             )),
           ],

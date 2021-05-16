@@ -18,27 +18,40 @@ class RunningContests extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _cubit,
-      builder: (BuildContext context, CubitState state) {
-        if(state == CubitState.loading) {
-          return Loading();
-        } else if(state == CubitState.fetchError) {
-          return FetchErrorMsg();
-        } else {
-          return Scaffold(
-            appBar: AppBar(title: Text('Running Contests')),
-            body: ListView(
-              padding: Paddings.pagePadding,
-              children: getListItems(context),
-            ),
-          );
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text('Running Contests')),
+      body: BlocBuilder(
+        bloc: _cubit,
+        builder: (BuildContext context, CubitState state) {
+          if(state == CubitState.loading) {
+            return Loading();
+          } else if(state == CubitState.fetchError) {
+            return FetchErrorMsg();
+          } else {
+            final List<InkWell> listItems = _getListItems(context);
+            final int totalItems = listItems.length;
+
+            if(totalItems > 0) {
+              return ListView.builder(
+                padding: Paddings.pagePadding,
+                itemCount: totalItems,
+                itemBuilder: (BuildContext context, int i) {
+                  return listItems[i];
+                },
+              );
+            } else {
+              return Padding(
+                padding: Paddings.pagePadding,
+                child: Text('No running contest found.'),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 
-  List<Widget> getListItems(BuildContext context) {
+  List<Widget> _getListItems(BuildContext context) {
     final List<Excerpt> runningContestsExcerpts = <Excerpt>[];
     final List<Series> runningContestsSerieses = <Series>[];
     final List<InkWell> listItems = <InkWell>[];
@@ -61,6 +74,7 @@ class RunningContests extends StatelessWidget {
         child: ContestsListItem(
           runningContestsExcerpts[i],
           runningContestsSerieses[i],
+          RunningContestsCubit.getSeriesTotalChips(runningContestsSerieses[i]),
         ),
         onTap: () async {
           await Navigator.push(context, MaterialPageRoute(

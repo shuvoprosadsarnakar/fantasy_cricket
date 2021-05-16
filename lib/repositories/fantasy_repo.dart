@@ -9,9 +9,10 @@ class FantasyRepo {
   static final CollectionReference _fantasyCollection = _db
     .collection('fantasies');
 
-  static Future<Fantasy> getFantasyByUsername(String username) async {
+  static Future<Fantasy> getFantasy(String username, String contestId) async {
     QuerySnapshot querySnapshot = await _fantasyCollection
       .where('username', isEqualTo: username)
+      .where('contestId', isEqualTo: contestId)
       .get();
 
     QueryDocumentSnapshot documentSnapshot = querySnapshot.docs.first;

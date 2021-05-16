@@ -6,6 +6,7 @@ import 'package:fantasy_cricket/pages/contests/contest_manager.dart';
 import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart' as ceCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contest_manager_cubit.dart' as cmCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart' as rcCubit;
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -31,21 +32,29 @@ class ContestsList extends StatelessWidget {
           } else if(state == CubitState.fetchError) {
             return FetchErrorMsg();
           } else {
-            final List<InkWell> listItems = <InkWell>[];
-            initListItems(context, listItems);
+            final List<InkWell> listItems = _getListItems(context);
 
-            return ListView.builder(
-              padding: Paddings.pagePadding,
-              itemCount: listItems.length,
-              itemBuilder: (BuildContext context, int i) => listItems[i],
-            );
+            if(listItems.length > 0) {
+              return ListView.builder(
+                padding: Paddings.pagePadding,
+                itemCount: listItems.length,
+                itemBuilder: (BuildContext context, int i) => listItems[i],
+              );
+            } else {
+              return Padding(
+                padding: Paddings.pagePadding,
+                child: Text('No contest found.'),
+              );
+            }
           }
         },
       ),
     );
   }
 
-  void initListItems(BuildContext context, List<InkWell> listItems) {
+  List<InkWell> _getListItems(BuildContext context) {
+    final List<InkWell> listItems = <InkWell>[];
+
     _cubit.notEndedSerieses.forEach((Series series) {
       int totalExcerpts = series.matchExcerpts.length;
 
@@ -57,37 +66,39 @@ class ContestsList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                getStartingTime(excerpt.startTime),
+                _getStartingTime(excerpt.startTime),
                 SizedBox(height: 5),
-                getTeamNames(excerpt.teamsNames, context),
+                _getTeamNames(excerpt.teamsNames, context),
                 SizedBox(height: 5),
-                getMatchTypeAndNo(excerpt.no, excerpt.type),
+                _getMatchTypeAndNo(excerpt.no, excerpt.type),
                 SizedBox(height: 5),
-                getSeriesName(series.name, context),
+                _getSeriesName(series.photo, series.name, context),
                 SizedBox(height: 5),
                 if(_contestStatus != ContestStatuses.upcoming) 
-                  getContestPrice(excerpt),
+                  _getContestPrice(excerpt),
                 if(_contestStatus != ContestStatuses.upcoming)
                   SizedBox(height: 5),
-                getSeriesPrice(series),
+                _getSeriesPrice(series),
                 Divider(height: 30),
               ],
             ),
-            onTap: getOnTap(context, series, i),
+            onTap: _getOnTap(context, series, i),
           ));
         }
       }
     });
+
+    return listItems;
   }
 
-  Text getStartingTime(Timestamp startTime) {
+  Text _getStartingTime(Timestamp startTime) {
     return Text(
       'Match Time: ' + startTime.toDate().toString(),
       style: TextStyle(fontStyle: FontStyle.italic),  
     );
   }
 
-  Text getTeamNames(List<String> teamsNames, BuildContext context) {
+  Text _getTeamNames(List<String> teamsNames, BuildContext context) {
     return Text(
       '${teamsNames[0]} VS ${teamsNames[1]}',
       style: TextStyle(
@@ -98,18 +109,28 @@ class ContestsList extends StatelessWidget {
     );
   }
 
-  Text getMatchTypeAndNo(int no, String type) {
+  Text _getMatchTypeAndNo(int no, String type) {
     return Text('No.$no $type');
   }
 
-  Text getSeriesName(String seriesName, BuildContext context) {
-    return Text(
-      seriesName,
-      style: Theme.of(context).textTheme.subtitle2,
+  Row _getSeriesName(String imageLink, String name, BuildContext context) {
+    return Row(
+      children: [
+        Image.network(
+          imageLink,
+          width: 50,
+          height: 50,
+        ),
+        SizedBox(width: 10),
+        Text(
+          name,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
+      ],
     );
   }
 
-  Function getOnTap(BuildContext context, Series series, int excerptIndex) {
+  Function _getOnTap(BuildContext context, Series series, int excerptIndex) {
     return () async {
       String snackBarText = await Navigator.push(
         context, 
@@ -137,21 +158,13 @@ class ContestsList extends StatelessWidget {
     };
   }
 
-  Text getSeriesPrice(Series series) {
-    int totalChips = 0;
-    int totalDistributes = series.chipsDistributes.length;
-    
-    for(int i = 0; i < totalDistributes; i++) {
-      totalChips += series.chipsDistributes[i].chips;
-    }
-
-    return Text(
-      'Series: $totalChips Chips & ' + 
-        '${series.chipsDistributes[totalDistributes - 1].to} Winners',
-    );
+  Text _getSeriesPrice(Series series) {
+    return Text('Series: ${rcCubit.RunningContestsCubit
+      .getSeriesTotalChips(series)} Chips & ${series.chipsDistributes.last.to} '
+      + 'Winners');
   }
 
-  Text getContestPrice(Excerpt excerpt) {
+  Text _getContestPrice(Excerpt excerpt) {
     return Text(
       'Match: ${excerpt.totalChips} Chips & ${excerpt.totalWinners} Winners'
     );

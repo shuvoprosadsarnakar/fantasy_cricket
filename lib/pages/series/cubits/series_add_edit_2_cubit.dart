@@ -19,7 +19,7 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
   // When admin comes to [SeriesAddEdit2] screen all teams will be fetched from
   // db and all team objects will added to [allTeams] variable. This variable 
   // will be used to create dropdown list for team dropdown fields.
-  final List<Team> allTeams = [];
+  final List<Team> allTeams = <Team>[];
   
   SeriesAddEdit2Cubit(this.series) : super(null) {
     emit(AddEditStatus.loading);
@@ -33,7 +33,8 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
   void addMatchExcerpt() {
     series.matchExcerpts.add(Excerpt(
       teamsIds: [null, null],
-      teamsNames: [null, null],  
+      teamsNames: [null, null],
+      teamImages: [null, null],
     ));
 
     if(state == AddEditStatus.excerptAdded) {

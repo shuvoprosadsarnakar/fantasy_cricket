@@ -53,6 +53,7 @@ class SeriesAddEditCubit extends Cubit<AddEditStatus> {
       series.matchExcerpts = [Excerpt(
         teamsIds: [null, null],
         teamsNames: [null, null],
+        teamImages: [null, null],
       )];
     }
   }

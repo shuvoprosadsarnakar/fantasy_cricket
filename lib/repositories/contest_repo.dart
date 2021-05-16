@@ -27,7 +27,8 @@ class ContestRepo {
       .chipsDistributes[contest.chipsDistributes.length - 1].to;
 
     contest.chipsDistributes.forEach((Distribute distribute) {
-      series.matchExcerpts[excerptIndex].totalChips += distribute.chips;
+      series.matchExcerpts[excerptIndex].totalChips 
+        += distribute.chips * (distribute.to - distribute.from + 1);
     });
 
     // update series excerpt

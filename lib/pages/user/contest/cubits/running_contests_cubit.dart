@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/auth_repo.dart';
@@ -40,5 +41,16 @@ class RunningContestsCubit extends Cubit<CubitState> {
     } else {
       emit(CubitState.rebuild);
     }
+  }
+
+  static int getSeriesTotalChips(Series series) {
+    int seriesTotalChips = 0;
+    
+    series.chipsDistributes.forEach((Distribute distribute) {
+      seriesTotalChips 
+        += distribute.chips * (distribute.to - distribute.from + 1);
+    });
+
+    return seriesTotalChips;
   }
 }

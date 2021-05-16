@@ -34,7 +34,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.noByType = _series.matchExcerpts[_excerptIndex].no;
       contest.startTime = _series.matchExcerpts[_excerptIndex].startTime;
       contest.excerptIndex = _excerptIndex;
-      contest.chipsDistributes = [Distribute()];
+      contest.chipsDistributes = <Distribute>[Distribute()];
 
       // fetch the two team's players and set players needed info
       setPlayersInfo(_series.matchExcerpts[_excerptIndex].teamsIds);
@@ -50,13 +50,9 @@ class ContestManagerCubit extends Cubit<CubitState> {
         });
     }
 
-    // to show [loading] widget on the screen because we need fetch the two 
-    // team's players or the contest from database
     emit(CubitState.loading);
   }
 
-  // fetches the two teams's players from db and set contest's players names, 
-  // roles, initial credits and initial 'is playing' status
   Future<void> setPlayersInfo(List<String> teamsIds) async {
     Team team1, team2;
     
@@ -67,10 +63,10 @@ class ContestManagerCubit extends Cubit<CubitState> {
       emit(CubitState.fetchError);
     }
 
-    contest.playersNames = [];
-    contest.playersRoles = [];
-    contest.playersCredits = [];
-    contest.isPlayings = [];
+    contest.playersNames = <String>[];
+    contest.playersRoles = <String>[];
+    contest.playersCredits = <double>[];
+    contest.isPlayings = <bool>[];
     contest.team1TotalPlayers = team1.playersNames.length;
     
     team1.playersNames.forEach((String name) {

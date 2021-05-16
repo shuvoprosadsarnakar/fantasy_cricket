@@ -38,7 +38,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
     emit(CubitState.loading);
 
     if(user.contestIds.contains(contest.id)) {
-      FantasyRepo.getFantasyByUsername(user.username)
+      FantasyRepo.getFantasy(user.username, contest.id)
         .catchError((dynamic error) {
           emit(CubitState.fetchError);
           return null;

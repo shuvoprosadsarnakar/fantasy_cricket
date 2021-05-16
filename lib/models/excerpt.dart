@@ -6,6 +6,7 @@ const String TYPE_KEY = 'type';
 const String NO_KEY = 'no';
 const String TEAMS_IDS_KEY = 'teamsIds';
 const String TEAMS_NAMES_KEY = 'teamsNames';
+const String TEAM_IMAGES_KEY = 'teamImages';
 const String START_TIME_KEY = 'startTime';
 const String STATUS_KEY = 'status';
 const String TOTAL_CHIPS_KEY = 'totalChips';
@@ -15,8 +16,9 @@ class Excerpt {
   String id;
   String type;
   int no;
-  List<String> teamsIds = [];
-  List<String> teamsNames = [];
+  List<String> teamsIds; // to get team players for contest
+  List<String> teamsNames;
+  List<String> teamImages;
   Timestamp startTime;
   String status;
   int totalChips;
@@ -28,18 +30,24 @@ class Excerpt {
     this.no,
     this.teamsIds,
     this.teamsNames,
+    this.teamImages,
     this.startTime,
     this.status = 'Upcoming',
     this.totalChips,
     this.totalWinners,
-  });
+  }) {
+    if(teamsIds == null) teamsIds = <String>[];
+    if(teamsNames == null) teamsNames = <String>[];
+    if(teamImages == null) teamsNames = <String>[];
+  }
 
   Excerpt.fromMap(Map<String, dynamic> map) {
     id = map[ID_KEY];
     type = map[TYPE_KEY];
     no = map[NO_KEY];
-    teamsIds = [];
-    teamsNames = [];
+    teamsIds = <String>[];
+    teamsNames = <String>[];
+    teamImages = <String>[];
     startTime = map[START_TIME_KEY];
     status = map[STATUS_KEY];
     totalChips = map[TOTAL_CHIPS_KEY];
@@ -53,6 +61,10 @@ class Excerpt {
     map[TEAMS_NAMES_KEY].forEach((dynamic teamName) {
       teamsNames.add(teamName);
     });
+
+    map[TEAM_IMAGES_KEY].forEach((dynamic teamImage) {
+      teamImages.add(teamImage);
+    });
   }
 
   Map<String, dynamic> toMap() {
@@ -62,17 +74,11 @@ class Excerpt {
       NO_KEY: no,
       TEAMS_IDS_KEY: teamsIds,
       TEAMS_NAMES_KEY: teamsNames,
+      TEAM_IMAGES_KEY: teamImages,
       START_TIME_KEY: startTime,
       STATUS_KEY: status,
       TOTAL_CHIPS_KEY: totalChips,
       TOTAL_WINNERS_KEY: totalWinners,
     };
-  }
-
-  @override
-  String toString() {
-    return '{ id: $id, type: $type, no: $no, teamsIds: $teamsIds, ' + 
-      'teamsNames: $teamsNames, startTime: $startTime, status: $status' + 
-      'totalChips: $totalChips, totalWinners: $totalWinners}';
   }
 }
