@@ -1,8 +1,8 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/pages/home/tabs/fantasy_tab.dart';
-import 'package:fantasy_cricket/pages/home/tabs/leaderboard_tab.dart';
-import 'package:fantasy_cricket/pages/home/tabs/news_tab.dart';
-import 'package:fantasy_cricket/pages/home/tabs/prediction.dart';
+import 'package:fantasy_cricket/pages/home/tabs/first_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/third_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
+import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedPage = 0;
-
+ final List<String> titleList = ["My contests", "Running contests", "Upcoming", "Profile"];
+ String currentTitle;
   @override
   void initState() {
+    currentTitle = titleList[0];
     super.initState();
   }
 
@@ -24,6 +26,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(currentTitle),
         backgroundColor: ColorPallate.pomegranate,
         elevation: 0.0,
         actions: [
@@ -39,7 +42,7 @@ class _HomeState extends State<Home> {
       ),
       body: IndexedStack(
         index: _selectedPage,
-        children: [FantasyTab(), NewsTab(), LeaderboardTab(), PredictionTab()],
+        children: [FirstTab(), SecondTab(), ThirdTab(), ProfileTab()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -52,15 +55,15 @@ class _HomeState extends State<Home> {
             icon: Icon(
               Icons.whatshot_outlined,
             ),
-            label: 'Fantasy',
+            label: 'Contests',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
-            label: 'Leaderboard',
+            label: 'Running',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.my_library_books),
-            label: 'News',
+            label: 'Upcoming',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
@@ -76,6 +79,7 @@ class _HomeState extends State<Home> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedPage = index;
+      currentTitle = titleList[index];
     });
   }
 

@@ -26,12 +26,10 @@ class RunningContests extends StatelessWidget {
         } else if(state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
-          return Scaffold(
-            appBar: AppBar(title: Text('Running Contests')),
-            body: ListView(
+          return  ListView(
               padding: Paddings.pagePadding,
               children: getListItems(context),
-            ),
+            
           );
         }
       },
