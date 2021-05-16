@@ -9,6 +9,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="fantasy_cricket"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9928854251233601~8383271686"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

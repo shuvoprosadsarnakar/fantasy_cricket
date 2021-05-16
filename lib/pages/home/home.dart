@@ -5,6 +5,7 @@ import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,12 +13,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+final RewardedAd myRewarded = RewardedAd(
+  adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+  request: AdRequest(),
+  listener: AdListener(
+    onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+      print(reward.type);
+      print(reward.amount);
+    },
+  ),
+);
+
   int _selectedPage = 0;
  final List<String> titleList = ["My contests", "Running contests", "Profile"];
  String currentTitle;
   @override
   void initState() {
     currentTitle = titleList[0];
+    myRewarded.load();
     super.initState();
   }
 
@@ -80,6 +94,7 @@ class _HomeState extends State<Home> {
   void _onMenuItemSelected(BuildContext context, int value) {
     switch (value) {
       case 1:
+      myRewarded.show();
         print("Settings clicked");
         break;
       case 2:
