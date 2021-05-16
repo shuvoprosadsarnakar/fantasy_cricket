@@ -1,4 +1,3 @@
-import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +69,17 @@ class ContestsListItem extends StatelessWidget {
       SizedBox(height: 5),
       Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ${_excerpt.type} Match'),
       SizedBox(height: 5),
-      Text(_series.name),
+      Row(
+        children: [
+          Image.network(
+            _series.photo,
+            width: 30,
+            height: 30,
+          ),
+          SizedBox(width: 10),
+          Text(_series.name),
+        ],
+      ),
       SizedBox(height: 5),
       Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
     ]);

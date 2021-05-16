@@ -59,7 +59,8 @@ class ContestDetails extends StatelessWidget {
         
         Column(children: [
           Text(
-            '${_cubit.excerpt. teamsNames[0]} vs ${_cubit.excerpt.teamsNames[1]}',
+            _cubit.excerpt.teamsNames[0] + ' vs ' 
+              + _cubit.excerpt.teamsNames[1],
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
@@ -70,7 +71,17 @@ class ContestDetails extends StatelessWidget {
             + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
             + _cubit.excerpt.type + ' Match'),
           SizedBox(height: 5),
-          Text(_cubit.series.name),
+          Row(
+            children: [
+              Image.network(
+                _cubit.series.photo,
+                width: 30,
+                height: 30,
+              ),
+              SizedBox(width: 10),
+              Text(_cubit.series.name),
+            ],
+          ),
           SizedBox(height: 5),
           Text(
             '${_cubit.excerpt.startTime.toDate().toString().substring(0, 16)}'

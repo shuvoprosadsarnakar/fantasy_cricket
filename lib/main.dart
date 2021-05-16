@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      //initialRoute: FirebaseAuth.instance.currentUser==null ? signIn : home,
-      home: ContestsList(ContestsListCubit(), ContestStatuses.running),
+      // initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
+      home: RunningContests(RunningContestsCubit()),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
