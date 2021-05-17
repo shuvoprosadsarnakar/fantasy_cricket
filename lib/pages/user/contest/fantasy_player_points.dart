@@ -57,8 +57,9 @@ class FantasyPlayerPoints extends StatelessWidget {
       child: ListTile(
         tileColor: ColorPallate.mercury,
         title: Text(_cubit.username),
-        subtitle: Text(_cubit.getRank(rankIndex).toString()),
-        trailing: Text(_cubit.contest.ranks[rankIndex].totalPoints.toString()),
+        subtitle: Text('Rank: ' + _cubit.getRank(rankIndex).toString()),
+        trailing: Text('Points: ' + 
+          _cubit.contest.ranks[rankIndex].totalPoints.toString()),
       ),
     );
   }
@@ -67,6 +68,8 @@ class FantasyPlayerPoints extends StatelessWidget {
     List<Widget> pointsRows = _cubit.fantasy.playerNames.map((String playerName) 
     {
       int playerIndex = _cubit.contest.playersNames.indexOf(playerName);
+      int teamIndex = playerIndex < _cubit.contest.team1TotalPlayers ? 0 : 1;
+      
       double pointsMultiplicator;
       String playerNameSuffix;
 
@@ -90,24 +93,32 @@ class FantasyPlayerPoints extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(children: [
-                      Image.network(
-                        playerIndex < _cubit.contest.team1TotalPlayers 
-                          ? _cubit.excerpt.teamImages[0] 
-                          : _cubit.excerpt.teamImages[1],
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(playerName + ' ' + playerNameSuffix),
-                          SizedBox(height: 5),
-                          Text(_cubit.contest.playersRoles[playerIndex]),
-                        ],
-                      ),
-                    ]),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          playerName + ' ' + playerNameSuffix,
+                          style: Theme.of(context).textTheme.subtitle1,  
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          _cubit.contest.playersRoles[playerIndex],
+                          style: TextStyle(fontWeight: FontWeight.w300),  
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Image.network(
+                              _cubit.excerpt.teamImages[teamIndex],
+                              width: 20,
+                              height: 20,
+                            ),
+                            SizedBox(width: 5),
+                            Text(_cubit.contest.teamsNames[teamIndex]),
+                          ],
+                        ),
+                      ],
+                    ),
                     Row(children: [
                       SizedBox(width: 10),
                       if(pointsMultiplicator != 1) 
