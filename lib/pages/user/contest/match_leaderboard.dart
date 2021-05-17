@@ -136,6 +136,7 @@ class MatchLeaderboard extends StatelessWidget {
           return FantasyPlayerPoints(FantasyPlayerPointsCubit(
             contest,
             rank.username,
+            excerpt,
           ));
         },
       )),
