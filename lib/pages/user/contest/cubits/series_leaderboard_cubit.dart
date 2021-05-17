@@ -15,6 +15,7 @@ enum CubitState {
 class SeriesLeaderboardCubit extends Cubit<CubitState> {
   final Series series;
   final User user;
+  List<Contest> seriesContests = <Contest>[];
   List<Rank> userContestRanks = <Rank>[];
 
   SeriesLeaderboardCubit(this.series, this.user) : super(null) {
@@ -23,7 +24,6 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
   }
 
   Future<void> _getuserContestRanks() async {
-    List<Contest> seriesContests = <Contest>[];
     int totalExcerpts = series.matchExcerpts.length;
 
     for(int i = 0; i < totalExcerpts; i++) {

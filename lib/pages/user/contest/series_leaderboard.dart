@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -43,7 +44,7 @@ class SeriesLeaderboard extends StatelessWidget {
               body: TabBarView(
                 children: [
                   getRanking(context),
-                  getMatches(),
+                  getMatches(context),
                 ],
               ),
             ),
@@ -138,33 +139,44 @@ class SeriesLeaderboard extends StatelessWidget {
     );
   }
 
-  ListView getMatches() {
+  ListView getMatches(BuildContext context) {
     List<Widget> matchWidgets = <Widget>[];
     int totalMatches = _cubit.series.matchExcerpts.length;
     
     for(int i = 0; i < totalMatches; i++) {
       Excerpt excerpt = _cubit.series.matchExcerpts[i];
       
-      matchWidgets.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(child: Text(excerpt.startTime.toDate().toString()
-            .substring(0, 16))),
-          SizedBox(width: 5),
-          Expanded(child: Text(excerpt.no.toString() + getNoSuffix(excerpt.no) +
-            ' ' + excerpt.type)),
-          SizedBox(width: 5),
-          Expanded(child: Text(excerpt.teamsNames[0] + ' vs ' + 
-            excerpt.teamsNames[1])),
-          SizedBox(width: 5),
-          Expanded(child: Text(_cubit.userContestRanks[i] != null ?
-            _cubit.userContestRanks[i].totalPoints.toString() : '-')),
-          SizedBox(width: 5),
-          Expanded(child: Text(_cubit.userContestRanks[i] != null ?
-            SeriesLeaderboardCubit.getRank(
-              _cubit.userContestRanks.indexOf(_cubit.userContestRanks[i])
-            ).toString() : '-')),
-        ],
+      matchWidgets.add(InkWell(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Text(excerpt.startTime.toDate().toString()
+              .substring(0, 16))),
+            SizedBox(width: 5),
+            Expanded(child: Text(excerpt.no.toString() + getNoSuffix(excerpt.no) +
+              ' ' + excerpt.type)),
+            SizedBox(width: 5),
+            Expanded(child: Text(excerpt.teamsNames[0] + ' vs ' + 
+              excerpt.teamsNames[1])),
+            SizedBox(width: 5),
+            Expanded(child: Text(_cubit.userContestRanks[i] != null ?
+              _cubit.userContestRanks[i].totalPoints.toString() : '-')),
+            SizedBox(width: 5),
+            Expanded(child: Text(_cubit.userContestRanks[i] != null ?
+              SeriesLeaderboardCubit.getRank(
+                _cubit.userContestRanks.indexOf(_cubit.userContestRanks[i])
+              ).toString() : '-')),
+          ],
+        ),
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context) {
+            return MatchLeaderboard(
+              contest: _cubit.seriesContests[i],
+              excerpt: excerpt,
+              user: _cubit.user,
+            );
+          },
+        )),
       ));
       matchWidgets.add(Divider());
     }
