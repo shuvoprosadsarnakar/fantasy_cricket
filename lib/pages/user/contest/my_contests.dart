@@ -1,7 +1,8 @@
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart' as cdCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart'
+    as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
@@ -12,25 +13,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyContests extends StatelessWidget {
   final RunningContestsCubit _cubit;
-  
+
   MyContests(this._cubit);
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _cubit,
       builder: (BuildContext context, CubitState state) {
-        if(state == CubitState.loading) {
+        if (state == CubitState.loading) {
           return Loading();
-        } else if(state == CubitState.fetchError) {
+        } else if (state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
-          return Scaffold(
-            appBar: AppBar(title: Text('My Contests')),
-            body: ListView(
-              padding: Paddings.pagePadding,
-              children: getListItems(context),
-            ),
+          return ListView(
+            padding: Paddings.pagePadding,
+            children: getListItems(context),
           );
         }
       },
@@ -41,11 +39,11 @@ class MyContests extends StatelessWidget {
     final List<Excerpt> runningContestsExcerpts = <Excerpt>[];
     final List<Series> runningContestsSerieses = <Series>[];
     final List<InkWell> listItems = <InkWell>[];
-      
+
     // init [runningContestsExcerpts] & [runningContestsSerieses] variables
     _cubit.notEndedSerieses.forEach((Series series) {
       series.matchExcerpts.forEach((Excerpt excerpt) {
-        if(_cubit.user.contestIds.contains(excerpt.id)) {
+        if (_cubit.user.contestIds.contains(excerpt.id)) {
           runningContestsExcerpts.add(excerpt);
           runningContestsSerieses.add(series);
         }
@@ -54,7 +52,7 @@ class MyContests extends StatelessWidget {
 
     final int totalListItems = runningContestsExcerpts.length;
 
-    for(int i = 0; i < totalListItems; i++) {
+    for (int i = 0; i < totalListItems; i++) {
       listItems.add(InkWell(
         child: ContestsListItem(
           runningContestsExcerpts[i],

@@ -13,6 +13,9 @@ const String verifyEmail = '/verifyEmail';
 const String passwordReset = '/passwordReset';
 const String home = '/home';
 const String adminHome = '/adminhome';
+const String runningContestList = '/runningContestList';
+const String lockedContestList = '/lockedContestList';
+const String endedContestList = '/endedContestList';
 
 final Map<String, WidgetBuilder> routes = {
 

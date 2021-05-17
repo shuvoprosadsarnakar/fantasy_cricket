@@ -17,9 +17,11 @@ import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -30,8 +32,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      // initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
-      home: MyContests(RunningContestsCubit()),
+      initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
+      //home: ContestsList(ContestsListCubit(), ContestStatuses.running),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

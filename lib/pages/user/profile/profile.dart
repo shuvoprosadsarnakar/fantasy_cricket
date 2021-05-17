@@ -67,7 +67,7 @@ class Profile extends StatelessWidget {
 
   Text getUsername(BuildContext context) {
     return Text(
-      'username',
+      _cubit.user.username,
       style: Theme.of(context).textTheme.headline3,
     );
   }

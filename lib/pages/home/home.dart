@@ -1,11 +1,11 @@
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/pages/home/tabs/first_tab.dart';
-import 'package:fantasy_cricket/pages/home/tabs/third_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,12 +13,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+final RewardedAd myRewarded = RewardedAd(
+  adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+  request: AdRequest(),
+  listener: AdListener(
+    onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+      print(reward.type);
+      print(reward.amount);
+    },
+  ),
+);
+
   int _selectedPage = 0;
- final List<String> titleList = ["My contests", "Running contests", "Upcoming", "Profile"];
+ final List<String> titleList = ["My contests", "Running contests", "Profile"];
  String currentTitle;
   @override
   void initState() {
     currentTitle = titleList[0];
+    myRewarded.load();
     super.initState();
   }
 
@@ -33,16 +46,15 @@ class _HomeState extends State<Home> {
           PopupMenuButton<int>(
               onSelected: (value) => _onMenuItemSelected(context, value),
               itemBuilder: (context) => [
-                    PopupMenuItem(value: 0, child: Text("Chips")),
+                    PopupMenuItem(value: 3, child: Text("Admin panel")),
                     PopupMenuItem(value: 1, child: Text("Settings")),
                     PopupMenuItem(value: 2, child: Text("Sign out")),
-                    PopupMenuItem(value: 3, child: Text("Admin panel"))
                   ])
         ],
       ),
       body: IndexedStack(
         index: _selectedPage,
-        children: [FirstTab(), SecondTab(), ThirdTab(), ProfileTab()],
+        children: [FirstTab(), SecondTab(), ProfileTab()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -62,11 +74,7 @@ class _HomeState extends State<Home> {
             label: 'Running',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.my_library_books),
-            label: 'Upcoming',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
@@ -85,10 +93,8 @@ class _HomeState extends State<Home> {
 
   void _onMenuItemSelected(BuildContext context, int value) {
     switch (value) {
-      case 0:
-        print("Chips clicked");
-        break;
       case 1:
+      myRewarded.show();
         print("Settings clicked");
         break;
       case 2:
