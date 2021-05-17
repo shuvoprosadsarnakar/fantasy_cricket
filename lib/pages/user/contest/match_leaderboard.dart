@@ -149,6 +149,26 @@ class MatchLeaderboard extends StatelessWidget {
     int totalPlayers = contest.playersNames.length;
 
     for(int i = 0; i < totalPlayers; i++) {
+      if(i == contest.team1TotalPlayers) {
+        pointsListTiles.add(ListTile(
+          leading: Image.network(
+            excerpt.teamImages[1],
+            width: 40,
+            height: 40,
+          ),
+          title: Text(
+            excerpt.teamsNames[1],
+            style: Theme.of(context).textTheme.headline6,  
+          ),
+          trailing: Text(
+            'Points',
+            style: Theme.of(context).textTheme.subtitle2,  
+          ),
+        ));
+
+        pointsListTiles.add(Divider(color: Colors.grey));
+      }
+
       pointsListTiles.add(ListTile(
         title: Text(contest.playersNames[i]),
         subtitle: Text(contest.playersRoles[i]),
@@ -160,7 +180,9 @@ class MatchLeaderboard extends StatelessWidget {
           },
         )),
       ));
-      pointsListTiles.add(Divider());
+
+      if(i != contest.team1TotalPlayers - 1 &&
+        i != contest.playersNames.length -1) pointsListTiles.add(Divider());
     }
 
     return ListView(
@@ -168,8 +190,19 @@ class MatchLeaderboard extends StatelessWidget {
       children: [
         // points titles
         ListTile(
-          title: Text('Player'),
-          trailing: Text('Points'),
+          leading: Image.network(
+            excerpt.teamImages[0],
+            width: 40,
+            height: 40,
+          ),
+          title: Text(
+            excerpt.teamsNames[0],
+            style: Theme.of(context).textTheme.headline6,  
+          ),
+          trailing: Text(
+            'Points',
+            style: Theme.of(context).textTheme.subtitle2, 
+          ),
         ),
         Divider(color: Colors.grey),
 

@@ -72,7 +72,8 @@ class PlayerPointsDetails extends StatelessWidget {
               _contest.playersRoles[_playerIndex]),
           ],
         ),
-        trailing: Text(_contest.playersPoints[_playerIndex].toString()),
+        trailing: Text('Points: ' +
+          _contest.playersPoints[_playerIndex].toString()),
       ),
     );
   }
@@ -84,7 +85,7 @@ class PlayerPointsDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             getOnePointsTitle(2, category, context),
-            getOnePointsTitle(1, 'Report', context),
+            getOnePointsTitle(1, 'Score', context),
             getOnePointsTitle(1, 'Points', context),
           ],
         ),
