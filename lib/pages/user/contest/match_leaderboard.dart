@@ -5,6 +5,7 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/fantasy_player_points.dart';
+import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class MatchLeaderboard extends StatelessWidget {
         body: TabBarView(
           children: [
             getUserRankings(context),
-            getPlayerPoints(),
+            getPlayerPoints(context),
             getMatchScores(),
           ],
         ),
@@ -143,7 +144,7 @@ class MatchLeaderboard extends StatelessWidget {
     );
   }
 
-  ListView getPlayerPoints() {
+  ListView getPlayerPoints(BuildContext context) {
     List<Widget> pointsListTiles = <Widget>[];
     int totalPlayers = contest.playersNames.length;
 
@@ -153,7 +154,11 @@ class MatchLeaderboard extends StatelessWidget {
         subtitle: Text(contest.playersRoles[i]),
         trailing: Text((contest.playersPoints.isNotEmpty
           ? contest.playersPoints[i] : 0).toString()),
-        onTap: () {},
+        onTap: () => Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context) {
+            return PlayerPointsDetails(contest, i, excerpt);
+          },
+        )),
       ));
       pointsListTiles.add(Divider());
     }

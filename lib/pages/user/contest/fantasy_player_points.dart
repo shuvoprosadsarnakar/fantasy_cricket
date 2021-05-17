@@ -1,5 +1,6 @@
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -37,7 +38,7 @@ class FantasyPlayerPoints extends StatelessWidget {
                   ],
                 ),
                 Divider(color: Colors.grey),
-                getPlayerPoints(),
+                getPlayerPoints(context),
               ],
             );
           }
@@ -62,7 +63,7 @@ class FantasyPlayerPoints extends StatelessWidget {
     );
   }
 
-  Column getPlayerPoints() {
+  Column getPlayerPoints(BuildContext context) {
     List<Widget> pointsRows = _cubit.fantasy.playerNames.map((String playerName) 
     {
       int playerIndex = _cubit.contest.playersNames.indexOf(playerName);
@@ -120,7 +121,12 @@ class FantasyPlayerPoints extends StatelessWidget {
                 ),
               ]),
             ),
-            onTap: () {},
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return PlayerPointsDetails(_cubit.contest, playerIndex, 
+                  _cubit.excerpt);
+              },
+            )),
           ),
           Divider(),
         ],
