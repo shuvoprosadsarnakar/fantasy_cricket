@@ -122,7 +122,7 @@ class ContestEnder extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_cubit.mapKeyToFieldTitle(
+                Text(mapKeyToFieldTitle(
                   _cubit.reportKeys[j]) + ': '),
                 SizedBox(
                   width: 100,
@@ -220,5 +220,22 @@ class ContestEnder extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String mapKeyToFieldTitle(String mapKey) {
+    int length = mapKey.length;
+    String capitalized = mapKey[0].toUpperCase();
+
+    for(int i = 1; i < length; i++) {
+      int codeUnit = mapKey[i].codeUnits[0];
+      
+      if(codeUnit >= 65 && codeUnit <= 90) {
+        capitalized += ' ';
+      }
+      
+      capitalized += mapKey[i];
+    }
+
+    return capitalized;
   }
 }
