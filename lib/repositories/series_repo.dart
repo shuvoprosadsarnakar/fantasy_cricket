@@ -32,9 +32,23 @@ class SeriesRepo {
   }
 
   static Future<void> assignNotEndedSerieses(List<Series> notEndedSerieses) 
-    async {
+    async 
+  {
+    DateTime dateTime = DateTime.now();
+    int year = dateTime.year;
+    int month = dateTime.month - 1;
+    int day = dateTime.day;
+
+    if(month == 0) {
+      year--;
+      month = 12;
+    }
+
+    // series ended after this time will be fetched
+    DateTime minTime = DateTime.utc(year, month, day);
+
     QuerySnapshot collection = await _seriesCollection
-      .where('times.end', isGreaterThan: Timestamp.fromDate(DateTime.now()))
+      .where('times.end', isGreaterThan: Timestamp.fromDate(minTime))
       .get();
 
     collection.docs.forEach((QueryDocumentSnapshot doc) {
