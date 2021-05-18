@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/exchange.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/exchange_repo.dart';
@@ -25,13 +26,13 @@ class ExchangeFormCubit extends Cubit<CubitState> {
   }
 
   Future<void> exchangeChips() async {
-    emit(CubitState.loading);
-
     if(formKey.currentState.validate()) {
       formKey.currentState.save();
       user.remainingChips -= exchange.chips;
+      exchange.dateTime = Timestamp.fromDate(DateTime.now());
 
       try {
+        emit(CubitState.loading);
         // add exchange and update user
         await ExchangeRepo.addExchange(exchange, user);
       } catch(error) {
