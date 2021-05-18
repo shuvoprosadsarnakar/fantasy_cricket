@@ -14,7 +14,9 @@ abstract class PointsCalculator {
     return sixesHit * 1.0;
   }
 
-  static double getHalfCenturyPoints(int halfCenturies, String matchType) {
+  static double getHalfCenturyPoints(int runsTaken, String matchType) {
+    int halfCenturies = getHalfCenturies(runsTaken);
+    
     if(matchType == 'T20') {
       return halfCenturies * 4.0;
     } else {
@@ -22,7 +24,13 @@ abstract class PointsCalculator {
     }
   }
 
-  static double getCenturyPoints(int centuries, String matchType) {
+  static int getHalfCenturies(int runsTaken) {
+    return (runsTaken % 100 >= 50) ? 1 : 0;
+  }
+
+  static double getCenturyPoints(int runsTaken, String matchType) {
+    int centuries = getCenturies(runsTaken);
+    
     if(matchType == 'T20') {
       return centuries * 8.0;
     } else {
@@ -30,9 +38,14 @@ abstract class PointsCalculator {
     }
   }
 
-  static double getStrikeRatePoints(int ballsFaced, double strikeRate,
+  static int getCenturies(int runsTaken) {
+    return (runsTaken / 100).floor();
+  }
+
+  static double getStrikeRatePoints(int ballsFaced, int runsTaken,
     String matchType) 
   {
+    double strikeRate = getStrikeRate(ballsFaced, runsTaken);
     double point = 0;
 
     if(matchType == 'T20' && ballsFaced >= 10) {
@@ -56,6 +69,10 @@ abstract class PointsCalculator {
     return point;
   }
 
+  static double getStrikeRate(int ballsFaced, int runsTaken) {
+    return runsTaken / ballsFaced * 100;
+  }
+
   // bowling points calculators
 
   static double getWicketsTakenPoints(int wicketsTaken, String matchType) {
@@ -66,7 +83,9 @@ abstract class PointsCalculator {
     }
   }
 
-  static double getFourWicketsPoints(int fourWickets, String matchType) {
+  static double getFourWicketsPoints(int wicketsTaken, String matchType) {
+    int fourWickets = getFourWickets(wicketsTaken);
+    
     if(matchType == 'T20') {
       return fourWickets * 4.0;
     } else {
@@ -74,7 +93,13 @@ abstract class PointsCalculator {
     }
   }
 
-  static double getFiveWicketsPoints(int fiveWickets, String matchType) {
+  static int getFourWickets(int wicketsTaken) {
+    return (wicketsTaken % 5 == 4) ? 1 : 0;
+  }
+
+  static double getFiveWicketsPoints(int wicketsTaken, String matchType) {
+    int fiveWickets = getFiveWickets(wicketsTaken);
+
     if(matchType == 'T20') {
       return fiveWickets * 8.0;
     } else {
@@ -82,19 +107,22 @@ abstract class PointsCalculator {
     }
   }
 
+  static int getFiveWickets(int wicketsTaken) {
+    return (wicketsTaken / 5).floor();
+  }
+
   static double getMaidenOversPoints(int maidenOvers, String matchType) {
-    if(matchType == 'T20') {
-      return maidenOvers * 4.0;
-    } else if(matchType == 'One Day') {
+    if(matchType != 'Test') {
       return maidenOvers * 4.0;
     } else {
       return 0;
     }
   }
 
-  static double getEconomyRatePoints(int ballsBowled, double economyRate, 
+  static double getEconomyRatePoints(int ballsBowled, int runsGiven, 
     String matchType) 
   {
+    double economyRate = getEconomyRate(ballsBowled, runsGiven);
     double point = 0;
 
     if(matchType == 'T20' && ballsBowled >= 12) {
@@ -128,6 +156,10 @@ abstract class PointsCalculator {
     }
 
     return point;
+  }
+
+  static double getEconomyRate(int ballsBowled, int runsGiven) {
+    return runsGiven / (ballsBowled / 6);
   }
 
   // fielding points calculator

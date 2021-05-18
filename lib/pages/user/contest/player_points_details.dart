@@ -10,12 +10,28 @@ class PlayerPointsDetails extends StatelessWidget {
   final Contest _contest;
   final int _playerIndex;
   final Excerpt _excerpt;
+  
+  Report report = Report();
+  int halfCenturies = 0;
+  int centuries = 0;
+  double strikeRate = 0;
+  int fourWickets = 0;
+  int fiveWickets = 0;
+  double economyRate = 0;
 
-  PlayerPointsDetails(
-    this._contest,
-    this._playerIndex,
-    this._excerpt,
-  );
+  PlayerPointsDetails(this._contest, this._playerIndex, this._excerpt) {
+    if(_contest.playersReports.isNotEmpty) {
+      report = _contest.playersReports[_playerIndex];
+      halfCenturies = PointsCalculator.getHalfCenturies(report.runsTaken);
+      centuries = PointsCalculator.getCenturies(report.runsTaken);
+      strikeRate 
+        = PointsCalculator.getStrikeRate(report.ballsFaced, report.runsTaken);
+      fourWickets = PointsCalculator.getFourWickets(report.wicketsTaken);
+      fiveWickets = PointsCalculator.getFiveWickets(report.wicketsTaken);
+      economyRate 
+        = PointsCalculator.getEconomyRate(report.ballsBowled, report.runsGiven);
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -72,8 +88,8 @@ class PlayerPointsDetails extends StatelessWidget {
               _contest.playersRoles[_playerIndex]),
           ],
         ),
-        trailing: Text('Points: ' +
-          _contest.playersPoints[_playerIndex].toString()),
+        trailing: Text('Points: ' + (_contest.playersPoints.isNotEmpty ?
+          _contest.playersPoints[_playerIndex] : 0).toString()),
       ),
     );
   }
@@ -104,12 +120,7 @@ class PlayerPointsDetails extends StatelessWidget {
     );
   }
 
-  Column getBattingPoints() {
-    Report report = _contest.playersReports[_playerIndex];
-    int halfCenturies = (report.runsTaken % 100 >= 50) ? 1 : 0;
-    int centuries = (report.runsTaken / 100).floor();
-    double strikeRate = report.runsTaken / report.ballsFaced * 100;
-    
+  Column getBattingPoints() {    
     return Column(
       children: [
         getPointsRow(
@@ -130,18 +141,19 @@ class PlayerPointsDetails extends StatelessWidget {
         getPointsRow(
           'Half Century',
           halfCenturies,
-          PointsCalculator.getHalfCenturyPoints(halfCenturies, _excerpt.status),
+          PointsCalculator.getHalfCenturyPoints(report.runsTaken, 
+            _excerpt.type),
         ),
         getPointsRow(
           'Century',
           centuries,
-          PointsCalculator.getCenturyPoints(centuries, _excerpt.status),
+          PointsCalculator.getCenturyPoints(report.runsTaken, _excerpt.type),
         ),
         getPointsRow(
           'Strike Rate',
           strikeRate,
-          PointsCalculator.getStrikeRatePoints(report.ballsBowled, strikeRate, 
-            _excerpt.status),
+          PointsCalculator.getStrikeRatePoints(report.ballsFaced, 
+            report.runsTaken, _excerpt.type),
         ),
       ],
     );
@@ -173,48 +185,43 @@ class PlayerPointsDetails extends StatelessWidget {
   }
 
   Column getBowlingPoints() {
-    Report report = _contest.playersReports[_playerIndex];
-    int fourWickets = (report.wicketsTaken % 5 >= 4) ? 1 : 0;
-    int fiveWickets = (report.wicketsTaken / 5).floor();
-    double economyRate = report.runsGiven / (report.ballsBowled / 6);
-
     return Column(
       children: [
         getPointsRow(
           'Wickets',
           report.wicketsTaken,
-          PointsCalculator.getWicketsTakenPoints(report.runsTaken, 
-            _excerpt.status),
+          PointsCalculator.getWicketsTakenPoints(report.wicketsTaken, 
+            _excerpt.type),
         ),
         getPointsRow(
           'Four Wickets',
           fourWickets,
-          PointsCalculator.getWicketsTakenPoints(fourWickets, _excerpt.status),
+          PointsCalculator.getFourWicketsPoints(report.wicketsTaken, 
+            _excerpt.type),
         ),
         getPointsRow(
           'Five Wickets',
           fiveWickets,
-          PointsCalculator.getWicketsTakenPoints(fiveWickets, _excerpt.status),
+          PointsCalculator.getFiveWicketsPoints(report.wicketsTaken, 
+            _excerpt.type),
         ),
         getPointsRow(
           'Maiden Overs',
           report.maidenOvers,
-          PointsCalculator.getWicketsTakenPoints(report.maidenOvers, 
-            _excerpt.status),
+          PointsCalculator.getMaidenOversPoints(report.maidenOvers, 
+            _excerpt.type),
         ),
         getPointsRow(
           'Economy Rate',
           economyRate,
-          PointsCalculator.getEconomyRatePoints(report.ballsBowled, economyRate, 
-            _excerpt.status),
+          PointsCalculator.getEconomyRatePoints(report.ballsBowled, 
+            report.runsGiven, _excerpt.type),
         ),
       ],
     );
   }
 
   Column getFieldingPoints() {
-    Report report = _contest.playersReports[_playerIndex];
-    
     return Column(
       children: [
         getPointsRow(
@@ -225,7 +232,7 @@ class PlayerPointsDetails extends StatelessWidget {
         getPointsRow(
           'Stumpings',
           report.stumpings,
-          PointsCalculator.getStumpingsPoints(report.catches),
+          PointsCalculator.getStumpingsPoints(report.stumpings),
         ),
         getPointsRow(
           'Run Outs',
@@ -237,8 +244,6 @@ class PlayerPointsDetails extends StatelessWidget {
   }
 
   Column getOthersPoints() {
-    Report report = _contest.playersReports[_playerIndex];
-      
     return Column(
       children: [
          Row(
@@ -250,7 +255,8 @@ class PlayerPointsDetails extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: Text(_contest.isPlayings[_playerIndex] ? 'Yes' : 'No'),
+              child: Text(_contest.isPlayings[_playerIndex] ? 
+                'Yes' : 'No'),
             ),
             Expanded(
               flex: 1,

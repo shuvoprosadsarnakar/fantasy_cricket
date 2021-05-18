@@ -29,7 +29,19 @@ class Report {
   int stumpings;
   int runOuts;
 
-  Report();
+  Report({
+    this.runsTaken = 0,
+    this.foursHit = 0,
+    this.sixesHit = 0,
+    this.ballsFaced = 0,
+    this.wicketsTaken = 0,
+    this.maidenOvers = 0,
+    this.ballsBowled = 0,
+    this.runsGiven = 0,
+    this.catches = 0,
+    this.runOuts = 0,
+    this.stumpings = 0,
+  });
 
   Report.fromMap(Map<String, dynamic> map) {
     runsTaken = map[RUNS_TAKEN_KEY];
