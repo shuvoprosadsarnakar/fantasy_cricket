@@ -35,9 +35,9 @@ class ContestDetails extends StatelessWidget {
               padding: Paddings.pagePadding,
               children: [
                 _getContestDetilsHeader(),
-                Divider(color: Theme.of(context).primaryColor),
+                Divider(color: Colors.grey.shade900, height: 30),
                 _getMatchPrizes(context),
-                Divider(color: Theme.of(context).primaryColor),
+                SizedBox(height: 20),
                 _getSeriesPrizes(context),
                 SizedBox(height: 50), // for floating action button
               ],
@@ -114,7 +114,7 @@ class ContestDetails extends StatelessWidget {
           TextButton(
             child: Text(
               'Leaderboard',
-              style: TextStyle(color: Colors.green),  
+              style: TextStyle(color: Theme.of(context).primaryColor),  
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
@@ -128,7 +128,7 @@ class ContestDetails extends StatelessWidget {
           ),
         ],
       ),
-      Divider(),
+      SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -136,7 +136,7 @@ class ContestDetails extends StatelessWidget {
           Text('${_cubit.excerpt.totalChips} Total Chips'),
         ],
       ),
-      Divider(),
+      Divider(color: Colors.grey),
       _getWinnersWiseChipsRows(_cubit.contest.chipsDistributes),
     ]);
   }
@@ -153,7 +153,7 @@ class ContestDetails extends StatelessWidget {
           TextButton(
             child: Text(
               'Leaderboard',
-              style: TextStyle(color: Colors.green),  
+              style: TextStyle(color: Theme.of(context).primaryColor),  
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
@@ -166,7 +166,7 @@ class ContestDetails extends StatelessWidget {
           ),
         ],
       ),
-      Divider(),
+      SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -175,7 +175,7 @@ class ContestDetails extends StatelessWidget {
             .toString() + ' Total Chips'),
         ],
       ),
-      Divider(),
+      Divider(color: Colors.grey),
       _getWinnersWiseChipsRows(_cubit.series.chipsDistributes),
     ]);
   }
