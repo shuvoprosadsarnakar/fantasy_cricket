@@ -1,5 +1,4 @@
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart';
-import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -23,23 +22,39 @@ class TeamManager extends StatelessWidget {
           return FetchErrorMsg();
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text('Choose Your Team')),
-            body: ListView(
-              padding: Paddings.pagePadding,
+            appBar: AppBar(title: Text('Team Manager')),
+            body: Column(
               children: [
-                getPlayerSelectionResultBarOne(),
-                Divider(),
-                getPlayerSelectionResultBarTwo(),
-                Divider(),
-                SizedBox(height: 20),
-                getTeam1Players(context),
-                SizedBox(height: 30),
-                getTeam2Players(context),
-                SizedBox(height: 30),
-                if(_cubit.fantasy.playerNames.length == 11 &&
-                  _cubit.fantasy.captain != null && 
-                  _cubit.fantasy.viceCaptain != null) 
-                  getTeamSubmitButton(context),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
+                  child: Column(children: [
+                    getPlayerSelectionResultBarOne(),
+                    Divider(),
+                    getPlayerSelectionResultBarTwo(),
+                    Divider(color: Colors.grey.shade900),
+                  ]),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    shrinkWrap: true,
+                    children: [
+                      SizedBox(height: 20),
+                      getTeam1Players(context),
+                      SizedBox(height: 30),
+                      getTeam2Players(context),
+                      SizedBox(height: 20),
+                      if(_cubit.fantasy.playerNames.length == 11 &&
+                        _cubit.fantasy.captain != null && 
+                        _cubit.fantasy.viceCaptain != null) 
+                        getTeamSubmitButton(context),
+                      if(_cubit.fantasy.playerNames.length == 11 &&
+                        _cubit.fantasy.captain != null && 
+                        _cubit.fantasy.viceCaptain != null) 
+                        SizedBox(height: 30),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -103,11 +118,11 @@ class TeamManager extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTeamName(_cubit.contest.teamsNames[0], context),
-        SizedBox(height: 10),
-        Divider(),
+        getTeamName(_cubit.excerpt.teamImages[0], _cubit.contest.teamsNames[0], 
+          context),
+        SizedBox(height: 20),
         getPlayerFieldTitles(),
-        Divider(),
+        Divider(color: Colors.grey),
         Column(children: playersRows),
       ],
     );
@@ -125,23 +140,35 @@ class TeamManager extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTeamName(_cubit.contest.teamsNames[1], context),
-        SizedBox(height: 10),
-        Divider(),
+        getTeamName(_cubit.excerpt.teamImages[1], _cubit.contest.teamsNames[1], 
+          context),
+        SizedBox(height: 20),
         getPlayerFieldTitles(),
-        Divider(),
+        Divider(color: Colors.grey),
         Column(children: playersRows),
       ],
     );
   }
 
-  Text getTeamName(String name, BuildContext context) {
-    return Text(
-      name,
-      style: TextStyle(
-        fontSize: 18,
-        color: Theme.of(context).primaryColor,
-      ),
+  Row getTeamName(String imageLink, String name, BuildContext context) {
+    return Row(
+      children: [
+        Image.network(
+          imageLink,
+          width: 40,
+          height: 40,
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 18,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -149,13 +176,13 @@ class TeamManager extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: Text('Info')),
+        Expanded(flex: 5, child: Text('Player')),
         SizedBox(width: 10),
         Expanded(child: Text('C', textAlign: TextAlign.center)),
         SizedBox(width: 10),
         Expanded(child: Text('VC', textAlign: TextAlign.center)),
         SizedBox(width: 10),
-        Expanded(child: Text('Selected', textAlign: TextAlign.center)),
+        Expanded(child: Icon(Icons.check)),
       ],
     );
   }
@@ -169,6 +196,7 @@ class TeamManager extends StatelessWidget {
       children: [
         // player's contest info
         Expanded(
+          flex: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -181,7 +209,8 @@ class TeamManager extends StatelessWidget {
               SizedBox(height: 5),
               Text(_cubit.contest.playersCredits[i].toString()),
               if(_cubit.contest.isPlayings[i]) SizedBox(height: 5),
-              if(_cubit.contest.isPlayings[i]) Text('PLAYING'),
+              if(_cubit.contest.isPlayings[i]) 
+                Text('Playing', style: TextStyle(color: Colors.green)),
             ],
           ),
         ),

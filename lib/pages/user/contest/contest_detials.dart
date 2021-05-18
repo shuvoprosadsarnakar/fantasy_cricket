@@ -229,6 +229,7 @@ class ContestDetails extends StatelessWidget {
               _cubit.series,
               _cubit.contest, 
               _cubit.user,
+              _cubit.excerpt,
             ));
           },
         ));

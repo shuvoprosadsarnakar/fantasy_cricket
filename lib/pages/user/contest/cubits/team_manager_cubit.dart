@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/series.dart';
@@ -24,6 +25,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
   final Contest contest;
   final User user;
   final Series series;
+  final Excerpt excerpt;
 
   Fantasy fantasy;
   int team1TotalPlayers = 0;
@@ -34,7 +36,9 @@ class TeamManagerCubit extends Cubit<CubitState> {
   int totalAllRounders = 0;
   int totalBowlers = 0;
 
-  TeamManagerCubit(this.series, this.contest, this.user) : super(null) {
+  TeamManagerCubit(this.series, this.contest, this.user, this.excerpt) : 
+    super(null) 
+  {
     emit(CubitState.loading);
 
     if(user.contestIds.contains(contest.id)) {

@@ -1,5 +1,3 @@
-import 'package:fantasy_cricket/pages/exchange/cubits/exchanges_list_cubit.dart';
-import 'package:fantasy_cricket/pages/exchange/exchanges_list.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/routing/app_router.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
@@ -21,8 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      // initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
-      home: ExchangesList(ExchangesListCubit()),
+      initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
