@@ -36,7 +36,7 @@ class ContestsList extends StatelessWidget {
           } else if (state == CubitState.fetchError) {
             return FetchErrorMsg();
           } else {
-            final List<InkWell> listItems = _getListItems(context);
+            final List<Widget> listItems = _getListItems(context);
 
             if (listItems.length > 0) {
               return ListView.builder(
@@ -56,8 +56,8 @@ class ContestsList extends StatelessWidget {
     );
   }
 
-  List<InkWell> _getListItems(BuildContext context) {
-    final List<InkWell> listItems = <InkWell>[];
+  List<Widget> _getListItems(BuildContext context) {
+    final List<Widget> listItems = <Widget>[];
 
     _cubit.notEndedSerieses.forEach((Series series) {
       int totalExcerpts = series.matchExcerpts.length;
@@ -68,13 +68,14 @@ class ContestsList extends StatelessWidget {
         if (excerpt.status == _contestStatus) {
           listItems.add(InkWell(
             child: Card(
-              elevation: 5,
+              elevation: 10,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _getTeamNames(excerpt.teamsNames, context),
+                    _getTeamNames(excerpt.teamImages, excerpt.teamsNames, 
+                      context),
                     SizedBox(height: 5),
                     _getMatchTypeAndNo(excerpt.no, excerpt.type),
                     SizedBox(height: 5),
@@ -87,13 +88,13 @@ class ContestsList extends StatelessWidget {
                     _getSeriesPrice(series),
                     SizedBox(height: 5),
                     _getStartingTime(excerpt.startTime),
-                    Divider(height: 30),
                   ],
                 ),
               ),
             ),
             onTap: _getOnTap(context, series, i),
           ));
+          listItems.add(SizedBox(height: 20));
         }
       }
     });
@@ -110,13 +111,37 @@ class ContestsList extends StatelessWidget {
     );
   }
 
-  Text _getTeamNames(List<String> teamsNames, BuildContext context) {
-    return Text(
-      '${teamsNames[0]} VS ${teamsNames[1]}',
-      style: TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 18,
-        color: Theme.of(context).primaryColor,
+  SizedBox _getTeamNames(List<String>teamImages, List<String> teamsNames, 
+    BuildContext context) 
+  {
+    return SizedBox(
+      width: double.maxFinite,
+      child: Row(
+        children: [
+          Image.network(
+            teamImages[0],
+            width: 40,
+            height: 40,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              '${teamsNames[0]} VS ${teamsNames[1]}',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: Theme.of(context).primaryColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(width: 5),
+          Image.network(
+            teamImages[1],
+            width: 40,
+            height: 40,
+          ),
+        ],
       ),
     );
   }
@@ -128,10 +153,13 @@ class ContestsList extends StatelessWidget {
   Row _getSeriesName(String imageLink, String name, BuildContext context) {
     return Row(
       children: [
-        Image.network(
-          imageLink,
-          width: 50,
-          height: 50,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(
+            imageLink,
+            width: 30,
+            height: 30,
+          ),
         ),
         SizedBox(width: 10),
         Text(
