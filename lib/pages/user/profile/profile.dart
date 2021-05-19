@@ -44,7 +44,7 @@ class Profile extends StatelessWidget {
                   context: context,
                   title: 'Total Exchanged Chips',
                   value: _cubit.getExchangedChips().toString(),
-                  buttonText: 'Exchanging History',
+                  buttonText: 'Exchange History',
                   page: ExchangeHistory(
                     ehCubit.ExchangeHistoryCubit(_cubit.user.id)),
                 ),

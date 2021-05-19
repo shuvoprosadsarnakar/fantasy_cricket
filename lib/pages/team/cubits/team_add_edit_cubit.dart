@@ -70,8 +70,11 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
 
   // this function deletes player from team, one at a time
   void deletePlayer(String playerName) {
-    team.playersRoles.removeAt(team.playersNames.indexOf(playerName));
+    int playerNameIndex = team.playersNames.indexOf(playerName);
+    
     team.playersNames.remove(playerName);
+    team.playersRoles.removeAt(playerNameIndex);
+    team.playerPhotos.removeAt(playerNameIndex);
 
     // emiiting same state doesn't rebuild ui, that's why different state will
     // be emitted everytime from here
@@ -86,6 +89,7 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   void addPlayer(Player player) {
     team.playersNames.add(player.name);
     team.playersRoles.add(player.role);
+    team.playerPhotos.add(player.photo);
     addPlayerController.clear();
 
     // emiiting same state doesn't rebuild ui, that's why different state will
