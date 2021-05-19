@@ -74,6 +74,9 @@ class PlayerPointsDetails extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(_contest.playerPhotos[_playerIndex] ?? ''),
+        ),
         tileColor: ColorPallate.mercury,
         title: Text(_contest.playersNames[_playerIndex]),
         subtitle: Row(

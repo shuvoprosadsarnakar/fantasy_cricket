@@ -170,6 +170,9 @@ class MatchLeaderboard extends StatelessWidget {
       }
 
       pointsListTiles.add(ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(contest.playerPhotos[i] ?? ''),
+        ),
         title: Text(contest.playersNames[i]),
         subtitle: Text(contest.playersRoles[i]),
         trailing: Text((contest.playersPoints.isNotEmpty
