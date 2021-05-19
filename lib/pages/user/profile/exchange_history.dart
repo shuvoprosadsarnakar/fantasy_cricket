@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/models/exchange.dart';
 import 'package:fantasy_cricket/pages/user/profile/cubits/exchange_history_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
+import 'package:fantasy_cricket/utils/exchange_util.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -49,11 +50,37 @@ class ExchangeHistory extends StatelessWidget {
         Text('Date & Time: ' + 
           exchange.dateTime.toDate().toString().substring(0, 16)),
         SizedBox(height: 5),
-        Text('Status: ${exchange.status}'),
+        Row(
+          children: [
+            Text('Status: '),
+            _getExchangeStatus(exchange.status),
+          ],
+        ),
         SizedBox(height: 5),
         Text('Details: ${exchange.details}'),
         Divider(),
       ],
+    );
+  }
+
+  Text _getExchangeStatus(String exchangeStatus) {
+    Color textColor;
+
+    if(exchangeStatus == ExchangeStatuses.processing) {
+      textColor = Colors.yellow;
+    } else if(exchangeStatus == ExchangeStatuses.successfull) {
+      textColor = Colors.green;
+    } else {
+      textColor = Colors.red;
+    }
+
+    return Text(
+      exchangeStatus,
+      style: TextStyle(
+        color: textColor,
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+      ),
     );
   }
 }
