@@ -4,23 +4,31 @@ import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
+import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CubitState {
   loading,
   fetchError,
-  loaded,
 }
 
 class SeriesLeaderboardCubit extends Cubit<CubitState> {
-  final Series series;
   final User user;
+  Series series;
   List<Contest> seriesContests = <Contest>[];
   List<Rank> userContestRanks = <Rank>[];
 
   SeriesLeaderboardCubit(this.series, this.user) : super(null) {
     emit(CubitState.loading);
-    _getuserContestRanks();
+
+    SeriesRepo.getSeriesById(series.id)
+      .catchError((error) {
+        emit(CubitState.fetchError);
+      })
+      .then((Series series) {
+        this.series = series;
+        _getuserContestRanks();
+      });
   }
 
   Future<void> _getuserContestRanks() async {
@@ -46,7 +54,7 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
       ));
     });
 
-    emit(CubitState.loaded);
+    emit(null);
   }
 
   static int getRank(int rankIndex) {

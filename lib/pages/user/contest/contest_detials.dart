@@ -1,5 +1,6 @@
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart' as rcCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart' as tmCubit;
@@ -118,11 +119,8 @@ class ContestDetails extends StatelessWidget {
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
-                return MatchLeaderboard(
-                  contest: _cubit.contest,
-                  excerpt: _cubit.excerpt,
-                  user: _cubit.user,
-                );
+                return MatchLeaderboard(mlCubit.MatchLeaderBoardCubit(
+                  _cubit.excerpt, _cubit.user));
               },
             )),
           ),

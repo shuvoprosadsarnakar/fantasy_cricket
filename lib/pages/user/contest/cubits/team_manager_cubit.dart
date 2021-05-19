@@ -157,36 +157,15 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   Future<void> addFantasy() async {
-    // add the fantasy
-    // update series's [ranks] property if user hasn't joined the series already
-    // update contest's [ranks] property
-    // update user's [contestIds] & [seriesIds] properties
-
-    bool hasJoinedSeries = user.seriesIds.contains(contest.seriesId);
-    Rank rank = Rank(
-      username: user.username,
-      totalPoints: 0,
-      joinedAt: Timestamp.fromDate(DateTime.now()),
-    );
-
-    user.contestIds.add(contest.id);
-    contest.ranks.add(rank);
-
-    if(!hasJoinedSeries) {
-      user.seriesIds.add(contest.seriesId);
-      series.ranks.add(rank);
-    }
-
     try {
-      await FantasyRepo.addFantasy(fantasy, user, contest, series);
+      await FantasyRepo.addFantasy(fantasy, user.id, contest);
       emit(CubitState.added);
+      
+      // to remove the contest from running contests list and to show 
+      // [Update Team] button instead of [Create Team] button on 
+      // [ContestDetails] page
+      user.contestIds.add(contest.id);
     } catch(error) {
-      user.contestIds.removeLast();
-      contest.ranks.removeLast();
-      if(!hasJoinedSeries) {
-        user.seriesIds.removeLast();
-        series.ranks.removeLast();
-      }
       emit(CubitState.addFailed);
     }
   }

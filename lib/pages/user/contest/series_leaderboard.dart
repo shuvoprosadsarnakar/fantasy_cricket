@@ -1,5 +1,6 @@
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/rank.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
@@ -170,11 +171,8 @@ class SeriesLeaderboard extends StatelessWidget {
         ),
         onTap: () => Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext context) {
-            return MatchLeaderboard(
-              contest: _cubit.seriesContests[i],
-              excerpt: excerpt,
-              user: _cubit.user,
-            );
+            return MatchLeaderboard(mlCubit.MatchLeaderBoardCubit(excerpt,
+              _cubit.user));
           },
         )),
       ));

@@ -1,43 +1,49 @@
-import 'package:fantasy_cricket/models/contest.dart';
-import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/rank.dart';
-import 'package:fantasy_cricket/models/user.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart' as fppCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
 import 'package:fantasy_cricket/pages/user/contest/fantasy_player_points.dart';
 import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MatchLeaderboard extends StatelessWidget {
-  final Contest contest;
-  final Excerpt excerpt;
-  final User user;
+  final MatchLeaderBoardCubit _cubit;
 
-  MatchLeaderboard({
-    this.contest,
-    this.excerpt,
-    this.user,
-  });
+  MatchLeaderboard(this._cubit);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Match Leaderboard'),
-          bottom: TabBar(tabs: getTabs()),
-        ),
-        body: TabBarView(
-          children: [
-            getUserRankings(context),
-            getPlayerPoints(context),
-            getMatchScores(),
-          ],
-        ),
-      ),
+    return BlocBuilder(
+      bloc: _cubit,
+      builder: (BuildContext context, CubitState state) {
+        if(state == CubitState.loading) {
+          return Loading();
+        } else if(state == CubitState.fetchError) {
+          return FetchErrorMsg();
+        } else {
+          return DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text('Match Leaderboard'),
+                bottom: TabBar(tabs: getTabs()),
+              ),
+              body: TabBarView(
+                children: [
+                  getUserRankings(context),
+                  getPlayerPoints(context),
+                  getMatchScores(),
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -59,8 +65,8 @@ class MatchLeaderboard extends StatelessWidget {
   }
 
   Padding getUserRankings(BuildContext context) {
-    int userRankIndex = contest.ranks.indexWhere((Rank rank) {
-      return user.username == rank.username;
+    int userRankIndex = _cubit.contest.ranks.indexWhere((Rank rank) {
+      return _cubit.user.username == rank.username;
     });
     
     return Padding(
@@ -80,7 +86,7 @@ class MatchLeaderboard extends StatelessWidget {
           // user's ranking
           if(userRankIndex != -1) getRankRow(
             userRankIndex,
-            contest.ranks[userRankIndex],
+            _cubit.contest.ranks[userRankIndex],
             context,
           ),
           if(userRankIndex != -1) Divider(color: Colors.grey),
@@ -88,10 +94,10 @@ class MatchLeaderboard extends StatelessWidget {
           // all rankings including the user
           ListView.builder(
             shrinkWrap: true,
-            itemCount: contest.ranks.length,
+            itemCount: _cubit.contest.ranks.length,
             itemBuilder: (BuildContext context, int i) {
               return Column(children: [
-                getRankRow(i, contest.ranks[i], context),
+                getRankRow(i, _cubit.contest.ranks[i], context),
                 Divider(),
               ]);
             },
@@ -118,7 +124,8 @@ class MatchLeaderboard extends StatelessWidget {
         child: Row(children: [
           Expanded(
             flex: 1,
-            child: Text(SeriesLeaderboardCubit.getRank(rankIndex).toString()),
+            child: Text(slCubit.SeriesLeaderboardCubit.getRank(rankIndex)
+              .toString()),
           ),
           SizedBox(width: 10),
           Expanded(
@@ -134,10 +141,10 @@ class MatchLeaderboard extends StatelessWidget {
       ),
       onTap: () => Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context) {
-          return FantasyPlayerPoints(FantasyPlayerPointsCubit(
-            contest,
+          return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
+            _cubit.contest,
             rank.username,
-            excerpt,
+            _cubit.excerpt,
           ));
         },
       )),
@@ -146,18 +153,18 @@ class MatchLeaderboard extends StatelessWidget {
 
   ListView getPlayerPoints(BuildContext context) {
     List<Widget> pointsListTiles = <Widget>[];
-    int totalPlayers = contest.playersNames.length;
+    int totalPlayers = _cubit.contest.playersNames.length;
 
     for(int i = 0; i < totalPlayers; i++) {
-      if(i == contest.team1TotalPlayers) {
+      if(i == _cubit.contest.team1TotalPlayers) {
         pointsListTiles.add(ListTile(
           leading: Image.network(
-            excerpt.teamImages[1],
+            _cubit.excerpt.teamImages[1],
             width: 40,
             height: 40,
           ),
           title: Text(
-            excerpt.teamsNames[1],
+            _cubit.excerpt.teamsNames[1],
             style: Theme.of(context).textTheme.headline6,  
           ),
           trailing: Text(
@@ -171,21 +178,22 @@ class MatchLeaderboard extends StatelessWidget {
 
       pointsListTiles.add(ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(contest.playerPhotos[i] ?? ''),
+          backgroundImage: NetworkImage(_cubit.contest.playerPhotos[i] ?? ''),
         ),
-        title: Text(contest.playersNames[i]),
-        subtitle: Text(contest.playersRoles[i]),
-        trailing: Text((contest.playersPoints.isNotEmpty
-          ? contest.playersPoints[i] : 0).toString()),
+        title: Text(_cubit.contest.playersNames[i]),
+        subtitle: Text(_cubit.contest.playersRoles[i]),
+        trailing: Text((_cubit.contest.playersPoints.isNotEmpty
+          ? _cubit.contest.playersPoints[i] : 0).toString()),
         onTap: () => Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext context) {
-            return PlayerPointsDetails(contest, i, excerpt);
+            return PlayerPointsDetails(_cubit.contest, i, _cubit.excerpt);
           },
         )),
       ));
 
-      if(i != contest.team1TotalPlayers - 1 &&
-        i != contest.playersNames.length -1) pointsListTiles.add(Divider());
+      if(i != _cubit.contest.team1TotalPlayers - 1 &&
+        i != _cubit.contest.playersNames.length -1) 
+        pointsListTiles.add(Divider());
     }
 
     return ListView(
@@ -194,12 +202,12 @@ class MatchLeaderboard extends StatelessWidget {
         // points titles
         ListTile(
           leading: Image.network(
-            excerpt.teamImages[0],
+            _cubit.excerpt.teamImages[0],
             width: 40,
             height: 40,
           ),
           title: Text(
-            excerpt.teamsNames[0],
+            _cubit.excerpt.teamsNames[0],
             style: Theme.of(context).textTheme.headline6,  
           ),
           trailing: Text(
@@ -218,9 +226,9 @@ class MatchLeaderboard extends StatelessWidget {
   ListView getMatchScores() {
     String matchStatus;
 
-    if(excerpt.status == ContestStatuses.locked) {
+    if(_cubit.excerpt.status == ContestStatuses.locked) {
       matchStatus = 'Running';
-    } else if(excerpt.status == ContestStatuses.ended) {
+    } else if(_cubit.excerpt.status == ContestStatuses.ended) {
       matchStatus = 'Ended';
     } else {
       matchStatus = 'Not Started';
@@ -236,15 +244,15 @@ class MatchLeaderboard extends StatelessWidget {
             Expanded(
               child: Column(children: [
                 Image.network(
-                  excerpt.teamImages[0],
+                 _cubit.excerpt.teamImages[0],
                   width: 40,
                   height: 40,
                 ),
                 SizedBox(height: 5),
-                Text(contest.teamsNames[0]),
+                Text(_cubit.contest.teamsNames[0]),
                 SizedBox(height: 5),
-                Text(contest.teamsScores.isNotEmpty 
-                  ? contest.teamsScores[0] : ''),
+                Text(_cubit.contest.teamsScores.isNotEmpty 
+                  ? _cubit.contest.teamsScores[0] : ''),
               ]),
             ),
             SizedBox(width: 10),
@@ -257,7 +265,7 @@ class MatchLeaderboard extends StatelessWidget {
                   Text(matchStatus),
                   SizedBox(height: 5),
                   Text(
-                    contest.startTime.toDate().toString().substring(0, 16),
+                    _cubit.contest.startTime.toDate().toString().substring(0, 16),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -269,15 +277,15 @@ class MatchLeaderboard extends StatelessWidget {
             Expanded(
               child: Column(children: [
                 Image.network(
-                  excerpt.teamImages[1],
+                  _cubit.excerpt.teamImages[1],
                   width: 40,
                   height: 40,
                 ),
                 SizedBox(height: 5),
-                Text(contest.teamsNames[1]),
+                Text(_cubit.contest.teamsNames[1]),
                 SizedBox(height: 5),
-                Text(contest.teamsScores.isNotEmpty 
-                  ? contest.teamsScores[1] : ''),
+                Text(_cubit.contest.teamsScores.isNotEmpty 
+                  ? _cubit.contest.teamsScores[1] : ''),
               ]),
             ),
           ],
@@ -286,7 +294,7 @@ class MatchLeaderboard extends StatelessWidget {
 
         // match result
         Text(
-          contest.result ?? '',
+          _cubit.contest.result ?? '',
           textAlign: TextAlign.center,
         ),
       ],
