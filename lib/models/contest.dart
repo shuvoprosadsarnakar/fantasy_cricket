@@ -24,6 +24,7 @@ const String TEAMS_SCORES_KEY = 'teamsScores';
 const String RESULT_KEY = 'result';
 const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
 const String RANKS_KEY = 'ranks';
+const String PLAYER_PHOTOS_KEY = 'playerPhotos';
 
 class Contest {
   String id;
@@ -46,6 +47,7 @@ class Contest {
   String seriesId;
   int excerptIndex;
   List<Rank> ranks;
+  List<String> playerPhotos;
 
   Contest({
     this.id,
@@ -68,6 +70,7 @@ class Contest {
     this.seriesId,
     this.excerptIndex,
     this.ranks,
+    this.playerPhotos,
   }) {
     if(teamsNames == null) teamsNames = <String>[];
     if(chipsDistributes == null) chipsDistributes = <Distribute>[];
@@ -79,6 +82,7 @@ class Contest {
     if(playersPoints == null) playersPoints = <double>[];
     if(playersReports == null) playersReports = <Report>[];
     if(teamsScores == null) teamsScores = <String>[];
+    if(playerPhotos == null) playerPhotos = <String>[];
   }
 
   Contest.fromMap(Map<String, dynamic> doc, String docId) {
@@ -102,6 +106,7 @@ class Contest {
     playersPoints = <double>[];
     playersReports = <Report>[];
     teamsScores = <String>[];
+    playerPhotos = <String>[];
 
     doc[TEAMS_NAMES_KEY].forEach((dynamic name) 
       => teamsNames.add(name));
@@ -111,6 +116,9 @@ class Contest {
     
     doc[PLAYERS_ROLES_KEY].forEach((dynamic role) 
       => playersRoles.add(role));
+
+    doc[PLAYER_PHOTOS_KEY].forEach((dynamic photo) 
+      => playerPhotos.add(photo));
     
     doc[PLAYERS_CREDITS_KEY].forEach((dynamic credits) 
       => playersCredits.add(credits));
@@ -152,6 +160,7 @@ class Contest {
       TEAMS_SCORES_KEY: teamsScores,
       RESULT_KEY: result,
       PLAYER_OF_THE_MATCH_KEY: playerOfTheMatch,
+      PLAYER_PHOTOS_KEY: playerPhotos,
       
       RANKS_KEY: ranks.map((Rank rank) {
         return rank.toMap();

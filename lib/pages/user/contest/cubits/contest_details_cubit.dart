@@ -22,12 +22,12 @@ class ContestDetialsCubit extends Cubit<CubitState> {
     emit(CubitState.loading);
 
     ContestRepo.getContestById(excerpt.id)
-      .catchError((dynamic error) {
-        emit(CubitState.fetchError);
-      })
       .then((Contest contest) {
         this.contest = contest;
         emit(CubitState.fetched);
+      })
+      .catchError((dynamic error) {
+        emit(CubitState.fetchError);
       });
   }
 

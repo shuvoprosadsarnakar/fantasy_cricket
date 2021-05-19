@@ -65,6 +65,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
 
     contest.playersNames = <String>[];
     contest.playersRoles = <String>[];
+    contest.playerPhotos = <String>[];
     contest.playersCredits = <double>[];
     contest.isPlayings = <bool>[];
     contest.team1TotalPlayers = team1.playersNames.length;
@@ -77,12 +78,20 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.playersRoles.add(role);
     });
 
+    team1.playerPhotos.forEach((String photo) {
+      contest.playerPhotos.add(photo);
+    });
+
     team2.playersNames.forEach((String name) {
       contest.playersNames.add(name);
     });
 
     team2.playersRoles.forEach((String role) {
       contest.playersRoles.add(role);
+    });
+
+    team2.playerPhotos.forEach((String photo) {
+      contest.playerPhotos.add(photo);
     });
 
     int totalPlayers = contest.playersNames.length;
