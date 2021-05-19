@@ -6,6 +6,7 @@ import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/utils/match_util.dart';
+import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
@@ -39,10 +40,7 @@ class SeriesAddEdit2 extends StatelessWidget {
         if(status == AddEditStatus.loading) {
           return Loading();
         } else if(status == AddEditStatus.fetchError) {
-          return Padding(
-            padding: EdgeInsets.all(15),
-            child: Text('Failed to fetch all teams.'),
-          );
+          return FetchErrorMsg();
         } else {
           return Scaffold(
             appBar: AppBar(title: Text(_cubit.series.id == null ? 

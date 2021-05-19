@@ -26,8 +26,8 @@ class SeriesAddEdit2Cubit extends Cubit<AddEditStatus> {
     
     TeamRepo
       .fetchAllTeams(allTeams)
-      .catchError((onError) => emit(AddEditStatus.fetchError))
-      .then((value) => emit(null));
+      .then((value) => emit(null))
+      .catchError((onError) => emit(AddEditStatus.fetchError));
   }
 
   void addMatchExcerpt() {

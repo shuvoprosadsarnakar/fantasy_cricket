@@ -194,6 +194,10 @@ class TeamManager extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        CircleAvatar(
+          backgroundImage: NetworkImage(_cubit.contest.playerPhotos[i] ?? ''),
+        ),
+        SizedBox(width: 10),
         // player's contest info
         Expanded(
           flex: 5,

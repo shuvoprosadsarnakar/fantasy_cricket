@@ -1,4 +1,7 @@
+import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
+import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
+import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
 import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: FirebaseAuth.instance.currentUser == null ? signIn : home,
-      // home: TeamAddEdit(TeamAddEditCubit(Team())),
+      home: SeriesAddEdit(SeriesAddEditCubit(Series()), false),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,
