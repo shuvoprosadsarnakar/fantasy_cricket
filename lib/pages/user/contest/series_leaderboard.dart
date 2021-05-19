@@ -63,6 +63,13 @@ class SeriesLeaderboard extends StatelessWidget {
     return ListView(
       padding: Paddings.pagePadding,
       children: [
+        Text(
+          '${_cubit.series.ranks.length} Contestants',
+          style: Theme.of(context).textTheme.subtitle1,
+          textAlign: TextAlign.center, 
+        ),
+        SizedBox(height: 30),
+
         // ranking titles
         Row(children: [
           Expanded(

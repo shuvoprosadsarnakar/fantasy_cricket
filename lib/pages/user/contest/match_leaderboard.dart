@@ -73,6 +73,12 @@ class MatchLeaderboard extends StatelessWidget {
       padding: Paddings.pagePadding,
       child: Column(
         children: [
+          Text(
+            '${_cubit.contest.ranks.length} Contestants',
+            style: Theme.of(context).textTheme.subtitle1,  
+          ),
+          SizedBox(height: 30),
+
           // ranking titles
           Row(children: [
             getRankTile(1, 'Rank', context),
