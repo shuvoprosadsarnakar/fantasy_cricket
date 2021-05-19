@@ -26,7 +26,6 @@ class ContestsListItem extends StatelessWidget {
           _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
-      
       Divider(),
       
       Row(
@@ -44,8 +43,10 @@ class ContestsListItem extends StatelessWidget {
           ),
         ],
       ),
-
-      Divider(color: Theme.of(context).primaryColor),
+      Divider(
+        color: Theme.of(context).primaryColor,
+        height: 30,  
+      ),
     ]);
   }
 

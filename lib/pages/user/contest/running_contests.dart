@@ -35,7 +35,12 @@ class RunningContests extends StatelessWidget {
               padding: Paddings.pagePadding,
               itemCount: totalItems,
               itemBuilder: (BuildContext context, int i) {
-                return listItems[i];
+                return Column(
+                  children: [
+                    listItems[i],
+                    SizedBox(height: 20),
+                  ],
+                );
               },
             );
           } else {

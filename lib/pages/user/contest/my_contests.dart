@@ -26,10 +26,28 @@ class MyContests extends StatelessWidget {
         } else if (state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
-          return ListView(
-            padding: Paddings.pagePadding,
-            children: getListItems(context),
-          );
+          final List<InkWell> listItems = getListItems(context);
+          final int totalItems = listItems.length;
+
+          if (totalItems > 0) {
+            return ListView.builder(
+              padding: Paddings.pagePadding,
+              itemCount: totalItems,
+              itemBuilder: (BuildContext context, int i) {
+                return Column(
+                  children: [
+                    listItems[i],
+                    SizedBox(height: 20),
+                  ],
+                );
+              },
+            );
+          } else {
+            return Padding(
+              padding: Paddings.pagePadding,
+              child: Text('No running contest found.'),
+            );
+          }
         }
       },
     );
