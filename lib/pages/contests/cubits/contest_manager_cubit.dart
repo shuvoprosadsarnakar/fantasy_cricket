@@ -33,20 +33,18 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.matchType = _series.matchExcerpts[_excerptIndex].type;
       contest.noByType = _series.matchExcerpts[_excerptIndex].no;
       contest.startTime = _series.matchExcerpts[_excerptIndex].startTime;
-      contest.excerptIndex = _excerptIndex;
       contest.chipsDistributes = <Distribute>[Distribute()];
 
       // fetch the two team's players and set players needed info
       setPlayersInfo(_series.matchExcerpts[_excerptIndex].teamsIds);
     } else {
       ContestRepo.getContestById(_series.matchExcerpts[_excerptIndex].id)
-        .catchError((dynamic error) {
-          emit(CubitState.fetchError);
-          return null;
-        })
         .then((Contest contest) {
           this.contest = contest;
           emit(null);
+        })
+        .catchError((dynamic error) {
+          emit(CubitState.fetchError);
         });
     }
 
@@ -59,6 +57,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
     try {
       team1 = await TeamRepo.getTeamById(teamsIds[0]);
       team2 = await TeamRepo.getTeamById(teamsIds[1]);
+      emit(null);
     } catch(error) {
       emit(CubitState.fetchError);
     }
@@ -68,6 +67,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
     contest.playerPhotos = <String>[];
     contest.playersCredits = <double>[];
     contest.isPlayings = <bool>[];
+    contest.playerPickedCounts = <int>[];
     contest.team1TotalPlayers = team1.playersNames.length;
     
     team1.playersNames.forEach((String name) {
@@ -99,9 +99,8 @@ class ContestManagerCubit extends Cubit<CubitState> {
     for(int i = 0; i < totalPlayers; i++) {
       contest.playersCredits.add(null);
       contest.isPlayings.add(false);
+      contest.playerPickedCounts.add(0);
     }
-
-    emit(null);
   }
 
   // adds a [ChipsDistribute] class object to [contest] object's 

@@ -143,7 +143,8 @@ class TeamManagerCubit extends Cubit<CubitState> {
       return;
     }
 
-    String contestStatus = series.matchExcerpts[contest.excerptIndex].status;
+    String contestStatus 
+      = series.matchExcerpts[series.matchExcerpts.indexOf(excerpt)].status;
 
     if(contestStatus == 'Locked' || contestStatus == 'Ended') {
       emit(CubitState.timeOver);

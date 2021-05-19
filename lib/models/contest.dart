@@ -19,14 +19,15 @@ const String PLAYERS_POINTS_KEY = 'playersPoints';
 const String PLAYERS_REPORTS_KEY = 'playersReports';
 const String IS_PLAYINGS_KEY = 'isPlaying';
 const String SERIES_ID_KEY = 'seriesId';
-const String EXCERPT_INDEX_KEY = 'excerptIndex';
 const String TEAMS_SCORES_KEY = 'teamsScores';
 const String RESULT_KEY = 'result';
 const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
 const String RANKS_KEY = 'ranks';
 const String PLAYER_PHOTOS_KEY = 'playerPhotos';
+const String PLAYER_PICKED_COUNTS_KEY = 'playerPickedCounts';
 
 class Contest {
+  // contest info
   String id;
   String seriesName;
   List<String> teamsNames;
@@ -34,20 +35,28 @@ class Contest {
   int noByType;
   Timestamp startTime;
   List<Distribute> chipsDistributes;
+  
+  // players info
   int team1TotalPlayers;
   List<String> playersNames;
   List<String> playersRoles;
+  List<String> playerPhotos;
   List<double> playersCredits;
-  List<double> playersPoints;
-  List<Report> playersReports;
   List<bool> isPlayings;
+
+  // match result info
+  List<Report> playersReports;
+  List<double> playersPoints;
   List<String> teamsScores;
   String result;
   String playerOfTheMatch;
+
+  // needed to update match excerpt's status
   String seriesId;
-  int excerptIndex;
+
+  // users info
   List<Rank> ranks;
-  List<String> playerPhotos;
+  List<int> playerPickedCounts;
 
   Contest({
     this.id,
@@ -68,9 +77,9 @@ class Contest {
     this.result,
     this.playerOfTheMatch,
     this.seriesId,
-    this.excerptIndex,
     this.ranks,
     this.playerPhotos,
+    this.playerPickedCounts,
   }) {
     if(teamsNames == null) teamsNames = <String>[];
     if(chipsDistributes == null) chipsDistributes = <Distribute>[];
@@ -83,6 +92,7 @@ class Contest {
     if(playersReports == null) playersReports = <Report>[];
     if(teamsScores == null) teamsScores = <String>[];
     if(playerPhotos == null) playerPhotos = <String>[];
+    if(playerPickedCounts == null) playerPickedCounts = <int>[];
   }
 
   Contest.fromMap(Map<String, dynamic> doc, String docId) {
@@ -93,7 +103,6 @@ class Contest {
     startTime = doc[START_TIME_KEY];
     team1TotalPlayers = doc[TEAM_1_TOTAL_PLAYERS_KEY];
     seriesId = doc[SERIES_ID_KEY];
-    excerptIndex = doc[EXCERPT_INDEX_KEY];
     result = doc[RESULT_KEY];
     playerOfTheMatch = doc[PLAYER_OF_THE_MATCH_KEY];
     teamsNames = <String>[];
@@ -107,6 +116,7 @@ class Contest {
     playersReports = <Report>[];
     teamsScores = <String>[];
     playerPhotos = <String>[];
+    playerPickedCounts = <int>[];
 
     doc[TEAMS_NAMES_KEY].forEach((dynamic name) 
       => teamsNames.add(name));
@@ -132,6 +142,9 @@ class Contest {
     doc[IS_PLAYINGS_KEY].forEach((dynamic isPlaying) 
       => isPlayings.add(isPlaying));
 
+    doc[PLAYER_PICKED_COUNTS_KEY].forEach((dynamic count) 
+      => playerPickedCounts.add(count));
+
     doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic distributeMap) 
       => chipsDistributes.add(Distribute.fromMap(distributeMap)));
 
@@ -156,11 +169,11 @@ class Contest {
       PLAYERS_POINTS_KEY: playersPoints,
       IS_PLAYINGS_KEY: isPlayings,
       SERIES_ID_KEY: seriesId,
-      EXCERPT_INDEX_KEY: excerptIndex,
       TEAMS_SCORES_KEY: teamsScores,
       RESULT_KEY: result,
       PLAYER_OF_THE_MATCH_KEY: playerOfTheMatch,
       PLAYER_PHOTOS_KEY: playerPhotos,
+      PLAYER_PICKED_COUNTS_KEY: playerPickedCounts,
       
       RANKS_KEY: ranks.map((Rank rank) {
         return rank.toMap();
