@@ -10,6 +10,8 @@ const String TIMES_KEY = 'times';
 const String CHIPS_DISTRIBUTES_KEY = 'chipsDistributes';
 const String MATCH_EXCERPTS_KEY = 'matchExcerpts';
 const String RANKS_KEY = 'ranks';
+const String PLAYER_NAMES_KEY = 'playerNames';
+const String PLAYER_POINTS_KEY = 'playerPoints';
 
 class Series {
   String id;
@@ -19,6 +21,8 @@ class Series {
   List<Distribute> chipsDistributes;
   List<Excerpt> matchExcerpts;
   List<Rank> ranks;
+  List<String> playerNames;
+  List<double> playerPoints;
 
   Series({
     this.id,
@@ -32,6 +36,8 @@ class Series {
     if(chipsDistributes == null) chipsDistributes = <Distribute>[];
     if(matchExcerpts == null) matchExcerpts = <Excerpt>[];
     if(ranks == null) ranks = <Rank>[];
+    if(playerNames == null) playerNames = <String>[];
+    if(playerPoints == null) playerPoints = <double>[];
   }
 
   Series.fromMap(Map<String, dynamic> doc, String docId) {
@@ -42,6 +48,8 @@ class Series {
     chipsDistributes = <Distribute>[];
     matchExcerpts = <Excerpt>[];
     ranks = <Rank>[];
+    playerNames = <String>[];
+    playerPoints = <double>[];
 
     doc[CHIPS_DISTRIBUTES_KEY].forEach((dynamic map) {
       chipsDistributes.add(Distribute.fromMap(map));
@@ -54,6 +62,14 @@ class Series {
     doc[RANKS_KEY].forEach((dynamic map) {
       ranks.add(Rank.fromMap(map));
     });
+
+    doc[PLAYER_NAMES_KEY].forEach((dynamic name) {
+      playerNames.add(name);
+    });
+
+    doc[PLAYER_POINTS_KEY].forEach((dynamic points) {
+      playerPoints.add(points);
+    });
   }
 
   Map<String, dynamic> toMap() {
@@ -62,14 +78,16 @@ class Series {
       PHOTO_KEY: photo,
       TIMES_KEY: times.toMap(),
       CHIPS_DISTRIBUTES_KEY: chipsDistributes.map((Distribute distribute) {
-          return distribute.toMap();
-        }).toList(),
+        return distribute.toMap();
+      }).toList(),
       MATCH_EXCERPTS_KEY: matchExcerpts.map((Excerpt excerpt) {
-          return excerpt.toMap();
-        }).toList(),
+        return excerpt.toMap();
+      }).toList(),
       RANKS_KEY: ranks.map((Rank rank) {
         return rank.toMap();
       }).toList(),
+      PLAYER_NAMES_KEY: playerNames,
+      PLAYER_POINTS_KEY: playerPoints,
     };
   }
 }

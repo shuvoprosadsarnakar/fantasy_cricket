@@ -195,6 +195,12 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   double getPlayerPickedPercentage(int playerIndex) {
-    return contest.playerPickedCounts[playerIndex] / contest.ranks.length * 100;
+    int totalContestants = contest.ranks.length;
+    
+    if(totalContestants != 0) {
+      return (contest.playerPickedCounts[playerIndex] / totalContestants) * 100;
+    } else {
+      return 0;
+    }
   }
 }

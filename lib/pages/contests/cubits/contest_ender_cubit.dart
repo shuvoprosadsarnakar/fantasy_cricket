@@ -64,39 +64,41 @@ class ContestEnderCubit extends Cubit<CubitState> {
 
   Future<bool> endContest() async {
     if(formKey.currentState.validate()) {
-      emit(CubitState.loading);
       formKey.currentState.save();
-
       // init contest's [playersPoints] && [playersReports] properties
       _setPlayersPoints();
-
+      // update the [playerPoints] of the series
+      contest.playersNames.forEach((String playerName) {
+        series.playerPoints[series.playerNames.indexOf(playerName)] 
+          += contest.playersPoints[contest.playersNames.indexOf(playerName)];
+      });
       // update the status of the contest in series match excerpt
       series.matchExcerpts[excerptIndex].status = ContestStatuses.ended;
       
       try {
+        emit(CubitState.loading);
         // update contest and series's [ranks] property
         await _updateContestAndSeriesRanks();
 
         // give chips to contest winners and get them 
         List<User> contestWinners = await _getUpdatedContestWinners();
-        
         // give chips to series winners and get them
         List<User> seriesWinners 
           = await _getUpdatedSeriesWinners(contestWinners);
 
-        await ContestRepo.endContest(
-          contest,
-          series,
-          contestWinners, 
-          seriesWinners,
-        );
+        await ContestRepo.endContest(contest, series, contestWinners, 
+          seriesWinners);
 
         // if we don't emit [null] then if [failed] is emitted once, cubit  
         // state will reamin always [failed]
         emit(null);
       } catch(error) {
-        series.matchExcerpts[excerptIndex].status = ContestStatuses.locked;
         emit(CubitState.failed);
+        contest.playersNames.forEach((String playerName) {
+          series.playerPoints[series.playerNames.indexOf(playerName)] 
+            -= contest.playersPoints[contest.playersNames.indexOf(playerName)];
+        });
+        series.matchExcerpts[excerptIndex].status = ContestStatuses.locked;
       }
       
       return true;

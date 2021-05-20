@@ -33,7 +33,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.matchType = _series.matchExcerpts[_excerptIndex].type;
       contest.noByType = _series.matchExcerpts[_excerptIndex].no;
       contest.startTime = _series.matchExcerpts[_excerptIndex].startTime;
-      contest.chipsDistributes = <Distribute>[Distribute()];
+      contest.chipsDistributes.add(Distribute());
 
       // fetch the two team's players and set players needed info
       setPlayersInfo(_series.matchExcerpts[_excerptIndex].teamsIds);
@@ -62,32 +62,31 @@ class ContestManagerCubit extends Cubit<CubitState> {
       emit(CubitState.fetchError);
     }
 
-    contest.playersNames = <String>[];
-    contest.playersRoles = <String>[];
-    contest.playerPhotos = <String>[];
-    contest.playersCredits = <double>[];
-    contest.isPlayings = <bool>[];
-    contest.playerPickedCounts = <int>[];
     contest.team1TotalPlayers = team1.playersNames.length;
     
+    // add player names to the contest and series
     team1.playersNames.forEach((String name) {
       contest.playersNames.add(name);
-    });
-
-    team1.playersRoles.forEach((String role) {
-      contest.playersRoles.add(role);
-    });
-
-    team1.playerPhotos.forEach((String photo) {
-      contest.playerPhotos.add(photo);
+      _series.playerNames.add(name);
     });
 
     team2.playersNames.forEach((String name) {
       contest.playersNames.add(name);
+      _series.playerNames.add(name);
+    });
+
+    // add player roles to the contest
+    team1.playersRoles.forEach((String role) {
+      contest.playersRoles.add(role);
     });
 
     team2.playersRoles.forEach((String role) {
       contest.playersRoles.add(role);
+    });
+
+    // add player photos to the contest
+    team1.playerPhotos.forEach((String photo) {
+      contest.playerPhotos.add(photo);
     });
 
     team2.playerPhotos.forEach((String photo) {
@@ -100,6 +99,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.playersCredits.add(null);
       contest.isPlayings.add(false);
       contest.playerPickedCounts.add(0);
+      _series.playerPoints.add(0);
     }
   }
 
