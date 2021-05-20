@@ -61,6 +61,7 @@ class FantasyRepo {
               throw 'User already joined the contest by another device.';
             }
             
+            bool hasJoinedSeries = user.seriesIds.contains(contest.seriesId);
             Rank rank = Rank(
               username: user.username,
               totalPoints: 0,
@@ -70,22 +71,54 @@ class FantasyRepo {
             user.contestIds.add(contest.id);
             contest.ranks.add(rank);
 
-            if(user.seriesIds.contains(contest.seriesId) == false) {
+            if(hasJoinedSeries == false) {
               user.seriesIds.add(contest.seriesId);
               series.ranks.add(rank);
-              transaction.update(seriesRef, series.toMap());
             }
+
+            fantasy.playerNames.forEach((String playerName) {
+              int playerIndex = contest.playersNames.indexOf(playerName);
+              contest.playerPickedCounts[playerIndex]++;
+            });
 
             transaction.set(fantasyRef, fantasy.toMap());
             transaction.update(userRef, user.toMap());
             transaction.update(contestRef, contest.toMap());
+            transaction.update(seriesRef, series.toMap());
           });
         });
       });
     });
   }
 
-  static Future<void> updateFantasy(Fantasy fantasy) async {
-    await _fantasyCollection.doc(fantasy.id).update(fantasy.toMap());
+  static Future<void> updateFantasy(Fantasy fantasy, 
+    List<String> oldPlayerNames) async 
+  {
+    DocumentReference fantasyRef = _fantasyCollection.doc(fantasy.id);
+    DocumentReference contestRef 
+      = _db.collection('contests').doc(fantasy.contestId);
+
+    await _db.runTransaction((Transaction transaction) {
+      return transaction.get(contestRef).then((DocumentSnapshot snapshot) {
+        Contest contest = Contest.fromMap(snapshot.data(), snapshot.id);
+
+        fantasy.playerNames.forEach((String playerName) {
+          if(oldPlayerNames.contains(playerName)) {
+            oldPlayerNames.remove(playerName);
+          } else {
+            int playerIndex = contest.playersNames.indexOf(playerName);
+            contest.playerPickedCounts[playerIndex]++;
+          }
+        });
+
+        oldPlayerNames.forEach((String playerName) {
+          int playerIndex = contest.playersNames.indexOf(playerName);
+          contest.playerPickedCounts[playerIndex]--;
+        });
+
+        transaction.update(contestRef, contest.toMap());
+        transaction.update(fantasyRef, fantasy.toMap());
+      });
+    });
   }
 }

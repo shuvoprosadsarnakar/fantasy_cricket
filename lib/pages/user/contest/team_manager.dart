@@ -309,8 +309,16 @@ class TeamManager extends StatelessWidget {
   }
 
   FormSubmitButton getTeamSubmitButton(BuildContext context) {
+    String buttonText;
+
+    if(_cubit.user.contestIds.contains(_cubit.contest.id)) {
+      buttonText = 'Update Team';
+    } else {
+      buttonText = 'Create Team';
+    }
+    
     return FormSubmitButton(
-      title: 'Submit Team',
+      title: buttonText,
       onPressed: () async {
         await _cubit.addOrUpdateFantasy();
 

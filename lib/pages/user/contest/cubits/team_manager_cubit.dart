@@ -28,6 +28,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
   final Excerpt excerpt;
 
   Fantasy fantasy;
+  List<String> oldPlayerNames;
   int team1TotalPlayers = 0;
   int team2TotalPlayers = 0;
   double creditsLeft = 100;
@@ -49,6 +50,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
         })
         .then((Fantasy fantasy) {
           this.fantasy = fantasy;
+          oldPlayerNames = List.of(fantasy.playerNames);
 
           fantasy.playerNames.forEach((String playerName) {
             initCubitAtPlayerAdd(contest.playersNames.indexOf(playerName));
@@ -143,8 +145,11 @@ class TeamManagerCubit extends Cubit<CubitState> {
       return;
     }
 
+    int excerptIndex = series.matchExcerpts.indexWhere((Excerpt excerpt) {
+      return excerpt.id == this.excerpt.id;
+    });
     String contestStatus 
-      = series.matchExcerpts[series.matchExcerpts.indexOf(excerpt)].status;
+      = series.matchExcerpts[excerptIndex].status;
 
     if(contestStatus == 'Locked' || contestStatus == 'Ended') {
       emit(CubitState.timeOver);
@@ -173,7 +178,7 @@ class TeamManagerCubit extends Cubit<CubitState> {
 
   Future<void> updateFantasy() async {
     try {
-      await FantasyRepo.updateFantasy(fantasy);
+      await FantasyRepo.updateFantasy(fantasy, oldPlayerNames);
       emit(CubitState.updated);
     } catch(error) {
       emit(CubitState.updateFailed);
