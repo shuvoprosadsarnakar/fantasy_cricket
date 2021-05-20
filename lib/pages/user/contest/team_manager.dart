@@ -211,7 +211,9 @@ class TeamManager extends StatelessWidget {
               SizedBox(height: 5),
               Text(playerRole),
               SizedBox(height: 5),
-              Text(_cubit.contest.playersCredits[i].toString()),
+              Text('${_cubit.contest.playersCredits[i]} Credits'),
+              SizedBox(height: 5),
+              Text('Picked by ${_cubit.getPlayerPickedPercentage(i)}%'),
               if(_cubit.contest.isPlayings[i]) SizedBox(height: 5),
               if(_cubit.contest.isPlayings[i]) 
                 Text('Playing', style: TextStyle(color: Colors.green)),

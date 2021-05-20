@@ -18,9 +18,12 @@ class FantasyRepo {
       .where('contestId', isEqualTo: contestId)
       .get();
 
-    QueryDocumentSnapshot documentSnapshot = querySnapshot.docs.first;
-
-    return Fantasy.fromMap(documentSnapshot.data(), documentSnapshot.id);
+    if(querySnapshot.docs.isNotEmpty) {
+      QueryDocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+      return Fantasy.fromMap(documentSnapshot.data(), documentSnapshot.id);
+    } else {
+      return null;
+    }
   }
 
   static Future<List<Fantasy>> getFantasiesByContestId(String contestId) async {
@@ -91,7 +94,7 @@ class FantasyRepo {
     });
   }
 
-  static Future<void> updateFantasy(Fantasy fantasy, 
+  static Future<Contest> updateFantasy(Fantasy fantasy, 
     List<String> oldPlayerNames) async 
   {
     DocumentReference fantasyRef = _fantasyCollection.doc(fantasy.id);

@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/fantasy.dart';
-import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/user.dart';
+import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,13 +21,14 @@ enum CubitState {
 }
 
 class TeamManagerCubit extends Cubit<CubitState> {
-  final Contest contest;
   final User user;
   final Series series;
   final Excerpt excerpt;
 
+  Contest contest;
   Fantasy fantasy;
   List<String> oldPlayerNames;
+
   int team1TotalPlayers = 0;
   int team2TotalPlayers = 0;
   double creditsLeft = 100;
@@ -37,36 +37,45 @@ class TeamManagerCubit extends Cubit<CubitState> {
   int totalAllRounders = 0;
   int totalBowlers = 0;
 
-  TeamManagerCubit(this.series, this.contest, this.user, this.excerpt) : 
-    super(null) 
-  {
+  TeamManagerCubit(this.series, this.user, this.excerpt) : super(null) {
     emit(CubitState.loading);
+    _getContestAndFantasy();
+  }
 
-    if(user.contestIds.contains(contest.id)) {
-      FantasyRepo.getFantasy(user.username, contest.id)
-        .catchError((dynamic error) {
-          emit(CubitState.fetchError);
-          return null;
-        })
-        .then((Fantasy fantasy) {
-          this.fantasy = fantasy;
-          oldPlayerNames = List.of(fantasy.playerNames);
+  void _getContestAndFantasy() async {
+    try {
+      // we must not take the contest from [ContestDetails] page because we need 
+      // to get the updated [playerPickedCounts] of [contest] after a fantasy 
+      // add or update, so that we can update the player picked percentage on 
+      // the UI
+      contest = await ContestRepo.getContestById(excerpt.id);
+      
+      // fantasy will be null if user hasn't joined the contest
+      fantasy = await FantasyRepo.getFantasy(user.username, contest.id);
+      
+      // to change the [CubitState.loading] state emitted by constructor
+      emit(null);
+    } catch(error) {
+      emit(CubitState.fetchError);
+    }
 
-          fantasy.playerNames.forEach((String playerName) {
-            initCubitAtPlayerAdd(contest.playersNames.indexOf(playerName));
-          });
 
-          emit(CubitState.fetched);
-        });
+    if(fantasy != null) {
+      // this will be used to update [playerPickedCounts] of [contest] at the 
+      // time of team/fantasy update
+      oldPlayerNames = List.of(fantasy.playerNames);
+
+      fantasy.playerNames.forEach((String playerName) {
+        _initCubitAtPlayerAdd(contest.playersNames.indexOf(playerName));
+      });
     } else {
       fantasy = Fantasy();
       fantasy.contestId = contest.id;
       fantasy.username = user.username;
-      emit(null);
     }
   }
 
-  void initCubitAtPlayerAdd(int playerIndex) {
+  void _initCubitAtPlayerAdd(int playerIndex) {
     if(playerIndex < contest.team1TotalPlayers) {
       team1TotalPlayers++;
     } else {
@@ -93,15 +102,15 @@ class TeamManagerCubit extends Cubit<CubitState> {
 
   void addPlayer(int playerIndex) {
     fantasy.playerNames.add(contest.playersNames[playerIndex]);
-    initCubitAtPlayerAdd(playerIndex);
+    _initCubitAtPlayerAdd(playerIndex);
   }
 
   void removePlayer(int playerIndex) {
     fantasy.playerNames.remove(contest.playersNames[playerIndex]);
-    initCubitAtPlayerRemove(playerIndex);
+    _initCubitAtPlayerRemove(playerIndex);
   }
 
-  void initCubitAtPlayerRemove(int playerIndex) {
+  void _initCubitAtPlayerRemove(int playerIndex) {
     if(playerIndex < contest.team1TotalPlayers) {
       team1TotalPlayers--;
     } else {
@@ -155,14 +164,14 @@ class TeamManagerCubit extends Cubit<CubitState> {
       emit(CubitState.timeOver);
     } else {
       if(fantasy.id == null) {
-        await addFantasy();
+        await _addFantasy();
       } else {
-        await updateFantasy();
+        await _updateFantasy();
       }
     }
   }
 
-  Future<void> addFantasy() async {
+  Future<void> _addFantasy() async {
     try {
       await FantasyRepo.addFantasy(fantasy, user.id, contest);
       emit(CubitState.added);
@@ -176,12 +185,16 @@ class TeamManagerCubit extends Cubit<CubitState> {
     }
   }
 
-  Future<void> updateFantasy() async {
+  Future<void> _updateFantasy() async {
     try {
       await FantasyRepo.updateFantasy(fantasy, oldPlayerNames);
       emit(CubitState.updated);
     } catch(error) {
       emit(CubitState.updateFailed);
     }
+  }
+
+  double getPlayerPickedPercentage(int playerIndex) {
+    return contest.playerPickedCounts[playerIndex] / contest.ranks.length * 100;
   }
 }
