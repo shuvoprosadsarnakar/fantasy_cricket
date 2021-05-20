@@ -29,7 +29,7 @@ class Profile extends StatelessWidget {
               padding: Paddings.pagePadding,
               children: [
                 getUsername(context),
-                SizedBox(height: 30),
+                SizedBox(height: 40),
 
                 getProfileInfo(
                   context: context,
@@ -95,9 +95,7 @@ class Profile extends StatelessWidget {
         TextButton(
           onPressed: () async {
             await Navigator.push(context, MaterialPageRoute(
-              builder: (BuildContext context) {
-                return page;
-              },
+              builder: (BuildContext context) => page,
             ));
             _cubit.refreshUi();
           },

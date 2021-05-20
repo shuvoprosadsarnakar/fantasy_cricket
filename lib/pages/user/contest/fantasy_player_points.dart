@@ -70,68 +70,54 @@ class FantasyPlayerPoints extends StatelessWidget {
       int playerIndex = _cubit.contest.playersNames.indexOf(playerName);
       int teamIndex = playerIndex < _cubit.contest.team1TotalPlayers ? 0 : 1;
       
-      double pointsMultiplicator;
-      String playerNameSuffix;
+      String playerPointsPrefix = '';
+      String playerNameSuffix = '';
+      int playerPointsMultiplicator = 1;
 
       if(playerName == _cubit.fantasy.captain) {
-        pointsMultiplicator = 2;
+        playerPointsPrefix = '(x 2)';
         playerNameSuffix = '(C)';
+        playerPointsMultiplicator = 2;
       } else if(playerName == _cubit.fantasy.viceCaptain) {
-        pointsMultiplicator = 1.5;
+        playerPointsPrefix = '(x 1.5)';
         playerNameSuffix = '(VC)';
-      } else {
-        pointsMultiplicator = 1;
-        playerNameSuffix = '';
+        playerPointsMultiplicator = 1;
       }
 
       return Column(
         children: [
-          InkWell(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(children:[
+          ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(
+                _cubit.contest.playerPhotos[playerIndex] ?? '',
+              ),
+            ),
+            title: Text(
+              playerName + ' ' + playerNameSuffix,
+              style: Theme.of(context).textTheme.subtitle1,  
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_cubit.contest.playersRoles[playerIndex]),
+                SizedBox(height: 5),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          playerName + ' ' + playerNameSuffix,
-                          style: Theme.of(context).textTheme.subtitle1,  
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          _cubit.contest.playersRoles[playerIndex],
-                          style: TextStyle(fontWeight: FontWeight.w300),  
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Image.network(
-                              _cubit.excerpt.teamImages[teamIndex],
-                              width: 20,
-                              height: 20,
-                            ),
-                            SizedBox(width: 5),
-                            Text(_cubit.contest.teamsNames[teamIndex]),
-                          ],
-                        ),
-                      ],
+                    Image.network(
+                      _cubit.excerpt.teamImages[teamIndex],
+                      width: 20,
+                      height: 20,
                     ),
-                    Row(children: [
-                      SizedBox(width: 10),
-                      if(pointsMultiplicator != 1) 
-                        Text('(x ' + pointsMultiplicator.toString() + ')'),
-                      if(pointsMultiplicator != 1) SizedBox(width: 10),
-                      Text((_cubit.contest.playersPoints.isNotEmpty 
-                        ? _cubit.contest.playersPoints[playerIndex] 
-                        * pointsMultiplicator : 0).toString()),
-                    ]),
+                    SizedBox(width: 5),
+                    Text(_cubit.contest.teamsNames[teamIndex]),
                   ],
                 ),
-              ]),
+              ],
             ),
+            trailing: Text(playerPointsPrefix + ' ' 
+              + (_cubit.contest.playersPoints.isNotEmpty 
+              ? _cubit.contest.playersPoints[playerIndex] 
+              * playerPointsMultiplicator : 0).toString()),
             onTap: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
                 return PlayerPointsDetails(_cubit.contest, playerIndex, 

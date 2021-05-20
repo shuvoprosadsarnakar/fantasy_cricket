@@ -27,26 +27,30 @@ class SeriesLeaderboard extends StatelessWidget {
           return DefaultTabController(
             length: 2,
             child: Scaffold(
-              appBar: AppBar(
-                title: Text('Series Leaderboard'),
-                bottom: TabBar(
-                  tabs: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text('Ranking'),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text('Matches'),
-                    ),
+              appBar: AppBar(title: Text('Series Leaderboard')),
+              body: Scaffold(
+                appBar: AppBar(
+                  title: getSeriesInfo(),
+                  leading: Text(''),
+                  bottom: TabBar(
+                    tabs: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text('Ranking'),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text('Matches'),
+                      ),
+                    ],
+                  ),
+                ),
+                body: TabBarView(
+                  children: [
+                    getRanking(context),
+                    getMatches(context),
                   ],
                 ),
-              ),
-              body: TabBarView(
-                children: [
-                  getRanking(context),
-                  getMatches(context),
-                ],
               ),
             ),
           );
@@ -63,10 +67,15 @@ class SeriesLeaderboard extends StatelessWidget {
     return ListView(
       padding: Paddings.pagePadding,
       children: [
-        Text(
-          '${_cubit.series.ranks.length} Contestants',
-          style: Theme.of(context).textTheme.subtitle1,
-          textAlign: TextAlign.center, 
+        Row(
+          children: [
+            Icon(Icons.people),
+            Text(
+              ' ${_cubit.series.ranks.length} Contestants',
+              style: Theme.of(context).textTheme.subtitle2,
+              textAlign: TextAlign.center, 
+            ),
+          ],
         ),
         SizedBox(height: 30),
 
@@ -220,5 +229,45 @@ class SeriesLeaderboard extends StatelessWidget {
       default:
         return 'th';
     }
+  }
+
+  Column getSeriesInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Image.network(
+              _cubit.series.photo,
+              width: 30,
+              height: 30,
+            ),
+            Text(
+              ' ' + _cubit.series.name,
+              style: TextStyle(fontSize: 17),
+            ),
+          ],
+        ),
+        SizedBox(height: 5),
+        Row(
+          children: [
+            getSeriesInfoText('T20: ${_cubit.numberOfT20Matches} | '),
+            getSeriesInfoText('One Day: ${_cubit.numberOfOneDayMatches} | '),
+            getSeriesInfoText('Text: ${_cubit.numberOfTestMatches}'),
+          ],
+        )
+      ],
+    );
+  }
+
+  Text getSeriesInfoText(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.normal,
+      ),
+    );
   }
 }

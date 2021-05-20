@@ -60,4 +60,34 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
   static int getRank(int rankIndex) {
     return rankIndex + 1;
   }
+
+  int get numberOfT20Matches {
+    int totalMatches = 0;
+
+    series.matchExcerpts.forEach((Excerpt excerpt) {
+      if(excerpt.type == 'T20') totalMatches++;
+    });
+
+    return totalMatches;
+  }
+
+  int get numberOfOneDayMatches {
+    int totalMatches = 0;
+
+    series.matchExcerpts.forEach((Excerpt excerpt) {
+      if(excerpt.type == 'One Day') totalMatches++;
+    });
+
+    return totalMatches;
+  }
+
+  int get numberOfTestMatches {
+    int totalMatches = 0;
+
+    series.matchExcerpts.forEach((Excerpt excerpt) {
+      if(excerpt.type == 'Test') totalMatches++;
+    });
+
+    return totalMatches;
+  }
 }
