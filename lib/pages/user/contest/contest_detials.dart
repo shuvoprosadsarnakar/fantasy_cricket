@@ -58,36 +58,38 @@ class ContestDetails extends StatelessWidget {
         _getTeamImage(_cubit.excerpt.teamImages[0]),
         SizedBox(width: 10),
         
-        Column(children: [
-          Text(
-            _cubit.excerpt.teamsNames[0] + ' vs ' 
-              + _cubit.excerpt.teamsNames[1],
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
-            ),
-          ),
-          SizedBox(height: 5),
-          Text(_cubit.excerpt.no.toString()
-            + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
-            + _cubit.excerpt.type + ' Match'),
-          SizedBox(height: 5),
-          Row(
-            children: [
-              Image.network(
-                _cubit.series.photo,
-                width: 30,
-                height: 30,
+        Expanded(
+          child: Column(children: [
+            Text(
+              _cubit.excerpt.teamsNames[0] + ' vs ' 
+                + _cubit.excerpt.teamsNames[1],
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
               ),
-              SizedBox(width: 10),
-              Text(_cubit.series.name),
-            ],
-          ),
-          SizedBox(height: 5),
-          Text(
-            '${_cubit.excerpt.startTime.toDate().toString().substring(0, 16)}'
-          ),
-        ]),
+            ),
+            SizedBox(height: 5),
+            Text(_cubit.excerpt.no.toString()
+              + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
+              + _cubit.excerpt.type + ' Match'),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Image.network(
+                  _cubit.series.photo,
+                  width: 30,
+                  height: 30,
+                ),
+                SizedBox(width: 10),
+                Expanded(child: Text(_cubit.series.name)),
+              ],
+            ),
+            SizedBox(height: 5),
+            Text(
+              '${_cubit.excerpt.startTime.toDate().toString().substring(0, 16)}'
+            ),
+          ]),
+        ),
         SizedBox(width: 10),
         
         _getTeamImage(_cubit.excerpt.teamImages[1]),

@@ -21,31 +21,35 @@ class ContestsListItem extends StatelessWidget {
         children: [
           _getTeamImage(_excerpt.teamImages[0]),
           SizedBox(width: 10),
-          _getMatchInfo(),
+          Expanded(child: _getMatchInfo()),
           SizedBox(width: 10),
           _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
-      Divider(),
-      
+      SizedBox(height: 20),      
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _getChipsAndWinnerInfo(
-            _excerpt.totalChips,
-            _excerpt.totalWinners,
-            'Match',
+          Expanded(
+            child: _getChipsAndWinnerInfo(
+              _excerpt.totalChips,
+              _excerpt.totalWinners,
+              'Match',
+            ),
           ),
-          _getChipsAndWinnerInfo(
-            _seriesTotalChips,
-            _series.chipsDistributes.last.to,
-            'Series',
+          SizedBox(width: 10),
+          Expanded(
+            child: _getChipsAndWinnerInfo(
+              _seriesTotalChips,
+              _series.chipsDistributes.last.to,
+              'Series',
+            ),
           ),
         ],
       ),
       Divider(
-        color: Theme.of(context).primaryColor,
-        height: 30,  
+        thickness: 2,
+        color: Colors.grey.shade300,
+        height: 40,
       ),
     ]);
   }
@@ -59,31 +63,35 @@ class ContestsListItem extends StatelessWidget {
   }
 
   Column _getMatchInfo() {
-    return Column(children: [
-      Text(
-        '${_excerpt. teamsNames[0]} vs ${_excerpt.teamsNames[1]}',
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-        ),
-      ),
-      SizedBox(height: 5),
-      Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ${_excerpt.type} Match'),
-      SizedBox(height: 5),
-      Row(
-        children: [
-          Image.network(
-            _series.photo,
-            width: 30,
-            height: 30,
+    return Column(
+      children: [
+        Text(
+          '${_excerpt. teamsNames[0]} vs ${_excerpt.teamsNames[1]}',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
           ),
-          SizedBox(width: 10),
-          Text(_series.name),
-        ],
-      ),
-      SizedBox(height: 5),
-      Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
-    ]);
+        ),
+        SizedBox(height: 10),
+        Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ' 
+          + '${_excerpt.type} Match'),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              _series.photo,
+              width: 30,
+              height: 30,
+            ),
+            SizedBox(width: 10),
+            Expanded(child: Text(_series.name)),
+          ],
+        ),
+        SizedBox(height: 10),
+        Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
+      ],
+    );
   }
 
   static String getNoSuffix(int no) {
@@ -104,22 +112,31 @@ class ContestsListItem extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.money),
-          SizedBox(width: 5),
+          Image.asset(
+            'lib/resources/images/coins.png',
+            width: 40,
+            height: 40,  
+          ),
           Text(chips.toString()),
-          SizedBox(width: 5),
-          Text('|'),
-          SizedBox(width: 5),
-          Icon(Icons.person),
+          SizedBox(width: 10),
+          Image.asset(
+            'lib/resources/images/winner.png',
+            width: 20,
+            height: 20,  
+          ),
           SizedBox(width: 5),
           Text(winners.toString()),
         ],
       ),
       SizedBox(height: 5),
       Container(
-        padding: EdgeInsets.all(2),
+        padding: EdgeInsets.symmetric(
+          vertical: 2,
+          horizontal: 10,  
+        ),
         decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Text(contestType),
       ),

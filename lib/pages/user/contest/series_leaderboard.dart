@@ -243,9 +243,11 @@ class SeriesLeaderboard extends StatelessWidget {
               width: 30,
               height: 30,
             ),
-            Text(
-              ' ' + _cubit.series.name,
-              style: TextStyle(fontSize: 17),
+            Expanded(
+              child: Text(
+                ' ' + _cubit.series.name,
+                style: TextStyle(fontSize: 17),
+              ),
             ),
           ],
         ),
