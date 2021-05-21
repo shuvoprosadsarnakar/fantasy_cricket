@@ -6,6 +6,7 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
+import 'package:fantasy_cricket/utils/player_roles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CubitState {
@@ -85,18 +86,17 @@ class TeamManagerCubit extends Cubit<CubitState> {
     creditsLeft -= contest.playersCredits[playerIndex];
 
     switch(contest.playersRoles[playerIndex]) {
-      case 'Batsman':
+      case BATSMAN:
         totalBatsmans++;
         break;
-      case 'Wicket Keeper':
+      case WICKET_KEEPER:
         totalWicketKeepers++;
         break;
-      case 'All Rounder':
+      case ALL_ROUNDER:
         totalAllRounders++;
         break;
-      case 'Bowler':
+      case BOWLER:
         totalBowlers++;
-        break;
     }
   }
 
@@ -120,18 +120,17 @@ class TeamManagerCubit extends Cubit<CubitState> {
     creditsLeft += contest.playersCredits[playerIndex];
 
     switch(contest.playersRoles[playerIndex]) {
-      case 'Batsman':
+      case BATSMAN:
         totalBatsmans--;
         break;
-      case 'Wicket Keeper':
+      case WICKET_KEEPER:
         totalWicketKeepers--;
         break;
-      case 'All Rounder':
+      case ALL_ROUNDER:
         totalAllRounders--;
         break;
-      case 'Bowler':
+      case BOWLER:
         totalBowlers--;
-        break;
     }
   }
 
