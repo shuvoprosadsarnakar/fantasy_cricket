@@ -1,3 +1,5 @@
+import 'package:fantasy_cricket/utils/match_types.dart';
+
 abstract class PointsCalculator {
 
   // batting points calculators
@@ -17,7 +19,7 @@ abstract class PointsCalculator {
   static double getHalfCenturyPoints(int runsTaken, String matchType) {
     int halfCenturies = getHalfCenturies(runsTaken);
     
-    if(matchType == 'T20') {
+    if(matchType == MatchTypes.t20) {
       return halfCenturies * 4.0;
     } else {
       return halfCenturies * 2.0;
@@ -31,7 +33,7 @@ abstract class PointsCalculator {
   static double getCenturyPoints(int runsTaken, String matchType) {
     int centuries = getCenturies(runsTaken);
     
-    if(matchType == 'T20') {
+    if(matchType == MatchTypes.t20) {
       return centuries * 8.0;
     } else {
       return centuries * 4.0;
@@ -48,7 +50,7 @@ abstract class PointsCalculator {
     double strikeRate = getStrikeRate(ballsFaced, runsTaken);
     double point = 0;
 
-    if(matchType == 'T20' && ballsFaced >= 10) {
+    if(matchType == MatchTypes.t20 && ballsFaced >= 10) {
       if(strikeRate <= 50) {
         point = -3;
       } else if(strikeRate <= 60) {
@@ -56,7 +58,7 @@ abstract class PointsCalculator {
       } else if(strikeRate <= 70) {
         point = -1;
       }
-    } else if(matchType == 'One Day' && ballsFaced >= 20) {
+    } else if(matchType == MatchTypes.oneDay && ballsFaced >= 20) {
       if(strikeRate <= 40) {
         point = -3;
       } else if(strikeRate <= 50) {
@@ -76,7 +78,7 @@ abstract class PointsCalculator {
   // bowling points calculators
 
   static double getWicketsTakenPoints(int wicketsTaken, String matchType) {
-    if(matchType == 'One Day') {
+    if(matchType == MatchTypes.oneDay) {
       return wicketsTaken * 12.0;
     } else {
       return wicketsTaken * 10.0;
@@ -86,7 +88,7 @@ abstract class PointsCalculator {
   static double getFourWicketsPoints(int wicketsTaken, String matchType) {
     int fourWickets = getFourWickets(wicketsTaken);
     
-    if(matchType == 'T20') {
+    if(matchType == MatchTypes.t20) {
       return fourWickets * 4.0;
     } else {
       return fourWickets * 2.0;
@@ -100,7 +102,7 @@ abstract class PointsCalculator {
   static double getFiveWicketsPoints(int wicketsTaken, String matchType) {
     int fiveWickets = getFiveWickets(wicketsTaken);
 
-    if(matchType == 'T20') {
+    if(matchType == MatchTypes.t20) {
       return fiveWickets * 8.0;
     } else {
       return fiveWickets * 4.0;
@@ -112,7 +114,7 @@ abstract class PointsCalculator {
   }
 
   static double getMaidenOversPoints(int maidenOvers, String matchType) {
-    if(matchType != 'Test') {
+    if(matchType != MatchTypes.test) {
       return maidenOvers * 4.0;
     } else {
       return 0;
@@ -125,7 +127,7 @@ abstract class PointsCalculator {
     double economyRate = getEconomyRate(ballsBowled, runsGiven);
     double point = 0;
 
-    if(matchType == 'T20' && ballsBowled >= 12) {
+    if(matchType == MatchTypes.t20 && ballsBowled >= 12) {
       if(economyRate <= 4) {
         point = 3;
       } else if(economyRate <= 5) {
@@ -139,7 +141,7 @@ abstract class PointsCalculator {
       } else {
         point = -3;
       }
-    } else if(matchType == 'One Day' && ballsBowled >= 12) {
+    } else if(matchType == MatchTypes.oneDay && ballsBowled >= 12) {
       if(economyRate <= 2.5) {
         point = 3;
       } else if(economyRate <= 3.5) {
