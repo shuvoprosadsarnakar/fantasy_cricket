@@ -137,7 +137,7 @@ class ContestEnderCubit extends Cubit<CubitState> {
       // update series rank's total points
       series.ranks.firstWhere((Rank rank) {
         return rank.username == fantasy.username;
-      }).totalPoints = totalPoints;
+      }).totalPoints += totalPoints;
     });
 
     // sort contest ranks

@@ -132,8 +132,8 @@ class ContestDetails extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('${_cubit.excerpt.totalWinners} Total Winners'),
-          Text('${_cubit.excerpt.totalChips} Total Chips'),
+          Text('${_cubit.excerpt.totalWinners} Winners'),
+          Text('${_cubit.excerpt.totalChips} Chips'),
         ],
       ),
       Divider(color: Colors.grey),
