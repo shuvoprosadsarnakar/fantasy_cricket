@@ -6,6 +6,7 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:fantasy_cricket/utils/player_roles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -159,7 +160,9 @@ class TeamManagerCubit extends Cubit<CubitState> {
     String contestStatus 
       = series.matchExcerpts[excerptIndex].status;
 
-    if(contestStatus == 'Locked' || contestStatus == 'Ended') {
+    if(contestStatus == ContestStatuses.locked || 
+      contestStatus == ContestStatuses.ended) 
+    {
       emit(CubitState.timeOver);
     } else {
       if(fantasy.id == null) {
