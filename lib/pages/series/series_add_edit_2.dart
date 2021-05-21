@@ -24,7 +24,7 @@ class SeriesAddEdit2 extends StatelessWidget {
     = <DropdownMenuItem<dynamic>>[];
 
   SeriesAddEdit2(this._cubit) {
-    matchTypes.forEach((String type) {
+    MatchTypes.list.forEach((String type) {
       _typeDropdownList.add(DropdownMenuItem<String>(
         value: type,
         child: Text(type),  
