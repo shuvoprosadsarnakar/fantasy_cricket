@@ -2,7 +2,7 @@ import 'package:fantasy_cricket/models/exchange.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/exchange_repo.dart';
 import 'package:fantasy_cricket/repositories/user_repo.dart';
-import 'package:fantasy_cricket/utils/exchange_util.dart';
+import 'package:fantasy_cricket/utils/exchange_statuses.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

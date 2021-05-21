@@ -8,7 +8,7 @@ import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/series_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';

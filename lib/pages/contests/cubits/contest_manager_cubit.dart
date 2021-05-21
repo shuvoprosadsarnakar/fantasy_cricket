@@ -5,7 +5,7 @@ import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

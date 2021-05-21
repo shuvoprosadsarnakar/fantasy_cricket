@@ -21,7 +21,7 @@ import 'package:fantasy_cricket/pages/team/bloc/team_bloc.dart';
 import 'package:fantasy_cricket/pages/team/bloc/team_event.dart';
 import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

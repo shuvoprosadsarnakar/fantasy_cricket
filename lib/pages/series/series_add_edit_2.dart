@@ -5,7 +5,7 @@ import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_2_cubit.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/match_util.dart';
+import 'package:fantasy_cricket/utils/match_types.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';

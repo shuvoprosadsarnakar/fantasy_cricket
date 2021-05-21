@@ -5,7 +5,7 @@ import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cub
 import 'package:fantasy_cricket/pages/user/contest/fantasy_player_points.dart';
 import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';

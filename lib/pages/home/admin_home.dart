@@ -3,7 +3,7 @@ import 'package:fantasy_cricket/pages/contests/contests_list.dart';
 import 'package:fantasy_cricket/pages/team/team_list.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
-import 'package:fantasy_cricket/utils/contest_util.dart';
+import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:flutter/material.dart';
 
 class AdminHome extends StatelessWidget {

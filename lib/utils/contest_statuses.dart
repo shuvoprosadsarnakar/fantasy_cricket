@@ -1,4 +1,3 @@
-// all contest statuses
 abstract class ContestStatuses {
   static final String upcoming = 'Upcoming';
   static final String running = 'Running';

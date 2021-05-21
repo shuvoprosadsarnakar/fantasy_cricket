@@ -1,7 +1,7 @@
 import 'package:fantasy_cricket/models/exchange.dart';
 import 'package:fantasy_cricket/pages/user/profile/cubits/exchange_history_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/exchange_util.dart';
+import 'package:fantasy_cricket/utils/exchange_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
