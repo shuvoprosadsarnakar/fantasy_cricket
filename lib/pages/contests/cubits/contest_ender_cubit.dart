@@ -10,7 +10,7 @@ import 'package:fantasy_cricket/models/win_info.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/user_repo.dart';
-import 'package:fantasy_cricket/resources/points_calculator.dart';
+import 'package:fantasy_cricket/helpers/points_calculator.dart';
 import 'package:fantasy_cricket/utils/contest_statuses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

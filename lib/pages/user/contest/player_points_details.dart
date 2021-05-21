@@ -3,7 +3,7 @@ import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/report.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/resources/points_calculator.dart';
+import 'package:fantasy_cricket/helpers/points_calculator.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPointsDetails extends StatelessWidget {
