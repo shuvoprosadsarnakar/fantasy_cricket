@@ -67,12 +67,18 @@ class ContestManagerCubit extends Cubit<CubitState> {
     // add player names to the contest and series
     team1.playersNames.forEach((String name) {
       contest.playersNames.add(name);
-      _series.playerNames.add(name);
+      if(_series.playerNames.contains(name) == false) {
+        _series.playerNames.add(name);
+        _series.playerPoints.add(0);
+      }
     });
 
     team2.playersNames.forEach((String name) {
       contest.playersNames.add(name);
-      _series.playerNames.add(name);
+      if(_series.playerNames.contains(name) == false) {
+        _series.playerNames.add(name);
+        _series.playerPoints.add(0);
+      }
     });
 
     // add player roles to the contest
@@ -99,7 +105,6 @@ class ContestManagerCubit extends Cubit<CubitState> {
       contest.playersCredits.add(null);
       contest.isPlayings.add(false);
       contest.playerPickedCounts.add(0);
-      _series.playerPoints.add(0);
     }
   }
 
