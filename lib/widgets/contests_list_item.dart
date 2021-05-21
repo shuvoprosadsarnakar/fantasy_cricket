@@ -77,12 +77,6 @@ class ContestsListItem extends StatelessWidget {
         Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ' 
           + '${_excerpt.type} Match'),
         SizedBox(height: 7),
-        Image.network(
-          _series.photo,
-          width: 25,
-          height: 25,
-        ),
-        SizedBox(height: 7),
         Text(
           _series.name,
           textAlign: TextAlign.center,
