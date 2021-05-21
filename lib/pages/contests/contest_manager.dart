@@ -25,6 +25,19 @@ class ContestManager extends StatelessWidget {
           return Loading();
         } else if(state == CubitState.fetchError) {
           return FetchErrorMsg();
+        } else if(state == CubitState.playerConflicted) {
+          return Scaffold(
+            body: SafeArea(
+              child: Padding(
+                padding: Paddings.pagePadding,
+                child: Text(
+                  'Contest can\'t be run because ${_cubit.conflictedPlayerName}'
+                  + ' is in both teams.',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+            ),  
+          );
         } else {
           return Scaffold(
             appBar: AppBar(title: Text(_cubit.contest.id == null ? 

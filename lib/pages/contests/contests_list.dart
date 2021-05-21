@@ -202,7 +202,7 @@ class ContestsList extends StatelessWidget {
 
   Text _getSeriesPrice(Series series) {
     return Text(
-        'Series: ${rcCubit.RunningContestsCubit.getSeriesTotalChips(series)}' 
+        'Series: ${rcCubit.RunningContestsCubit.getSeriesTotalChips(series)} ' 
         + 'Chips & ${series.chipsDistributes.last.to} Winners');
   }
 

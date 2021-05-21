@@ -16,6 +16,7 @@ enum CubitState {
   distributeRemoved,
   isPlayingChanged,
   failed,
+  playerConflicted,
 }
 
 class ContestManagerCubit extends Cubit<CubitState> {
@@ -23,6 +24,7 @@ class ContestManagerCubit extends Cubit<CubitState> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Series _series;
   final int _excerptIndex;
+  String conflictedPlayerName;
 
   ContestManagerCubit(this._series, this._excerptIndex) : super(null) {
     if(_series.matchExcerpts[_excerptIndex].id == null) {
@@ -66,6 +68,10 @@ class ContestManagerCubit extends Cubit<CubitState> {
     
     // add player names to the contest and series
     team1.playersNames.forEach((String name) {
+      if(team2.playersNames.contains(name)) {
+        conflictedPlayerName = name;
+        emit(CubitState.playerConflicted);
+      }
       contest.playersNames.add(name);
       if(_series.playerNames.contains(name) == false) {
         _series.playerNames.add(name);
