@@ -82,9 +82,14 @@ class ContestEnderCubit extends Cubit<CubitState> {
 
         // give chips to contest winners and get them 
         List<User> contestWinners = await _getUpdatedContestWinners();
-        // give chips to series winners and get them
-        List<User> seriesWinners 
-          = await _getUpdatedSeriesWinners(contestWinners);
+        
+        // give chips to series winners and get them if it is the last contest 
+        // of the series
+        List<User> seriesWinners;
+
+        if(excerptIndex == (series.matchExcerpts.length - 1)) {
+          seriesWinners = await _getUpdatedSeriesWinners(contestWinners);
+        }
 
         await ContestRepo.endContest(contest, series, contestWinners, 
           seriesWinners);

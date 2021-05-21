@@ -67,7 +67,7 @@ class ContestRepo {
       batch.update(docRef, user.toMap());
     });
 
-    seriesWinners.forEach((User user) {
+    if(seriesWinners != null) seriesWinners.forEach((User user) {
       if(user != null) {
         docRef = _db.collection('users').doc(user.id);
         batch.update(docRef, user.toMap());
