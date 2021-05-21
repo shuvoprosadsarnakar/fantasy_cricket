@@ -72,7 +72,6 @@ class ContestsList extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _getTeamNames(excerpt.teamImages, excerpt.teamsNames, 
                       context),
@@ -86,7 +85,7 @@ class ContestsList extends StatelessWidget {
                     if (_contestStatus != ContestStatuses.upcoming)
                       SizedBox(height: 5),
                     _getSeriesPrice(series),
-                    SizedBox(height: 5),
+                    SizedBox(height: 10),
                     _getStartingTime(excerpt.startTime),
                   ],
                 ),
@@ -120,8 +119,9 @@ class ContestsList extends StatelessWidget {
         children: [
           Image.network(
             teamImages[0],
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
+            fit: BoxFit.cover,
           ),
           SizedBox(width: 5),
           Expanded(
@@ -138,8 +138,9 @@ class ContestsList extends StatelessWidget {
           SizedBox(width: 5),
           Image.network(
             teamImages[1],
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
+            fit: BoxFit.cover,
           ),
         ],
       ),
@@ -159,12 +160,15 @@ class ContestsList extends StatelessWidget {
             imageLink,
             width: 30,
             height: 30,
+            fit: BoxFit.fitHeight,
           ),
         ),
-        SizedBox(width: 10),
-        Text(
-          name,
-          style: Theme.of(context).textTheme.subtitle2,
+        SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            name,
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
         ),
       ],
     );
@@ -198,8 +202,8 @@ class ContestsList extends StatelessWidget {
 
   Text _getSeriesPrice(Series series) {
     return Text(
-        'Series: ${rcCubit.RunningContestsCubit.getSeriesTotalChips(series)} Chips & ${series.chipsDistributes.last.to} ' +
-            'Winners');
+        'Series: ${rcCubit.RunningContestsCubit.getSeriesTotalChips(series)}' 
+        + 'Chips & ${series.chipsDistributes.last.to} Winners');
   }
 
   Text _getContestPrice(Excerpt excerpt) {
