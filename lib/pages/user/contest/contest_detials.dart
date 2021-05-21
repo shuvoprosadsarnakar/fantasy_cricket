@@ -73,12 +73,6 @@ class ContestDetails extends StatelessWidget {
               + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
               + _cubit.excerpt.type + ' Match'),
             SizedBox(height: 7),
-            Image.network(
-              _cubit.series.photo,
-              width: 25,
-              height: 25,
-            ),
-            SizedBox(height: 7),
             Text(_cubit.series.name, textAlign: TextAlign.center),
             SizedBox(height: 7),
             Text(
