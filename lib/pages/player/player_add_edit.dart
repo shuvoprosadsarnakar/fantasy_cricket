@@ -16,7 +16,7 @@ class PlayerAddEdit extends StatelessWidget {
   final List<DropdownMenuItem<String>> _roleDropdownList = [];
 
   PlayerAddEdit(this._playerAddEditCubit) {
-    playerRoles.forEach((String value) {
+    PlayerRoles.list.forEach((String value) {
       _roleDropdownList.add(DropdownMenuItem<String>(
         value: value,
         child: Text(value),
