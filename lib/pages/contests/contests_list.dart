@@ -154,20 +154,11 @@ class ContestsList extends StatelessWidget {
   Row _getSeriesName(String imageLink, String name, BuildContext context) {
     return Row(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Image.network(
-            imageLink,
-            width: 30,
-            height: 30,
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-        SizedBox(width: 5),
         Expanded(
           child: Text(
             name,
             style: Theme.of(context).textTheme.subtitle2,
+            textAlign: TextAlign.center,
           ),
         ),
       ],
