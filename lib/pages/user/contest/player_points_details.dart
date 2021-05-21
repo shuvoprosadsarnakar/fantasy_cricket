@@ -87,12 +87,23 @@ class PlayerPointsDetails extends StatelessWidget {
               height: 20,
             ),
             SizedBox(width: 5),
-            Text(_contest.teamsNames[teamIndex] + ' | ' +
-              _contest.playersRoles[_playerIndex]),
+            Expanded(
+              child: Text(
+                _contest.teamsNames[teamIndex] + ' | ' +
+                  _contest.playersRoles[_playerIndex],
+                style: TextStyle(fontSize: 12),    
+              ),
+            ),
           ],
         ),
-        trailing: Text('Points: ' + (_contest.playersPoints.isNotEmpty ?
-          _contest.playersPoints[_playerIndex] : 0).toString()),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Points'),
+            Text((_contest.playersPoints.isNotEmpty ?
+              _contest.playersPoints[_playerIndex] : 0).toString()),
+          ],
+        ),
       ),
     );
   }

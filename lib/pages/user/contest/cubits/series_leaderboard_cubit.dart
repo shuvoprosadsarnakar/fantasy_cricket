@@ -37,21 +37,29 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
     for(int i = 0; i < totalExcerpts; i++) {
       Excerpt excerpt = series.matchExcerpts[i];
 
-      try {
-        seriesContests.add(await ContestRepo.getContestById(excerpt.id));
-      } catch(error) {
-        emit(CubitState.fetchError);
-        return;
+      if(excerpt.id == null) {
+        seriesContests.add(null);
+      } else {
+        try {
+          seriesContests.add(await ContestRepo.getContestById(excerpt.id));
+        } catch(error) {
+          emit(CubitState.fetchError);
+          return;
+        }
       }
     }
 
     seriesContests.forEach((Contest contest) {
-      userContestRanks.add(contest.ranks.firstWhere(
-        (Rank rank) {
-          return rank.username == user.username;
-        },
-        orElse: () => null,
-      ));
+      if(contest == null) {
+        userContestRanks.add(null);
+      } else {
+        userContestRanks.add(contest.ranks.firstWhere(
+          (Rank rank) {
+            return rank.username == user.username;
+          },
+          orElse: () => null,
+        ));
+      }
     });
 
     emit(null);

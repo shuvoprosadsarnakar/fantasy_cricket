@@ -185,12 +185,20 @@ class SeriesLeaderboard extends StatelessWidget {
               ).toString() : '-')),
           ],
         ),
-        onTap: () => Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return MatchLeaderboard(mlCubit.MatchLeaderBoardCubit(excerpt,
-              _cubit.user));
-          },
-        )),
+        onTap: () {
+          if(excerpt.id != null) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return MatchLeaderboard(mlCubit.MatchLeaderBoardCubit(excerpt,
+                  _cubit.user));
+              },
+            ));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Contest isn\'t started.'),
+            ));
+          }
+        },
       ));
       matchWidgets.add(Divider());
     }
@@ -256,7 +264,7 @@ class SeriesLeaderboard extends StatelessWidget {
           children: [
             getSeriesInfoText('T20: ${_cubit.numberOfT20Matches} | '),
             getSeriesInfoText('One Day: ${_cubit.numberOfOneDayMatches} | '),
-            getSeriesInfoText('Text: ${_cubit.numberOfTestMatches}'),
+            getSeriesInfoText('Test: ${_cubit.numberOfTestMatches}'),
           ],
         )
       ],

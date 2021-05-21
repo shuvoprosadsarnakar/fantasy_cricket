@@ -26,7 +26,7 @@ class ContestsListItem extends StatelessWidget {
           _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
-      SizedBox(height: 20),      
+      SizedBox(height: 15),      
       Row(
         children: [
           Expanded(
@@ -57,8 +57,9 @@ class ContestsListItem extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 50,
-      width: 50,
+      height: 40,
+      width: 40,
+      fit: BoxFit.cover,
     );
   }
 
@@ -72,30 +73,28 @@ class ContestsListItem extends StatelessWidget {
             fontSize: 16,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 7),
         Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ' 
           + '${_excerpt.type} Match'),
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              _series.photo,
-              width: 30,
-              height: 30,
-            ),
-            SizedBox(width: 10),
-            Expanded(child: Text(_series.name)),
-          ],
+        SizedBox(height: 7),
+        Image.network(
+          _series.photo,
+          width: 25,
+          height: 25,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 7),
+        Text(
+          _series.name,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 7),
         Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
       ],
     );
   }
 
   static String getNoSuffix(int no) {
-    switch(no % 10) {
+    switch(no) {
       case 1:
         return 'st';
       case 2:

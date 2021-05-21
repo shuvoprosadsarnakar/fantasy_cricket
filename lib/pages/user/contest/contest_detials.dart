@@ -68,23 +68,19 @@ class ContestDetails extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 7),
             Text(_cubit.excerpt.no.toString()
               + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
               + _cubit.excerpt.type + ' Match'),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Image.network(
-                  _cubit.series.photo,
-                  width: 30,
-                  height: 30,
-                ),
-                SizedBox(width: 10),
-                Expanded(child: Text(_cubit.series.name)),
-              ],
+            SizedBox(height: 7),
+            Image.network(
+              _cubit.series.photo,
+              width: 25,
+              height: 25,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 7),
+            Text(_cubit.series.name, textAlign: TextAlign.center),
+            SizedBox(height: 7),
             Text(
               '${_cubit.excerpt.startTime.toDate().toString().substring(0, 16)}'
             ),
@@ -100,8 +96,9 @@ class ContestDetails extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 50,
-      width: 50,
+      height: 40,
+      width: 40,
+      fit: BoxFit.cover,
     );
   }
 
@@ -170,9 +167,9 @@ class ContestDetails extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('${_cubit.series.chipsDistributes.last.to} Total Winners'),
+          Text('${_cubit.series.chipsDistributes.last.to} Winners'),
           Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)
-            .toString() + ' Total Chips'),
+            .toString() + ' Chips'),
         ],
       ),
       Divider(color: Colors.grey),
@@ -181,22 +178,27 @@ class ContestDetails extends StatelessWidget {
   }
 
   Column _getWinnersWiseChipsRows(List<Distribute> distributes) {
-    List<Row> distributeRows = <Row>[];
+    List<Column> distributeRows = <Column>[];
     int totalDistributes = distributes.length;
 
     for(int i = 0; i < totalDistributes; i++) {
       int from = distributes[i].from;
       int to = distributes[i].to;
       
-      distributeRows.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      distributeRows.add(Column(
         children: [
-          Text(
-            from.toString() + ContestsListItem.getNoSuffix(from) 
-              + (from != to ? ' - ' + to.toString() 
-              + ContestsListItem.getNoSuffix(to) : ''),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                from.toString() + ContestsListItem.getNoSuffix(from) 
+                  + (from != to ? ' - ' + to.toString() 
+                  + ContestsListItem.getNoSuffix(to) : ''),
+              ),
+              Text(distributes[i].chips.toString() + ' Chips'),
+            ],
           ),
-          Text(distributes[i].chips.toString() + ' Chips'),
+          Divider(),
         ],
       ));
     }

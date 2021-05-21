@@ -39,8 +39,8 @@ class ContestRepo {
   }
 
   static Future<Contest> getContestById(String id) async {
-    DocumentSnapshot doc = await _contestCollection.doc(id).get();
-    return Contest.fromMap(doc.data(), doc.id);
+    DocumentSnapshot snapshot = await _contestCollection.doc(id).get();
+    return Contest.fromMap(snapshot.data(), snapshot.id);
   }
 
   static Future<void> updateContest(Contest contest) async {
