@@ -65,10 +65,6 @@ class SeriesLeaderboardCubit extends Cubit<CubitState> {
     emit(null);
   }
 
-  static int getRank(int rankIndex) {
-    return rankIndex + 1;
-  }
-
   int get numberOfT20Matches {
     int totalMatches = 0;
 

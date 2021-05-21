@@ -1,7 +1,7 @@
+import 'package:fantasy_cricket/helpers/rank_calculator.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart' as fppCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
 import 'package:fantasy_cricket/pages/user/contest/fantasy_player_points.dart';
 import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
@@ -135,7 +135,7 @@ class MatchLeaderboard extends StatelessWidget {
         child: Row(children: [
           Expanded(
             flex: 1,
-            child: Text(slCubit.SeriesLeaderboardCubit.getRank(rankIndex)
+            child: Text(RankCalculator.getRank(rankIndex)
               .toString()),
           ),
           SizedBox(width: 10),
