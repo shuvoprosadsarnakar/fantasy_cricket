@@ -293,6 +293,7 @@ class MatchLeaderboard extends StatelessWidget {
                   _cubit.excerpt.teamImages[1],
                   width: 40,
                   height: 40,
+                  fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5),
                 Text(_cubit.contest.teamsNames[1]),

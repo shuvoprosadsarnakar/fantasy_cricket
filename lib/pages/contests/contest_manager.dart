@@ -1,3 +1,5 @@
+// this screen is used to run, update and lock contest
+
 import 'package:fantasy_cricket/pages/contests/cubits/contest_manager_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -8,8 +10,6 @@ import 'package:fantasy_cricket/widgets/form_text_field.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// this screen is used to run, update and lock contest
 
 class ContestManager extends StatelessWidget {
   final ContestManagerCubit _cubit;
@@ -62,6 +62,9 @@ class ContestManager extends StatelessWidget {
                     SizedBox(height: 10),
                     getPlayersInfoFields(context),
                     SizedBox(height: 10),
+                    FormFieldTitle('Full Score Url'),
+                    getFullScoreUrlField(),
+                    SizedBox(height: 20),
 
                     // form submit button
                     _cubit.contest.id == null ? getRunContestButton(context) :
@@ -77,6 +80,15 @@ class ContestManager extends StatelessWidget {
           );
         }
       },
+    );
+  }
+
+  FormTextField getFullScoreUrlField() {
+    return FormTextField(
+      initialValue: _cubit.contest.fullScoreUrl,
+      hintText: 'Enter full score url',
+      keyboardType: TextInputType.url,
+      onSaved: (String value) => _cubit.contest.fullScoreUrl = value,
     );
   }
 

@@ -29,11 +29,10 @@ class MatchLeaderBoardCubit extends Cubit<CubitState> {
   }
 
   Future<void> launchFullScoreUrl() async {
-    String url = 'https://www.cricbuzz.com/live-cricket-scorecard/36092/ned-vs-sco-2nd-odi-scotland-tour-of-netherlands-2021';
-    
-    if(await canLaunch(url)) {
+    emit(CubitState.loading);
+    if(await canLaunch(contest.fullScoreUrl)) {
       await launch(
-        url,
+        contest.fullScoreUrl,
         forceWebView: true,
         enableJavaScript: true,
       );

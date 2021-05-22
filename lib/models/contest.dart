@@ -25,6 +25,7 @@ const String PLAYER_OF_THE_MATCH_KEY = 'playerOfTheMatch';
 const String RANKS_KEY = 'ranks';
 const String PLAYER_PHOTOS_KEY = 'playerPhotos';
 const String PLAYER_PICKED_COUNTS_KEY = 'playerPickedCounts';
+const String FULL_SCORE_URL_KEY = 'fullScoreUrl';
 
 class Contest {
   // contest info
@@ -50,6 +51,7 @@ class Contest {
   List<String> teamsScores;
   String result;
   String playerOfTheMatch;
+  String fullScoreUrl;
 
   // needed to update match excerpt's status
   String seriesId;
@@ -80,6 +82,7 @@ class Contest {
     this.ranks,
     this.playerPhotos,
     this.playerPickedCounts,
+    this.fullScoreUrl,
   }) {
     if(teamsNames == null) teamsNames = <String>[];
     if(chipsDistributes == null) chipsDistributes = <Distribute>[];
@@ -105,6 +108,7 @@ class Contest {
     seriesId = doc[SERIES_ID_KEY];
     result = doc[RESULT_KEY];
     playerOfTheMatch = doc[PLAYER_OF_THE_MATCH_KEY];
+    fullScoreUrl = doc[FULL_SCORE_URL_KEY];
     teamsNames = <String>[];
     chipsDistributes = <Distribute>[];
     playersNames = <String>[];
@@ -174,6 +178,7 @@ class Contest {
       PLAYER_OF_THE_MATCH_KEY: playerOfTheMatch,
       PLAYER_PHOTOS_KEY: playerPhotos,
       PLAYER_PICKED_COUNTS_KEY: playerPickedCounts,
+      FULL_SCORE_URL_KEY: fullScoreUrl,
       
       RANKS_KEY: ranks.map((Rank rank) {
         return rank.toMap();
