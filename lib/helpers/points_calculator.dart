@@ -1,4 +1,4 @@
-import 'package:fantasy_cricket/utils/match_types.dart';
+import 'package:fantasy_cricket/resources/match_types.dart';
 
 abstract class PointsCalculator {
 

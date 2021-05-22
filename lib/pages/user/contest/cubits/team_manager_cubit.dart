@@ -6,8 +6,8 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
-import 'package:fantasy_cricket/utils/contest_statuses.dart';
-import 'package:fantasy_cricket/utils/player_roles.dart';
+import 'package:fantasy_cricket/resources/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/player_roles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum CubitState {

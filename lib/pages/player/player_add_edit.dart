@@ -1,5 +1,5 @@
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
-import 'package:fantasy_cricket/utils/player_roles.dart';
+import 'package:fantasy_cricket/resources/player_roles.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';

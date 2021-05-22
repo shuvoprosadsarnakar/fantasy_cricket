@@ -3,7 +3,7 @@ import 'package:fantasy_cricket/pages/exchange/cubits/exchange_updater_cubit.dar
 import 'package:fantasy_cricket/pages/exchange/cubits/exchanges_list_cubit.dart';
 import 'package:fantasy_cricket/pages/exchange/exchange_updater.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/exchange_statuses.dart';
+import 'package:fantasy_cricket/resources/exchange_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';

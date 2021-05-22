@@ -11,7 +11,7 @@ import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart'
     as rcCubit;
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';

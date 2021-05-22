@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/exchange.dart';
 import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/repositories/exchange_repo.dart';
-import 'package:fantasy_cricket/utils/exchange_statuses.dart';
+import 'package:fantasy_cricket/resources/exchange_statuses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

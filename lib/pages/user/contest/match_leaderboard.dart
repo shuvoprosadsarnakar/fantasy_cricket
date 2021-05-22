@@ -5,7 +5,7 @@ import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubi
 import 'package:fantasy_cricket/pages/user/contest/fantasy_player_points.dart';
 import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/utils/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -276,7 +276,8 @@ class MatchLeaderboard extends StatelessWidget {
                   Text(matchStatus),
                   SizedBox(height: 5),
                   Text(
-                    _cubit.contest.startTime.toDate().toString().substring(0, 16),
+                    _cubit.contest.startTime.toDate().toString()
+                      .substring(0, 16),
                     textAlign: TextAlign.center,
                   ),
                 ],
