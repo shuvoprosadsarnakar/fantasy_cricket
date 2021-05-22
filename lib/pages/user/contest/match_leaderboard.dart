@@ -37,7 +37,7 @@ class MatchLeaderboard extends StatelessWidget {
                 children: [
                   getUserRankings(context),
                   getPlayerPoints(context),
-                  getMatchScores(),
+                  getMatchScores(context),
                 ],
               ),
             ),
@@ -76,6 +76,7 @@ class MatchLeaderboard extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.people),
+              SizedBox(width: 5),
               Text(
                 ' ${_cubit.contest.ranks.length} Contestants',
                 style: Theme.of(context).textTheme.subtitle2,  
@@ -234,7 +235,7 @@ class MatchLeaderboard extends StatelessWidget {
     );
   }
 
-  ListView getMatchScores() {
+  ListView getMatchScores(BuildContext context) {
     String matchStatus;
 
     if(_cubit.excerpt.status == ContestStatuses.locked) {
@@ -308,6 +309,26 @@ class MatchLeaderboard extends StatelessWidget {
         Text(
           _cubit.contest.result ?? '',
           textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 20),
+
+        TextButton(
+          child: Text(
+            'Full Score',
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 16,  
+            ),  
+          ),
+          onPressed: () async {
+            await _cubit.launchFullScoreUrl();
+            
+            if(_cubit.state == CubitState.launchFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Full score not available right now.'),
+              ));
+            }
+          },
         ),
       ],
     );

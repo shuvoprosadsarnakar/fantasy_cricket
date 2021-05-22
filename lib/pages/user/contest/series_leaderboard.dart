@@ -71,6 +71,7 @@ class SeriesLeaderboard extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.people),
+            SizedBox(width: 5),
             Text(
               ' ${_cubit.series.ranks.length} Contestants',
               style: Theme.of(context).textTheme.subtitle2,
