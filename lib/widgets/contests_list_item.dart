@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class ContestsListItem extends StatelessWidget {
           ),
         ),
         SizedBox(height: 7),
-        Text('${_excerpt.no}${getNoSuffix(_excerpt.no)} ' 
+        Text('${_excerpt.no}${NumberSuffixFinder.getNumberSuffix(_excerpt.no)} '
           + '${_excerpt.type} Match'),
         SizedBox(height: 7),
         Text(
@@ -85,19 +86,6 @@ class ContestsListItem extends StatelessWidget {
         Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
       ],
     );
-  }
-
-  static String getNoSuffix(int no) {
-    switch(no) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-       return 'rd';
-      default:
-        return 'th';
-    }
   }
 
   Column _getChipsAndWinnerInfo(int chips, int winners, String contestType) {

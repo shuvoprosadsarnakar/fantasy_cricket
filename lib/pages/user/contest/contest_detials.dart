@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
@@ -70,7 +71,7 @@ class ContestDetails extends StatelessWidget {
             ),
             SizedBox(height: 7),
             Text(_cubit.excerpt.no.toString()
-              + ContestsListItem.getNoSuffix(_cubit.excerpt.no) + ' '
+              + NumberSuffixFinder.getNumberSuffix(_cubit.excerpt.no) + ' '
               + _cubit.excerpt.type + ' Match'),
             SizedBox(height: 7),
             Text(_cubit.series.name, textAlign: TextAlign.center),
@@ -185,9 +186,9 @@ class ContestDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                from.toString() + ContestsListItem.getNoSuffix(from) 
+                from.toString() + NumberSuffixFinder.getNumberSuffix(from) 
                   + (from != to ? ' - ' + to.toString() 
-                  + ContestsListItem.getNoSuffix(to) : ''),
+                  + NumberSuffixFinder.getNumberSuffix(to) : ''),
               ),
               Text(distributes[i].chips.toString() + ' Chips'),
             ],
