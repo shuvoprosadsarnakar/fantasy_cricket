@@ -169,11 +169,13 @@ class MatchLeaderboard extends StatelessWidget {
 
     for(int i = 0; i < totalPlayers; i++) {
       if(i == _cubit.contest.team1TotalPlayers) {
+        pointsListTiles.add(SizedBox(height: 10));
         pointsListTiles.add(ListTile(
           leading: Image.network(
             _cubit.excerpt.teamImages[1],
             width: 40,
             height: 40,
+            fit: BoxFit.cover,
           ),
           title: Text(
             _cubit.excerpt.teamsNames[1],
@@ -184,7 +186,6 @@ class MatchLeaderboard extends StatelessWidget {
             style: Theme.of(context).textTheme.subtitle2,  
           ),
         ));
-
         pointsListTiles.add(Divider(color: Colors.grey));
       }
 
@@ -205,7 +206,7 @@ class MatchLeaderboard extends StatelessWidget {
 
       if(i != _cubit.contest.team1TotalPlayers - 1 &&
         i != _cubit.contest.playersNames.length -1) 
-        pointsListTiles.add(Divider());
+        pointsListTiles.add(Divider(height: 1));
     }
 
     return ListView(
