@@ -1,4 +1,5 @@
-import 'package:fantasy_cricket/helpers/rank_calculator.dart';
+import 'package:fantasy_cricket/helpers/ranking_maker.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart' as fppCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart';
@@ -68,17 +69,48 @@ class MatchLeaderboard extends StatelessWidget {
     int userRankIndex = _cubit.contest.ranks.indexWhere((Rank rank) {
       return _cubit.user.username == rank.username;
     });
+    int userChips;
+
+    int totalContestants = _cubit.contest.ranks.length;
+    List<ListTile> rankingListTiles = <ListTile>[];
+
+    // set [rankingListTiles]
+    _cubit.contest.chipsDistributes.forEach((Distribute distribute) {
+      if(userRankIndex >= RankingMaker.getDistributeFromIndex(distribute.from) 
+        && userRankIndex < distribute.to) userChips = distribute.chips;
+      
+      for(int i = RankingMaker.getDistributeFromIndex(distribute.from); 
+        i < distribute.to && i < totalContestants; i++) 
+      {
+        rankingListTiles.add(ListTile(
+          leading: Text(RankingMaker.getRank(i).toString()),
+          title: Text(_cubit.contest.ranks[i].username),
+          subtitle: Text(distribute.chips.toString() + ' Chips'),
+          trailing: Text(_cubit.contest.ranks[i].totalPoints.toString()),
+          onTap: () => Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
+                _cubit.contest,
+                _cubit.contest.ranks[i].username,
+                _cubit.excerpt,
+              ));
+            },
+          )),
+        ));
+      }
+    });
     
     return Padding(
       padding: Paddings.pagePadding,
       child: Column(
         children: [
+          // number of total contestants
           Row(
             children: [
               Icon(Icons.people),
-              SizedBox(width: 5),
+              SizedBox(width: 10),
               Text(
-                ' ${_cubit.contest.ranks.length} Contestants',
+                '$totalContestants Contestants',
                 style: Theme.of(context).textTheme.subtitle2,  
               ),
             ],
@@ -87,31 +119,47 @@ class MatchLeaderboard extends StatelessWidget {
 
           // ranking titles
           Row(children: [
-            getRankTile(1, 'Rank', context),
+            getRankTitle(1, 'Rank', context),
             SizedBox(width: 10),
-            getRankTile(3, 'User', context),
+            getRankTitle(3, 'User', context),
             SizedBox(width: 10),
-            getRankTile(1, 'Points', context),
+            getRankTitle(1, 'Points', context),
           ]), 
           Divider(),
 
           // user's ranking
-          if(userRankIndex != -1) getRankRow(
-            userRankIndex,
-            _cubit.contest.ranks[userRankIndex],
-            context,
+          if(userRankIndex != -1) ListTile(
+            leading: Text(RankingMaker.getRank(userRankIndex).toString()),
+            title: Text(_cubit.contest.ranks[userRankIndex].username),
+            subtitle: Text(userChips.toString() + ' Chips'),
+            trailing: Text(_cubit.contest.ranks[userRankIndex].totalPoints
+              .toString()),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) {
+                return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
+                  _cubit.contest,
+                  _cubit.contest.ranks[userRankIndex].username,
+                  _cubit.excerpt,
+                ));
+              },
+            )),
           ),
-          if(userRankIndex != -1) Divider(color: Colors.grey),
+          if(userRankIndex != -1) Divider(
+            color: Colors.grey.shade700,
+            height: 1,  
+          ),
 
           // all rankings including the user
           ListView.builder(
             shrinkWrap: true,
-            itemCount: _cubit.contest.ranks.length,
+            itemCount: rankingListTiles.length,
             itemBuilder: (BuildContext context, int i) {
-              return Column(children: [
-                getRankRow(i, _cubit.contest.ranks[i], context),
-                Divider(),
-              ]);
+              return Column(
+                children: [
+                  rankingListTiles[i],
+                  Divider(height: 1),
+                ],
+              );
             },
           ),
         ],
@@ -119,47 +167,13 @@ class MatchLeaderboard extends StatelessWidget {
     );
   }
 
-  Expanded getRankTile(int flex, String title, BuildContext context) {
+  Expanded getRankTitle(int flex, String title, BuildContext context) {
     return Expanded(
       flex: flex,
       child: Text(
         title,
         style: Theme.of(context).textTheme.subtitle2,  
       ),
-    );
-  }
-
-  InkWell getRankRow(int rankIndex, Rank rank, BuildContext context) {
-    return InkWell(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Row(children: [
-          Expanded(
-            flex: 1,
-            child: Text(RankCalculator.getRank(rankIndex)
-              .toString()),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 3,
-            child: Text(rank.username),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 1,
-            child: Text(rank.totalPoints.toString()),
-          ),
-        ]),
-      ),
-      onTap: () => Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) {
-          return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
-            _cubit.contest,
-            rank.username,
-            _cubit.excerpt,
-          ));
-        },
-      )),
     );
   }
 
