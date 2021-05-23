@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
@@ -209,7 +210,18 @@ class TeamManager extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle2,
               ),
               SizedBox(height: 5),
-              Text(playerRole),
+              Row(
+                children: [
+                  Image.asset(
+                    RoleImageFinder.getRoleImage(playerRole),
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 5),
+                  Text(playerRole),
+                ],
+              ),
               SizedBox(height: 5),
               Text('${_cubit.contest.playersCredits[i]} Credits'),
               SizedBox(height: 5),

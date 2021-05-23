@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/report.dart';
@@ -65,27 +66,11 @@ class PlayerPointsDetails extends StatelessWidget {
 
   ClipRRect getPlayerPointsSummary() {
     int teamIndex;
-    String roleImage = 'lib/resources/images/';
 
     if(_playerIndex < _contest.team1TotalPlayers) {
       teamIndex = 0;
     } else {
       teamIndex = 1;
-    }
-
-    switch(_contest.playersRoles[_playerIndex]) {
-      case BATSMAN:
-        roleImage += 'bat.png';
-        break;
-      case BOWLER:
-        roleImage += 'ball.png';
-        break;
-      case ALL_ROUNDER:
-        roleImage += 'bat-and-ball.png';
-        break;
-      case WICKET_KEEPER:
-        roleImage += 'wicket-keeper.jpg';
-        break;
     }
 
     return ClipRRect(
@@ -109,29 +94,21 @@ class PlayerPointsDetails extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    _contest.teamsNames[teamIndex],
-                    style: TextStyle(fontSize: 12),    
-                  ),
-                ),
+                Expanded(child: Text(_contest.teamsNames[teamIndex])),
               ],
             ),
             SizedBox(height: 5),
             Row(
               children: [
                 Image.asset(
-                  roleImage,
+                  RoleImageFinder
+                    .getRoleImage(_contest.playersRoles[_playerIndex]),
                   width: 20,
                   height: 20,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    _contest.playersRoles[_playerIndex],
-                    style: TextStyle(fontSize: 12),    
-                  ),
+                Expanded(child: Text(_contest.playersRoles[_playerIndex]),
                 ),
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/player_points_details.dart';
@@ -99,7 +100,20 @@ class FantasyPlayerPoints extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_cubit.contest.playersRoles[playerIndex]),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Image.asset(
+                      RoleImageFinder
+                        .getRoleImage(_cubit.contest.playersRoles[playerIndex]),
+                      width: 20,
+                      height: 20,
+                      fit: BoxFit.cover,
+                    ),
+                    SizedBox(width: 5),
+                    Text(_cubit.contest.playersRoles[playerIndex]),
+                  ],
+                ),
                 SizedBox(height: 5),
                 Row(
                   children: [
@@ -107,9 +121,10 @@ class FantasyPlayerPoints extends StatelessWidget {
                       _cubit.excerpt.teamImages[teamIndex],
                       width: 20,
                       height: 20,
+                      fit: BoxFit.cover,
                     ),
                     SizedBox(width: 5),
-                    Text(_cubit.contest.teamsNames[teamIndex]),
+                    Expanded(child: Text(_cubit.contest.teamsNames[teamIndex])),
                   ],
                 ),
               ],

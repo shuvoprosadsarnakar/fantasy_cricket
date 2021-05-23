@@ -1,4 +1,5 @@
 import 'package:fantasy_cricket/helpers/ranking_maker.dart';
+import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/fantasy_player_points_cubit.dart' as fppCubit;
@@ -184,7 +185,7 @@ class MatchLeaderboard extends StatelessWidget {
 
     for(int i = 0; i < totalPlayers; i++) {
       if(i == _cubit.contest.team1TotalPlayers) {
-        pointsListTiles.add(SizedBox(height: 10));
+        pointsListTiles.add(SizedBox(height: 20));
         pointsListTiles.add(ListTile(
           leading: Image.network(
             _cubit.excerpt.teamImages[1],
@@ -209,7 +210,18 @@ class MatchLeaderboard extends StatelessWidget {
           backgroundImage: NetworkImage(_cubit.contest.playerPhotos[i] ?? ''),
         ),
         title: Text(_cubit.contest.playersNames[i]),
-        subtitle: Text(_cubit.contest.playersRoles[i]),
+        subtitle: Row(
+          children: [
+            Image.asset(
+              RoleImageFinder.getRoleImage(_cubit.contest.playersRoles[i]),
+              width: 20,
+              height: 20,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 5),
+            Expanded(child: Text(_cubit.contest.playersRoles[i])),
+          ],
+        ),
         trailing: Text((_cubit.contest.playersPoints.isNotEmpty
           ? _cubit.contest.playersPoints[i] : 0).toString()),
         onTap: () => Navigator.push(context, MaterialPageRoute(
