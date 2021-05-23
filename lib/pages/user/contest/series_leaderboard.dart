@@ -1,4 +1,6 @@
+import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/helpers/ranking_maker.dart';
+import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
@@ -64,10 +66,32 @@ class SeriesLeaderboard extends StatelessWidget {
     int userRankIndex = _cubit.series.ranks.indexWhere((Rank rank) {
       return _cubit.user.username == rank.username;
     });
+    int userChips;
+
+    int totalContestants = _cubit.series.ranks.length;
+    List<ListTile> rankingListTiles = <ListTile>[];
+
+    // set [rankingListTiles]
+    _cubit.series.chipsDistributes.forEach((Distribute distribute) {
+      if(userRankIndex >= RankingMaker.getDistributeFromIndex(distribute.from) 
+        && userRankIndex < distribute.to) userChips = distribute.chips;
+      
+      for(int i = RankingMaker.getDistributeFromIndex(distribute.from); 
+        i < distribute.to && i < totalContestants; i++) 
+      {
+        rankingListTiles.add(ListTile(
+          leading: Text(RankingMaker.getRank(i).toString()),
+          title: Text(_cubit.series.ranks[i].username),
+          subtitle: Text(distribute.chips.toString() + ' Chips'),
+          trailing: Text(_cubit.series.ranks[i].totalPoints.toString()),
+        ));
+      }
+    });
 
     return ListView(
       padding: Paddings.pagePadding,
       children: [
+        // number of total contestants
         Row(
           children: [
             Icon(Icons.people),
@@ -101,57 +125,29 @@ class SeriesLeaderboard extends StatelessWidget {
         Divider(),
 
         // user's ranking
-        if(userRankIndex != -1) Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Row(children: [
-            Expanded(
-              flex: 1,
-              child: Text(RankingMaker.getRank(userRankIndex)
-                .toString()),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 3,
-              child: Text(_cubit.user.username),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              flex: 1,
-              child: Text(_cubit.series.ranks[userRankIndex].totalPoints
-                .toString()),
-            ),
-          ]),
+        if(userRankIndex != -1) ListTile(
+          leading: Text(RankingMaker.getRank(userRankIndex).toString()),
+          title: Text(_cubit.series.ranks[userRankIndex].username),
+          subtitle: Text(userChips.toString() + ' Chips'),
+          trailing: Text(_cubit.series.ranks[userRankIndex].totalPoints
+            .toString()),
         ),
-        if(userRankIndex != -1) Divider(color: Colors.grey),
+        if(userRankIndex != -1) Divider(
+          color: Colors.grey.shade700,
+          height: 1,  
+        ),
 
         // all rankings including the user
         ListView.builder(
           shrinkWrap: true,
-          itemCount: _cubit.series.ranks.length,
+          itemCount:totalContestants,
           itemBuilder: (BuildContext context, int i) {
-            return Column(children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Row(children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text(RankingMaker.getRank(i).toString()),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    flex: 3,
-                    child: Text(_cubit.series.ranks[i].username),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    flex: 1,
-                    child: Text(_cubit.series.ranks[i].totalPoints
-                      .toString()),
-                  ),
-                ]),
-              ),
-              Divider(),
-            ]);
+            return Column(
+              children: [
+                rankingListTiles[i],
+                Divider(height: 1),
+              ],
+            );
           },
         ),
       ],
@@ -172,8 +168,9 @@ class SeriesLeaderboard extends StatelessWidget {
             Expanded(child: Text(excerpt.startTime.toDate().toString()
               .substring(0, 16))),
             SizedBox(width: 5),
-            Expanded(child: Text(excerpt.no.toString() + getNoSuffix(excerpt.no) +
-              ' ' + excerpt.type)),
+            Expanded(child: Text(excerpt.no.toString() + 
+              NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' + 
+              excerpt.type)),
             SizedBox(width: 5),
             Expanded(child: Text(excerpt.teamsNames[0] + ' vs ' + 
               excerpt.teamsNames[1])),
@@ -226,19 +223,6 @@ class SeriesLeaderboard extends StatelessWidget {
         Column(children: matchWidgets),
       ],
     );
-  }
-
-  String getNoSuffix(int no) {
-    switch(no % 10) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-       return 'rd';
-      default:
-        return 'th';
-    }
   }
 
   Column getSeriesInfo() {

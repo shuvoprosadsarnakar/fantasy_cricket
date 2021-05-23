@@ -152,7 +152,7 @@ class MatchLeaderboard extends StatelessWidget {
           // all rankings including the user
           ListView.builder(
             shrinkWrap: true,
-            itemCount: rankingListTiles.length,
+            itemCount: totalContestants,
             itemBuilder: (BuildContext context, int i) {
               return Column(
                 children: [
