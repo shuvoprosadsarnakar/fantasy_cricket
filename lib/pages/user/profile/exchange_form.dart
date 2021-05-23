@@ -151,9 +151,10 @@ class ExchangeForm extends StatelessWidget {
           String snackBarText;
 
           if(_cubit.state == CubitState.failed) {
-            snackBarText = 'Failed to apply for chips exchange, try again.';
+            snackBarText 
+              = 'Failed to request for chips exchange, please try again.';
           } else {
-            snackBarText = 'Chips exchange applied successfully.';
+            snackBarText = 'Chips exchange requested successfully.';
             Navigator.pop(context);
           }
 

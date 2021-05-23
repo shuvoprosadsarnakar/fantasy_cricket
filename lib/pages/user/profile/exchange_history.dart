@@ -6,6 +6,7 @@ import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class ExchangeHistory extends StatelessWidget {
   final ExchangeHistoryCubit _cubit;
@@ -47,8 +48,8 @@ class ExchangeHistory extends StatelessWidget {
         SizedBox(height: 5),
         Text('Mobile: ${exchange.mobile}'),
         SizedBox(height: 5),
-        Text('Date & Time: ' + 
-          exchange.dateTime.toDate().toString().substring(0, 16)),
+        Text('Requested on: ' + 
+          DateFormat.yMMMd().add_jm().format(exchange.dateTime.toDate())),
         SizedBox(height: 5),
         Row(
           children: [
@@ -56,9 +57,9 @@ class ExchangeHistory extends StatelessWidget {
             _getExchangeStatus(exchange.status),
           ],
         ),
-        SizedBox(height: 5),
-        Text('Details: ${exchange.details}'),
-        Divider(),
+        if(exchange.details.isNotEmpty) SizedBox(height: 5),
+        if(exchange.details.isNotEmpty) Text('Details: ${exchange.details}'),
+        Divider(height: 20),
       ],
     );
   }
@@ -67,7 +68,7 @@ class ExchangeHistory extends StatelessWidget {
     Color textColor;
 
     if(exchangeStatus == ExchangeStatuses.processing) {
-      textColor = Colors.yellow;
+      textColor = Colors.yellow.shade700;
     } else if(exchangeStatus == ExchangeStatuses.successfull) {
       textColor = Colors.green;
     } else {
