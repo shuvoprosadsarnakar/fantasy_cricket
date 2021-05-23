@@ -123,8 +123,29 @@ class ContestDetails extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('${_cubit.excerpt.totalWinners} Winners'),
-          Text('${_cubit.excerpt.totalChips} Chips'),
+          Row(
+            children: [
+              Image.asset(
+                'lib/resources/images/winner.png',
+                width: 20,
+                height: 20,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(width: 8),
+              Text('${_cubit.excerpt.totalWinners} Winners'),
+            ],
+          ),
+          Row(
+            children: [
+              Image.asset(
+                'lib/resources/images/coins.png',
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+              Text('${_cubit.excerpt.totalChips} Chips'),
+            ],
+          ),
         ],
       ),
       Divider(color: Colors.grey),
@@ -161,9 +182,30 @@ class ContestDetails extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('${_cubit.series.chipsDistributes.last.to} Winners'),
-          Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)
-            .toString() + ' Chips'),
+          Row(
+            children: [
+              Image.asset(
+                'lib/resources/images/winner.png',
+                width: 20,
+                height: 20,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(width: 8),
+              Text('${_cubit.series.chipsDistributes.last.to} Winners'),
+            ],
+          ),
+          Row(
+            children: [
+              Image.asset(
+                'lib/resources/images/coins.png',
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+              Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)
+                .toString() + ' Chips'),
+            ],
+          ),
         ],
       ),
       Divider(color: Colors.grey),
