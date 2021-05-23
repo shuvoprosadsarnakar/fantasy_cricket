@@ -3,6 +3,7 @@ import 'package:fantasy_cricket/models/player.dart';
 import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/repositories/player_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
+import 'package:fantasy_cricket/resources/player_roles.dart';
 import 'package:flutter/material.dart';
 
 // this enum will be used by TeamAddEditCubit() cubit to rebuild ui
@@ -129,6 +130,8 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
 
+      sortPlayersByRole();
+
       // after emitting this state a progress animation will be shown on the ui
       emit(AddEditStatus.loading);
 
@@ -162,6 +165,69 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
       }
     } else {
       emit(AddEditStatus.validationError);
+    }
+  }
+
+  void sortPlayersByRole() {
+    List<String> batsmanNames = <String>[];
+    List<String> batsmanImages = <String>[];
+    List<String> bowlerNames = <String>[];
+    List<String> bowlerImages = <String>[];
+    List<String> allRounderNames = <String>[];
+    List<String> allRounderImages = <String>[];
+    List<String> wicketKeeperNames = <String>[];
+    List<String> wicketKeeperImages = <String>[];
+    int totalPlayers = team.playersNames.length;
+
+    for(int i = 0; i < totalPlayers; i++) {
+      switch(team.playersRoles[i]) {
+        case BATSMAN:
+          batsmanNames.add(team.playersNames[i]);
+          batsmanImages.add(team.playerPhotos[i]);
+          break;
+        case BOWLER:
+          bowlerNames.add(team.playersNames[i]);
+          bowlerImages.add(team.playerPhotos[i]);
+          break;
+        case ALL_ROUNDER:
+          allRounderNames.add(team.playersNames[i]);
+          allRounderImages.add(team.playerPhotos[i]);
+          break;
+        case WICKET_KEEPER:
+          wicketKeeperNames.add(team.playersNames[i]);
+          wicketKeeperImages.add(team.playerPhotos[i]);
+          break;
+      }
+    }
+
+    int totalBatsmans = batsmanNames.length;
+    int totalBowlers = bowlerNames.length;
+    int totalAllRounders = allRounderNames.length;
+    int totalWicketKeepers = wicketKeeperNames.length;
+    int playerIndex = 0;
+
+    for(int i = 0; i < totalBatsmans; i++, playerIndex++) {
+      team.playersNames[playerIndex] = batsmanNames[i];
+      team.playerPhotos[playerIndex] = batsmanImages[i];
+      team.playersRoles[playerIndex] = BATSMAN;
+    }
+
+    for(int i = 0; i < totalWicketKeepers; i++, playerIndex++) {
+      team.playersNames[playerIndex] = wicketKeeperNames[i];
+      team.playerPhotos[playerIndex] = wicketKeeperImages[i];
+      team.playersRoles[playerIndex] = WICKET_KEEPER;
+    }
+
+    for(int i = 0; i < totalAllRounders; i++, playerIndex++) {
+      team.playersNames[playerIndex] = allRounderNames[i];
+      team.playerPhotos[playerIndex] = allRounderImages[i];
+      team.playersRoles[playerIndex] = ALL_ROUNDER;
+    }
+
+    for(int i = 0; i < totalBowlers; i++, playerIndex++) {
+      team.playersNames[playerIndex] = bowlerNames[i];
+      team.playerPhotos[playerIndex] = bowlerImages[i];
+      team.playersRoles[playerIndex] = BOWLER;
     }
   }
 }
