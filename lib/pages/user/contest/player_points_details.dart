@@ -4,6 +4,7 @@ import 'package:fantasy_cricket/models/report.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/helpers/points_calculator.dart';
+import 'package:fantasy_cricket/resources/player_roles.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPointsDetails extends StatelessWidget {
@@ -64,6 +65,7 @@ class PlayerPointsDetails extends StatelessWidget {
 
   ClipRRect getPlayerPointsSummary() {
     int teamIndex;
+    String roleImage = 'lib/resources/images/';
 
     if(_playerIndex < _contest.team1TotalPlayers) {
       teamIndex = 0;
@@ -71,28 +73,67 @@ class PlayerPointsDetails extends StatelessWidget {
       teamIndex = 1;
     }
 
+    switch(_contest.playersRoles[_playerIndex]) {
+      case BATSMAN:
+        roleImage += 'bat.png';
+        break;
+      case BOWLER:
+        roleImage += 'ball.png';
+        break;
+      case ALL_ROUNDER:
+        roleImage += 'bat-and-ball.png';
+        break;
+      case WICKET_KEEPER:
+        roleImage += 'wicket-keeper.jpg';
+        break;
+    }
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(_contest.playerPhotos[_playerIndex] ?? ''),
+          backgroundImage: NetworkImage(_contest.playerPhotos[_playerIndex] ?? 
+            ''),
         ),
         tileColor: ColorPallate.mercury,
         title: Text(_contest.playersNames[_playerIndex]),
-        subtitle: Row(
+        subtitle: Column(
           children: [
-            Image.network(
-              _excerpt.teamImages[teamIndex],
-              width: 20,
-              height: 20,
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Image.network(
+                  _excerpt.teamImages[teamIndex],
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    _contest.teamsNames[teamIndex],
+                    style: TextStyle(fontSize: 12),    
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                _contest.teamsNames[teamIndex] + ' | ' +
-                  _contest.playersRoles[_playerIndex],
-                style: TextStyle(fontSize: 12),    
-              ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Image.asset(
+                  roleImage,
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    _contest.playersRoles[_playerIndex],
+                    style: TextStyle(fontSize: 12),    
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -100,6 +141,7 @@ class PlayerPointsDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Points'),
+            SizedBox(height: 5),
             Text((_contest.playersPoints.isNotEmpty ?
               _contest.playersPoints[_playerIndex] : 0).toString()),
           ],
