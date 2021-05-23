@@ -1,3 +1,5 @@
+import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
+import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/pages/home/tabs/first_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
@@ -12,7 +14,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home>{
 
 final RewardedAd myRewarded = RewardedAd(
   adUnitId: 'ca-app-pub-3940256099942544/5224354917',
@@ -54,7 +56,7 @@ final RewardedAd myRewarded = RewardedAd(
       ),
       body: IndexedStack(
         index: _selectedPage,
-        children: [FirstTab(), SecondTab(), ProfileTab()],
+        children: [MyContests(RunningContestsCubit()), SecondTab(), ProfileTab()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
