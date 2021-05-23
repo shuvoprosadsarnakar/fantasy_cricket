@@ -5,7 +5,6 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

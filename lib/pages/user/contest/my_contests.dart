@@ -9,17 +9,24 @@ import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyContests extends StatelessWidget {
+class MyContests extends StatefulWidget {
   final RunningContestsCubit _cubit;
 
   MyContests(this._cubit);
 
   @override
+  _MyContestsState createState() => _MyContestsState();
+}
+
+class _MyContestsState extends State<MyContests> with AutomaticKeepAliveClientMixin<MyContests>{
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder(
-      bloc: _cubit,
+      bloc: widget._cubit,
       builder: (BuildContext context, CubitState state) {
         if (state == CubitState.loading) {
           return Loading();
@@ -59,9 +66,9 @@ class MyContests extends StatelessWidget {
     final List<InkWell> listItems = <InkWell>[];
 
     // init [runningContestsExcerpts] & [runningContestsSerieses] variables
-    _cubit.notEndedSerieses.forEach((Series series) {
+    widget._cubit.notEndedSerieses.forEach((Series series) {
       series.matchExcerpts.forEach((Excerpt excerpt) {
-        if (_cubit.user.contestIds.contains(excerpt.id)) {
+        if (widget._cubit.user.contestIds.contains(excerpt.id)) {
           runningContestsExcerpts.add(excerpt);
           runningContestsSerieses.add(series);
         }
@@ -82,7 +89,7 @@ class MyContests extends StatelessWidget {
             return ContestDetails(cdCubit.ContestDetialsCubit(
               runningContestsSerieses[i],
               runningContestsExcerpts[i],
-              _cubit.user,
+              widget._cubit.user,
             ));
           },
         )),
@@ -91,4 +98,7 @@ class MyContests extends StatelessWidget {
 
     return listItems;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
