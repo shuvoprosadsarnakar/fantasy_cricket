@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
+import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/report.dart';
 import 'package:fantasy_cricket/models/series.dart';
@@ -173,6 +175,7 @@ class ContestEnderCubit extends Cubit<CubitState> {
     int totalContestents = contest.ranks.length;
     int totalWinners = contest.chipsDistributes.last.to;
     int totalDistributes = contest.chipsDistributes.length;
+    Excerpt excerpt = series.matchExcerpts[excerptIndex];
 
     // get the contest winners
     for(int i = 0; i < totalWinners && i < totalContestents; i++) {
@@ -192,7 +195,9 @@ class ContestEnderCubit extends Cubit<CubitState> {
         contestWinners[j].remainingChips += distribute.chips;
         contestWinners[j].earningHistory.add(WinInfo(
           date: Timestamp.fromDate(DateTime.now()),
-          details: 'Match Prize',
+          details: excerpt.no.toString() 
+            + NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' 
+            + excerpt.type + ', ' + series.name,
           rank: j + 1,
           rewards: distribute.chips,
         ));
@@ -231,15 +236,17 @@ class ContestEnderCubit extends Cubit<CubitState> {
       for(int j = distribute.from - 1;
         j < distribute.to && j < totalContestents; j++)
       {
+        WinInfo winInfo = WinInfo(
+            date: Timestamp.fromDate(DateTime.now()),
+            details: series.name,
+            rank: j + 1,
+            rewards: distribute.chips,
+          );
+
         if(seriesWinners[j] != null) {
           seriesWinners[j].earnedChips += distribute.chips;
           seriesWinners[j].remainingChips += distribute.chips;
-          seriesWinners[j].earningHistory.add(WinInfo(
-            date: Timestamp.fromDate(DateTime.now()),
-            details: 'Series Prize',
-            rank: j + 1,
-            rewards: distribute.chips,
-          ));
+          seriesWinners[j].earningHistory.add(winInfo);
         } else {
           int contestWinnerIndex = contestWinners.indexWhere((User user) {
             return user.username == series.ranks[j].username;
@@ -247,12 +254,7 @@ class ContestEnderCubit extends Cubit<CubitState> {
 
           contestWinners[contestWinnerIndex].earnedChips += distribute.chips;
           contestWinners[contestWinnerIndex].remainingChips += distribute.chips;
-          contestWinners[contestWinnerIndex].earningHistory.add(WinInfo(
-            date: Timestamp.fromDate(DateTime.now()),
-            details: 'Series Prize',
-            rank: j + 1,
-            rewards: distribute.chips,
-          ));
+          contestWinners[contestWinnerIndex].earningHistory.add(winInfo);
         }
       }
     }
