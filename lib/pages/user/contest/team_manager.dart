@@ -44,7 +44,7 @@ class TeamManager extends StatelessWidget {
                       getTeam1Players(context),
                       SizedBox(height: 30),
                       getTeam2Players(context),
-                      SizedBox(height: 20),
+                      SizedBox(height: 30),
                       if(_cubit.fantasy.playerNames.length == 11 &&
                         _cubit.fantasy.captain != null && 
                         _cubit.fantasy.viceCaptain != null) 
@@ -113,7 +113,7 @@ class TeamManager extends StatelessWidget {
     
     for(int i = 0; i < _cubit.contest.team1TotalPlayers; i++) {
       playersRows.add(getPlayerRow(context, i));
-      playersRows.add(Divider());
+      if(i != _cubit.contest.team1TotalPlayers - 1) playersRows.add(Divider());
     }
 
     return Column(
@@ -135,7 +135,7 @@ class TeamManager extends StatelessWidget {
 
     for(int i = _cubit.contest.team1TotalPlayers; i < totalPlayers; i++) {
       playersRows.add(getPlayerRow(context, i));
-      playersRows.add(Divider());
+      if(i != totalPlayers - 1) playersRows.add(Divider());
     }
 
     return Column(
