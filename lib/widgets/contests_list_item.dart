@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ContestsListItem extends StatelessWidget {
   final Excerpt _excerpt;
@@ -83,7 +84,7 @@ class ContestsListItem extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 7),
-        Text('${_excerpt.startTime.toDate().toString().substring(0, 16)}'),
+        Text(DateFormat.yMMMd().add_jm().format(_excerpt.startTime.toDate())),
       ],
     );
   }

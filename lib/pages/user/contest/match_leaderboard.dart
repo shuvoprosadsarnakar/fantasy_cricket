@@ -11,6 +11,7 @@ import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class MatchLeaderboard extends StatelessWidget {
   final MatchLeaderBoardCubit _cubit;
@@ -292,8 +293,8 @@ class MatchLeaderboard extends StatelessWidget {
                   Text(matchStatus),
                   SizedBox(height: 5),
                   Text(
-                    _cubit.contest.startTime.toDate().toString()
-                      .substring(0, 16),
+                    DateFormat.yMMMd().add_jm().format(_cubit.contest.startTime
+                      .toDate()),
                     textAlign: TextAlign.center,
                   ),
                 ],

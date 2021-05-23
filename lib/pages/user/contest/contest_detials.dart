@@ -14,6 +14,7 @@ import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class ContestDetails extends StatelessWidget {
   final ContestDetialsCubit _cubit;
@@ -75,9 +76,8 @@ class ContestDetails extends StatelessWidget {
             SizedBox(height: 7),
             Text(_cubit.series.name, textAlign: TextAlign.center),
             SizedBox(height: 7),
-            Text(
-              '${_cubit.excerpt.startTime.toDate().toString().substring(0, 16)}'
-            ),
+            Text(DateFormat.yMMMd().add_jm().format(_cubit.excerpt.startTime
+              .toDate())),
           ]),
         ),
         SizedBox(width: 10),

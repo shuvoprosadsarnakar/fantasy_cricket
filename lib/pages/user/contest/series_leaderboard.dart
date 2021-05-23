@@ -11,6 +11,7 @@ import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class SeriesLeaderboard extends StatelessWidget {
   final SeriesLeaderboardCubit _cubit;
@@ -165,8 +166,8 @@ class SeriesLeaderboard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: Text(excerpt.startTime.toDate().toString()
-              .substring(0, 16))),
+            Expanded(child: Text(DateFormat.yMMMd().add_jm().format(excerpt
+              .startTime.toDate()))),
             SizedBox(width: 5),
             Expanded(child: Text(excerpt.no.toString() + 
               NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' + 
