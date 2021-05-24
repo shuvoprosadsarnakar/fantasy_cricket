@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:fantasy_cricket/pages/series/bloc/series_event.dart';
 import 'package:fantasy_cricket/pages/series/bloc/series_state.dart';
+import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:fantasy_cricket/repositories/team_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
@@ -26,21 +27,21 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
     if (event is SeriesFetched && !_hasReachedMax(currentState)) {
       try {
         if (currentState is SeriesInitial) {
-          final teams = await TeamRepo.fetchTeams(0, limit);
-          if (teams.length < limit)
-            yield SeriesSuccess(series: teams, hasReachedMax: true);
+          final series = await SeriesRepo.fetchSeries(0, limit);
+          if (series.length < limit)
+            yield SeriesSuccess(series: series, hasReachedMax: true);
           else
-            yield SeriesSuccess(series: teams, hasReachedMax: false);
+            yield SeriesSuccess(series: series, hasReachedMax: false);
           return;
         }
         if (currentState is SeriesSuccess) {
-          // final teams = await TeamRepo.fetchTeams(1, limit);
-          // if (teams.length < limit)
-          //   yield SeriesSuccess(
-          //       series: currentState.s + teams, hasReachedMax: true);
-          // else
-          //   yield SeriesSuccess(
-          //       series: currentState.teams + teams, hasReachedMax: false);
+          final series = await SeriesRepo.fetchSeries(1, limit);
+          if (series.length < limit)
+            yield SeriesSuccess(
+                series: currentState.series + series, hasReachedMax: true);
+          else
+            yield SeriesSuccess(
+                series: currentState.series + series, hasReachedMax: false);
         }
       } catch (error) {
         print(error);
@@ -50,28 +51,29 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
     if (event is SeriesSearched) {
       print("Team searched bloc");
       if (currentState is SeriesSuccess) {
-        //final teams =await TeamRepo.searchTeams(event.searchKeyWord, limit);
-        // if (teams != null) {
-        //   if (teams.length < limit)
-        //     yield SeriesSuccess(series: teams, hasReachedMax: true);
-        //   else
-        //     yield SeriesSuccess(series: teams, hasReachedMax: false);
-        // }
+        final series =await SeriesRepo.searchTeams(event.searchKeyWord, limit);
+        if (series != null) {
+          if (series.length < limit)
+            yield SeriesSuccess(series: series, hasReachedMax: true);
+          else
+            yield SeriesSuccess(series: series, hasReachedMax: false);
+        }
       }
     }
     if (event is SeriesSearchClosed) {
-      //    final teams = await TeamRepo.fetchTeams(0, limit);
-      //       if (teams.length < limit)
-      //         yield SeriesSuccess(teams: teams, hasReachedMax: true);
-      //       else
-      //         yield SeriesSuccess(teams: teams, hasReachedMax: false);
-      // }
+         final series = await SeriesRepo.fetchSeries(0, limit);
+            if (series.length < limit)
+              yield SeriesSuccess(series: series, hasReachedMax: true);
+            else
+              yield SeriesSuccess(series: series, hasReachedMax: false);
+      }
       if (event is SeriesDelete) {
-        //TeamRepo.deleteTeam(event.team);
+        SeriesRepo.deleteSeries(event.series);
       }
     }
   }
 
   bool _hasReachedMax(SeriesState state) =>
       state is SeriesSuccess && state.hasReachedMax;
-}
+
+

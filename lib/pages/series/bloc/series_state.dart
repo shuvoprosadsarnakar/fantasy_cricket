@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
 
 abstract class SeriesState extends Equatable {
@@ -13,7 +14,7 @@ class SeriesInitial extends SeriesState {}
 class SeriesFailure extends SeriesState {}
 
 class SeriesSuccess extends SeriesState {
-  final List<Team> series;
+  final List<Series> series;
   final bool hasReachedMax;
 
   const SeriesSuccess({
@@ -22,11 +23,11 @@ class SeriesSuccess extends SeriesState {
   });
 
   SeriesSuccess copyWith({
-    List<Team> teams,
+    List<Series> series,
     bool hasReachedMax,
   }) {
     return SeriesSuccess(
-      series: teams ?? this.series,
+      series: series ?? this.series,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }

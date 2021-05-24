@@ -31,6 +31,16 @@ class SeriesRepo {
     await _seriesCollection.doc(series.id).update(series.toMap());
   }
 
+    static Future<void> deleteSeries(Series series) async {
+    await _seriesCollection.doc(series.id).delete().whenComplete(() {
+      print("series deleted");
+      return true;
+    }).onError((error, stackTrace) {
+      print(error);
+      return false;
+    });
+  }
+
   static Future<void> assignNotEndedSerieses(List<Series> notEndedSerieses) 
     async 
   {
