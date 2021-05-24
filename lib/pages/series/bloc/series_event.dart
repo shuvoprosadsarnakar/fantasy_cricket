@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/team.dart';
 
 abstract class SeriesEvent extends Equatable {
@@ -20,7 +21,7 @@ class SeriesSearched extends SeriesEvent {
 }
 
 class SeriesDelete extends SeriesEvent {
-  final Team series;
+  final Series series;
 
   SeriesDelete(this.series);
 

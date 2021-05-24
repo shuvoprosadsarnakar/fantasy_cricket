@@ -110,38 +110,49 @@ class _TeamListState extends State<TeamList> {
     );
   }
 
-  Container gridCard(TeamSuccess state, int index, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: ColorPallate.mercury,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: 80,
-            width: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.fitHeight,
-                image: NetworkImage(
-                  state.teams[index].photo ?? defaultTeamAvatar,
+  Widget gridCard(TeamSuccess state, int index, BuildContext context) {
+    Team t = state.teams[index];
+    return InkResponse(
+            enableFeedback: true,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TeamAddEdit(TeamAddEditCubit(t))),
+        );
+      },
+          child: Container(
+        margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: ColorPallate.mercury,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: NetworkImage(
+                    state.teams[index].photo ?? defaultTeamAvatar,
+                  ),
                 ),
               ),
             ),
-          ),
-          Text(
-            state.teams[index].name,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          ),
-          // Text(
-          //   "Players: " + state.teams[index].playersNames.length.toString(),
-          //   style: Theme.of(context).textTheme.bodyText1,
-          // ),
-        ],
+            Text(
+              state.teams[index].name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            // Text(
+            //   "Players: " + state.teams[index].playersNames.length.toString(),
+            //   style: Theme.of(context).textTheme.bodyText1,
+            // ),
+          ],
+        ),
       ),
     );
   }
