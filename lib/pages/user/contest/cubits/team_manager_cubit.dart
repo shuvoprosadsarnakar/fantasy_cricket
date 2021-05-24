@@ -144,9 +144,9 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   Future<void> addOrUpdateFantasy() async {
-    emit(CubitState.loading);
     Series series;
 
+    emit(CubitState.loading);
     try {
       series = await SeriesRepo.getSeriesById(contest.seriesId);
     } catch(error) {
@@ -165,6 +165,10 @@ class TeamManagerCubit extends Cubit<CubitState> {
     {
       emit(CubitState.timeOver);
     } else {
+      // sort players by role so that at the time watching fantasy players 
+      // points players reamin sorted by their role
+      sortPlayersByRole();
+
       if(fantasy.id == null) {
         await _addFantasy();
       } else {
@@ -203,6 +207,56 @@ class TeamManagerCubit extends Cubit<CubitState> {
       return (contest.playerPickedCounts[playerIndex] / totalContestants) * 100;
     } else {
       return 0;
+    }
+  }
+
+  void sortPlayersByRole() {
+    List<String> batsmanNames = <String>[];
+    List<String> bowlerNames = <String>[];
+    List<String> allRounderNames = <String>[];
+    List<String> wicketKeeperNames = <String>[];
+
+    for(int i = 0; i < 11; i++) {
+      String playerName = fantasy.playerNames[i];
+      int playerIndex = contest.playersNames.indexOf(playerName);
+      String playerRole = contest.playersRoles[playerIndex]; 
+
+      switch(playerRole) {
+        case BATSMAN:
+          batsmanNames.add(playerName);
+          break;
+        case BOWLER:
+          bowlerNames.add(playerName);
+          break;
+        case ALL_ROUNDER:
+          allRounderNames.add(playerName);
+          break;
+        case WICKET_KEEPER:
+          wicketKeeperNames.add(playerName);
+          break;
+      }
+    }
+
+    int totalBatsmans = batsmanNames.length;
+    int totalBowlers = bowlerNames.length;
+    int totalAllRounders = allRounderNames.length;
+    int totalWicketKeepers = wicketKeeperNames.length;
+    int playerIndex = 0;
+
+    for(int i = 0; i < totalBatsmans; i++, playerIndex++) {
+      fantasy.playerNames[playerIndex] = batsmanNames[i];
+    }
+
+    for(int i = 0; i < totalWicketKeepers; i++, playerIndex++) {
+      fantasy.playerNames[playerIndex] = wicketKeeperNames[i];
+    }
+
+    for(int i = 0; i < totalAllRounders; i++, playerIndex++) {
+      fantasy.playerNames[playerIndex] = allRounderNames[i];
+    }
+
+    for(int i = 0; i < totalBowlers; i++, playerIndex++) {
+      fantasy.playerNames[playerIndex] = bowlerNames[i];
     }
   }
 }

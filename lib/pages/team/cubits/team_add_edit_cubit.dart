@@ -129,7 +129,9 @@ class TeamAddEditCubit extends Cubit<AddEditStatus> {
   Future<void> addUpdateTeam() async {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-
+      
+      // sort players by role so that at the time creating fantasy team players 
+      // reamin sorted by their role
       sortPlayersByRole();
 
       // after emitting this state a progress animation will be shown on the ui
