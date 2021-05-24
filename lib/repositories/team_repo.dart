@@ -56,14 +56,9 @@ abstract class TeamRepo {
   static Future<List<Team>> fetchTeams(int startIndex, int limit) async {
     if (startIndex == 0) {
       QuerySnapshot documentList = await _teamCollection
-          .orderBy("name")
-          .limit(limit)
-          .get(GetOptions(source: Source.cache));
-      if (documentList.docs.isEmpty)
-        await _teamCollection
             .orderBy("name")
             .limit(limit)
-            .get(GetOptions(source: Source.server));
+            .get();
       lastDocument = documentList.docs.last;
 
       print(documentList.docs.first.data());

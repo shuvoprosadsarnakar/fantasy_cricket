@@ -43,10 +43,7 @@ abstract class PlayerRepo {
 
   static Future<List<Player>> fetchPlayers(int startIndex, int limit) async {
     if (startIndex == 0) {
-      QuerySnapshot documentList =
-          await _playerCollection.orderBy("name").limit(limit).get(GetOptions(source: Source.cache));
-          if(documentList.docs.isEmpty)
-          await _playerCollection.orderBy("name").limit(limit).get(GetOptions(source: Source.server));
+      QuerySnapshot documentList = await _playerCollection.orderBy("name").limit(limit).get();
       lastDocument = documentList.docs.last;
 
       return documentList.docs

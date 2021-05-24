@@ -64,14 +64,9 @@ class SeriesRepo {
   static Future<List<Series>> fetchSeries(int startIndex, int limit) async {
     if (startIndex == 0) {
       QuerySnapshot documentList = await _seriesCollection
-          .orderBy("name")
-          .limit(limit)
-          .get(GetOptions(source: Source.cache));
-      if (documentList.docs.isEmpty)
-        await _seriesCollection
             .orderBy("name")
             .limit(limit)
-            .get(GetOptions(source: Source.server));
+            .get();
       lastDocument = documentList.docs.last;
 
       return documentList.docs

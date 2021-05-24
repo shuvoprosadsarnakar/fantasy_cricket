@@ -5,6 +5,7 @@ import 'package:fantasy_cricket/pages/player/bloc/player_event.dart';
 import 'package:fantasy_cricket/pages/player/cubits/player_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/player/player_add_edit.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/resources/strings/image_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -146,8 +147,6 @@ class BottomLoader extends StatelessWidget {
 
 class PostWidget extends StatelessWidget {
   final Player player;
-  final String defaultPhoto =
-      "https://cdn.iconscout.com/icon/free/png-512/football-player-1426973-1208513.png";
   const PostWidget({Key key, @required this.player}) : super(key: key);
 
   @override
@@ -158,7 +157,7 @@ class PostWidget extends StatelessWidget {
       child: ListTile(
           leading: CircleAvatar(
             backgroundColor: ColorPallate.mercury,
-            backgroundImage: NetworkImage(player.photo ?? defaultPhoto),
+            backgroundImage: NetworkImage(player.photo ?? defaultPlayerAvatar),
           ),
           title: Text(player.name ?? ""),
           subtitle: Text(player.role ?? ""),
