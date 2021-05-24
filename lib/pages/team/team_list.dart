@@ -82,21 +82,28 @@ class _TeamListState extends State<TeamList> {
                       child: Text('no teams'),
                     );
                   }
-                  return GridView.builder(
-                      controller: _scrollController,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                      itemCount: state.teams.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return gridCard(state, index, context);
-                      });
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                       _teamBloc..add(TeamSearchClosed());
+                      
+                    },
+                    child: GridView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: _scrollController,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        itemCount: state.teams.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return gridCard(state, index, context);
+                        }),
+                  );
                 }
               },
             ),
           ),
         ],
       ),
-            floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.push(
@@ -113,7 +120,7 @@ class _TeamListState extends State<TeamList> {
   Widget gridCard(TeamSuccess state, int index, BuildContext context) {
     Team t = state.teams[index];
     return InkResponse(
-            enableFeedback: true,
+      enableFeedback: true,
       onTap: () {
         Navigator.push(
           context,
@@ -121,7 +128,7 @@ class _TeamListState extends State<TeamList> {
               builder: (context) => TeamAddEdit(TeamAddEditCubit(t))),
         );
       },
-          child: Container(
+      child: Container(
         margin: EdgeInsets.fromLTRB(4, 4, 4, 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),

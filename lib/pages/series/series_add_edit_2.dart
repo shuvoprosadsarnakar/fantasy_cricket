@@ -248,6 +248,8 @@ class SeriesAddEdit2 extends StatelessWidget {
           String snackBarMsg;
 
           if (_cubit.state == AddEditStatus.updated) {
+            Navigator.pop(context);
+            Navigator.pop(context);
             snackBarMsg = 'Series is updated successfully.';
           } else if (_cubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';

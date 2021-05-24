@@ -185,8 +185,10 @@ class _TeamAddEditState extends State<TeamAddEdit> {
           String snackBarMsg;
 
           if (widget._cubit.state == AddEditStatus.added) {
+            Navigator.pop(context);
             snackBarMsg = 'Team added successfully.';
           } else if (widget._cubit.state == AddEditStatus.updated) {
+            Navigator.pop(context);
             snackBarMsg = 'Team updated successfully.';
           } else if (widget._cubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';

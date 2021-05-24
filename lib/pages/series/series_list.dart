@@ -83,14 +83,20 @@ class _SeriesListState extends State<SeriesList> {
                       child: Text('no series'),
                     );
                   }
-                  return GridView.builder(
-                      controller: _scrollController,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                      itemCount: state.series.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return gridCard(state, index, context);
-                      });
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      _seriesBloc..add(SeriesSearchClosed());
+                    },
+                    child: GridView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                        controller: _scrollController,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        itemCount: state.series.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return gridCard(state, index, context);
+                        }),
+                  );
                 }
               },
             ),
@@ -103,7 +109,8 @@ class _SeriesListState extends State<SeriesList> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>  SeriesAddEdit(SeriesAddEditCubit(Series()),false)),
+                builder: (context) =>
+                    SeriesAddEdit(SeriesAddEditCubit(Series()), false)),
           );
         },
       ),
@@ -119,7 +126,8 @@ class _SeriesListState extends State<SeriesList> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => SeriesAddEdit(SeriesAddEditCubit(s),false)),
+              builder: (context) =>
+                  SeriesAddEdit(SeriesAddEditCubit(s), false)),
         );
       },
       child: Container(
