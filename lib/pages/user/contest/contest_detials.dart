@@ -106,6 +106,10 @@ class ContestDetails extends StatelessWidget {
             style: TextStyle(fontSize: 18),  
           ),
           TextButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(8),
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
             child: Text(
               'Leaderboard',
               style: TextStyle(color: Theme.of(context).primaryColor),  
@@ -163,6 +167,10 @@ class ContestDetails extends StatelessWidget {
             style: TextStyle(fontSize: 18),  
           ),
           TextButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(8),
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
             child: Text(
               'Leaderboard',
               style: TextStyle(color: Theme.of(context).primaryColor),  
@@ -244,6 +252,8 @@ class ContestDetails extends StatelessWidget {
 
   TextButton _getJoinContestButton(BuildContext context) {
     String buttonText;
+
+    print(_cubit.user);
     
     if(_cubit.user.contestIds.contains(_cubit.excerpt.id)) {
       buttonText = 'Update Team';
