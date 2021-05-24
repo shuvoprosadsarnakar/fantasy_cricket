@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PlayerAddEdit extends StatelessWidget {
   // variable for managing state of this screen
   final PlayerAddEditCubit _playerAddEditCubit;
-  
+
   // role dropdown list for player role dropdown field
   final List<DropdownMenuItem<String>> _roleDropdownList = [];
 
@@ -34,7 +34,7 @@ class PlayerAddEdit extends StatelessWidget {
         } else {
           return Scaffold(
             appBar: AppBar(
-              title: Text(_playerAddEditCubit.player.id == null
+                title: Text(_playerAddEditCubit.player.id == null
                     ? 'Add Player'
                     : 'Update Player')),
             body: Form(
@@ -129,14 +129,16 @@ class PlayerAddEdit extends StatelessWidget {
       onPressed: () async {
         await _playerAddEditCubit.addUpdatePlayer();
 
-        // _playerAddEditCubit.state will be AddEditStatus.notValid  if form has 
+        // _playerAddEditCubit.state will be AddEditStatus.notValid  if form has
         // validation error
-        if(_playerAddEditCubit.state != AddEditStatus.notValid) {
+        if (_playerAddEditCubit.state != AddEditStatus.notValid) {
           String snackBarMsg;
 
           if (_playerAddEditCubit.state == AddEditStatus.added) {
+            Navigator.pop(context);
             snackBarMsg = 'Player added successfully.';
           } else if (_playerAddEditCubit.state == AddEditStatus.updated) {
+            Navigator.pop(context);
             snackBarMsg = 'Player updated successfully.';
           } else if (_playerAddEditCubit.state == AddEditStatus.failed) {
             snackBarMsg = 'Failed to perform task, please try again.';

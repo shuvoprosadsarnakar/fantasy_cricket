@@ -37,57 +37,53 @@ class _TeamListState extends State<TeamList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [],
         title: Text('Team List'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {},
-              )),
-              onSubmitted: (value) {
-                print(value);
-              },
-              onChanged: (value) {
-                print(value);
-                if (value.length > 0)
-                  _teamBloc.add(TeamSearched(value));
-                else
-                  _teamBloc.add(TeamSearchClosed());
-              },
+      body: RefreshIndicator(
+              onRefresh: () async { _teamBloc..add(TeamSearchClosed()); },
+              child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {},
+                )),
+                onSubmitted: (value) {
+                  print(value);
+                },
+                onChanged: (value) {
+                  print(value);
+                  if (value.length > 0)
+                    _teamBloc.add(TeamSearched(value));
+                  else
+                    _teamBloc.add(TeamSearchClosed());
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<TeamBloc, TeamState>(
-              // ignore: missing_return
-              builder: (context, state) {
-                if (state is TeamInitial) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is TeamFailure) {
-                  return Center(
-                    child: Text('failed to fetch Teams'),
-                  );
-                } else if (state is TeamSuccess) {
-                  if (state.teams.isEmpty) {
+            Expanded(
+              child: BlocBuilder<TeamBloc, TeamState>(
+                // ignore: missing_return
+                builder: (context, state) {
+                  if (state is TeamInitial) {
                     return Center(
-                      child: Text('no teams'),
+                      child: CircularProgressIndicator(),
                     );
-                  }
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                       _teamBloc..add(TeamSearchClosed());
-                      
-                    },
-                    child: GridView.builder(
+                  } else if (state is TeamFailure) {
+                    return Center(
+                      child: Text('failed to fetch Teams'),
+                    );
+                  } else if (state is TeamSuccess) {
+                    if (state.teams.isEmpty) {
+                      return Center(
+                        child: Text('no teams'),
+                      );
+                    }
+                    return GridView.builder(
                         physics: const AlwaysScrollableScrollPhysics(),
                         controller: _scrollController,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,13 +91,13 @@ class _TeamListState extends State<TeamList> {
                         itemCount: state.teams.length,
                         itemBuilder: (BuildContext context, int index) {
                           return gridCard(state, index, context);
-                        }),
-                  );
-                }
-              },
+                        });
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

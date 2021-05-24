@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 
 // keys
 const String NAME_KEY = 'name';
@@ -6,7 +5,7 @@ const String ROLE_KEY = 'role';
 const String PHOTO_KEY = 'photo';
 
 // ignore: must_be_immutable
-class Player extends Equatable {
+class Player {
   String id;
   String name;
   String role;
@@ -34,6 +33,4 @@ class Player extends Equatable {
     };
   }
 
-  @override  
-  List<Object> get props => [id, name, role, photo];
 }

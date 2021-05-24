@@ -49,9 +49,9 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
       }
     }
     if (event is SeriesSearched) {
-      print("Team searched bloc");
+      print("Series searched bloc");
       if (currentState is SeriesSuccess) {
-        final series =await SeriesRepo.searchTeams(event.searchKeyWord, limit);
+        final series = await SeriesRepo.searchTeams(event.searchKeyWord, limit);
         if (series != null) {
           if (series.length < limit)
             yield SeriesSuccess(series: series, hasReachedMax: true);
@@ -61,19 +61,17 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
       }
     }
     if (event is SeriesSearchClosed) {
-         final series = await SeriesRepo.fetchSeries(0, limit);
-            if (series.length < limit)
-              yield SeriesSuccess(series: series, hasReachedMax: true);
-            else
-              yield SeriesSuccess(series: series, hasReachedMax: false);
-      }
-      if (event is SeriesDelete) {
-        SeriesRepo.deleteSeries(event.series);
-      }
+      final series = await SeriesRepo.fetchSeries(0, limit);
+      if (series.length < limit)
+        yield SeriesSuccess(series: series, hasReachedMax: true);
+      else
+        yield SeriesSuccess(series: series, hasReachedMax: false);
+    }
+    if (event is SeriesDelete) {
+      SeriesRepo.deleteSeries(event.series);
     }
   }
 
   bool _hasReachedMax(SeriesState state) =>
       state is SeriesSuccess && state.hasReachedMax;
-
-
+}

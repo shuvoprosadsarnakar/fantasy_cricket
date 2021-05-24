@@ -31,72 +31,79 @@ class _PlayerListState extends State<PlayerList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  _controller.clear();
-                  _playerBloc.add(PlayerSearchClosed());
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _playerBloc..add(PlayerSearchClosed());
+          print("refresh");
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    _controller.clear();
+                    _playerBloc.add(PlayerSearchClosed());
+                  },
+                )),
+                onSubmitted: (value) {
+                  print(value);
+                  // if(value.length>0)
+                  // _playerBloc.add(PlayerSearched(value));
+                  // else
+                  // _playerBloc.add(PlayerSearchClosed());
                 },
-              )),
-              onSubmitted: (value) {
-                print(value);
-                // if(value.length>0)
-                // _playerBloc.add(PlayerSearched(value));
-                // else
-                // _playerBloc.add(PlayerSearchClosed());
-              },
-              onChanged: (value) {
-                print(value);
-                if (value.length > 0)
-                  _playerBloc.add(PlayerSearched(value));
-                else
-                  _playerBloc.add(PlayerSearchClosed());
-              },
+                onChanged: (value) {
+                  print(value);
+                  if (value.length > 0)
+                    _playerBloc.add(PlayerSearched(value));
+                  else
+                    _playerBloc.add(PlayerSearchClosed());
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<PlayerBloc, PlayerState>(
-              // ignore: missing_return
-              builder: (context, state) {
-                if (state is PlayerInitial) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is PlayerFailure) {
-                  return Center(
-                    child: Text('failed to fetch posts'),
-                  );
-                } else if (state is PlayerSuccess) {
-                  if (state.players.isEmpty) {
+            Expanded(
+              child: BlocBuilder<PlayerBloc, PlayerState>(
+                // ignore: missing_return
+                builder: (context, state) {
+                  if (state is PlayerInitial) {
                     return Center(
-                      child: Text('no posts'),
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is PlayerFailure) {
+                    return Center(
+                      child: Text('failed to fetch posts'),
+                    );
+                  } else if (state is PlayerSuccess) {
+                    if (state.players.isEmpty) {
+                      return Center(
+                        child: Text('no posts'),
+                      );
+                    }
+                    return ListView.builder(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return index >= state.players.length
+                            ? BottomLoader()
+                            : PostWidget(player: state.players[index]);
+                      },
+                      itemCount: state.hasReachedMax
+                          ? state.players.length
+                          : state.players.length + 1,
+                      controller: _scrollController,
                     );
                   }
-                  return ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      return index >= state.players.length
-                          ? BottomLoader()
-                          : PostWidget(player: state.players[index]);
-                    },
-                    itemCount: state.hasReachedMax
-                        ? state.players.length
-                        : state.players.length + 1,
-                    controller: _scrollController,
-                  );
-                }
-              },
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -104,7 +111,8 @@ class _PlayerListState extends State<PlayerList> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PlayerAddEdit(PlayerAddEditCubit(Player()))),
+                builder: (context) =>
+                    PlayerAddEdit(PlayerAddEditCubit(Player()))),
           );
         },
       ),
