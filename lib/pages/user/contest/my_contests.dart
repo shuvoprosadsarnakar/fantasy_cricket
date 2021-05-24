@@ -52,7 +52,10 @@ class _MyContestsState extends State<MyContests> with AutomaticKeepAliveClientMi
           } else {
             return Padding(
               padding: Paddings.pagePadding,
-              child: Text('No running contest found.'),
+              child: Text(
+                'You haven\'t joined any contest yet.',
+                style: Theme.of(context).textTheme.subtitle1,  
+              ),
             );
           }
         }

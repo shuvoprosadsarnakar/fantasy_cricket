@@ -28,7 +28,7 @@ final RewardedAd myRewarded = RewardedAd(
 );
 
   int _selectedPage = 0;
- final List<String> titleList = ["My contests", "Running contests", "Profile"];
+ final List<String> titleList = ["My Contests", "Running Contests", "Profile"];
  String currentTitle;
   @override
   void initState() {
@@ -67,17 +67,24 @@ final RewardedAd myRewarded = RewardedAd(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.whatshot_outlined,
+              Icons.play_arrow_outlined,
+              size: 30,
             ),
-            label: 'Contests',
+            label: 'My Contests',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard),
-            label: 'Running',
+            icon: Icon(
+              Icons.run_circle_outlined,
+              size: 30,
+            ),
+            label: 'Running Contests',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(
+              Icons.person_outlined,
+              size: 30,  
+            ),
+            label: 'My Profile',
           ),
         ],
         currentIndex: _selectedPage,

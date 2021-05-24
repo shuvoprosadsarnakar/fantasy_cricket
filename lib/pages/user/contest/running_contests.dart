@@ -46,7 +46,10 @@ class RunningContests extends StatelessWidget {
           } else {
             return Padding(
               padding: Paddings.pagePadding,
-              child: Text('No running contest found.'),
+              child: Text(
+                'No running contest found for you to join.',
+                style: Theme.of(context).textTheme.subtitle1,   
+              ),
             );
           }
         }
