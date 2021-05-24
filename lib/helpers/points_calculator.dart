@@ -114,8 +114,10 @@ abstract class PointsCalculator {
   }
 
   static double getMaidenOversPoints(int maidenOvers, String matchType) {
-    if(matchType != MatchTypes.test) {
+    if(matchType == MatchTypes.t20) {
       return maidenOvers * 4.0;
+    } else if(matchType == MatchTypes.oneDay) {
+      return maidenOvers * 2.0;
     } else {
       return 0;
     }
@@ -130,7 +132,7 @@ abstract class PointsCalculator {
     if(matchType == MatchTypes.t20 && ballsBowled >= 12) {
       if(economyRate <= 4) {
         point = 3;
-      } else if(economyRate <= 5) {
+      } else if(economyRate == 5) {
         point = 2;
       } else if(economyRate <= 7) {
         point = 1;
