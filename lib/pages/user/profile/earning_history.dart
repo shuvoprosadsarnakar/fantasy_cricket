@@ -15,6 +15,7 @@ class EarningHistory extends StatelessWidget {
       body: Padding(
         padding: Paddings.pagePadding,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             getTitlesRow(context),
             SizedBox(height: 15),
@@ -34,16 +35,23 @@ class EarningHistory extends StatelessWidget {
     );
   }
 
-  Row getTitlesRow(BuildContext context) {
-    return Row(children: [
-      getTitle(context, 1, 'Date'),
-      SizedBox(width: 10),
-      getTitle(context, 2, 'Details'),
-      SizedBox(width: 10),
-      getTitle(context, 1, 'Rank'),
-      SizedBox(width: 10),
-      getTitle(context, 1, 'Rewards'),
-    ]);
+  Widget getTitlesRow(BuildContext context) {
+    if(user.earningHistory.isEmpty) {
+      return Text(
+        'No earning history found.',
+        style: Theme.of(context).textTheme.subtitle1,
+      );
+    } else {
+      return Row(children: [
+        getTitle(context, 1, 'Date'),
+        SizedBox(width: 10),
+        getTitle(context, 2, 'Details'),
+        SizedBox(width: 10),
+        getTitle(context, 1, 'Rank'),
+        SizedBox(width: 10),
+        getTitle(context, 1, 'Rewards'),
+      ]);
+    }
   }
 
   Expanded getTitle(BuildContext context, int flex, String title) {
