@@ -5,7 +5,9 @@ import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -28,33 +30,42 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign In'),
-        actions: [getSignUpButton(context)],
-      ),
-      body: Form(
-        key: widget._cubit.formKey,
-        child: ListView(
-          padding: Paddings.pagePadding,
-          children: [
-            // email field
-            FormFieldTitle('Email'),
-            getEmailField(),
-            SizedBox(height: 20),
+    return BlocBuilder(
+      bloc: widget._cubit,
+      builder: (BuildContext context, CubitState state) {
+        if(state == CubitState.loading) {
+          return Loading();
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Sign In'),
+              actions: [getSignUpButton(context)],
+            ),
+            body: Form(
+              key: widget._cubit.formKey,
+              child: ListView(
+                padding: Paddings.pagePadding,
+                children: [
+                  // email field
+                  FormFieldTitle('Email'),
+                  getEmailField(),
+                  SizedBox(height: 20),
 
-            // password field
-            FormFieldTitle('Password'),
-            getPasswordField(),
-            SizedBox(height: 30),
+                  // password field
+                  FormFieldTitle('Password'),
+                  getPasswordField(),
+                  SizedBox(height: 30),
 
-            // buttons
-            getSignInButton(context),
-            SizedBox(height: 10),
-            getForgotPasswordButton(context),
-          ],
-        ),
-      ),
+                  // buttons
+                  getSignInButton(context),
+                  SizedBox(height: 10),
+                  getForgotPasswordButton(context),
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
