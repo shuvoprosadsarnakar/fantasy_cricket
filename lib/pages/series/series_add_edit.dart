@@ -123,7 +123,7 @@ class SeriesAddEdit extends StatelessWidget {
       // start date picker
       DateTimePicker(
         type: DateTimePickerType.dateTime,
-        initialValue: times.start.toString(),
+        initialValue: times.start.toDate().toString(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2100),
         dateLabelText: 'Start Date',
@@ -145,7 +145,7 @@ class SeriesAddEdit extends StatelessWidget {
       // end date picker
       DateTimePicker(
         type: DateTimePickerType.dateTime,
-        initialValue: times.end.toString(),
+        initialValue: times.end.toDate().toString(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2100),
         dateLabelText: 'End Date',
@@ -252,13 +252,14 @@ class SeriesAddEdit extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if(_seriesAddEditCubit.series.chipsDistributes.length > 1) Column(children: [
-          IconButton(
-            icon: Icon(Icons.remove),
-            onPressed: _seriesAddEditCubit.removeChipsDistribute,
-          ),
-          SizedBox(width: 30),
-        ]),
+        if(_seriesAddEditCubit.series.chipsDistributes.length > 1)
+          Column(children: [
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: _seriesAddEditCubit.removeChipsDistribute,
+            ),
+            SizedBox(width: 30),
+          ]),
         IconButton(
           icon: Icon(Icons.add),
           onPressed: _seriesAddEditCubit.addChipsDistribute,
