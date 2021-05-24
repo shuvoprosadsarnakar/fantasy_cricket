@@ -226,9 +226,10 @@ class TeamManager extends StatelessWidget {
               Text('${_cubit.contest.playersCredits[i]} Credits'),
               SizedBox(height: 5),
               Text('${_cubit.series.playerPoints[_cubit.series.playerNames
-                .indexOf(playerName)]} Series Points'),
+                .indexOf(playerName)].toStringAsFixed(1)} Series Points'),
               SizedBox(height: 5),
-              Text('Picked by ${_cubit.getPlayerPickedPercentage(i)}%'),
+              Text('Picked by ${_cubit
+                .getPlayerPickedPercentage(i).toStringAsFixed(1)}%'),
               if(_cubit.contest.isPlayings[i]) SizedBox(height: 5),
               if(_cubit.contest.isPlayings[i]) 
                 Text('Playing', style: TextStyle(color: Colors.green)),

@@ -25,13 +25,20 @@ class ExchangeHistory extends StatelessWidget {
         } else {
           return Scaffold(
             appBar: AppBar(title: Text('Exchange History')),
-            body: ListView.builder(
-              padding: Paddings.pagePadding,
-              itemCount: _cubit.exchanges.length,
-              itemBuilder: (BuildContext context, int i) {
-                return getExchangeHistoryRow(_cubit.exchanges[i]);
-              },
-            ),
+            body: _cubit.exchanges.isEmpty ? 
+              Padding(
+                padding: Paddings.pagePadding,
+                child: Text(
+                  'No exchange history found.',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ) : ListView.builder(
+                padding: Paddings.pagePadding,
+                itemCount: _cubit.exchanges.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return getExchangeHistoryRow(_cubit.exchanges[i]);
+                },
+              ),
           );
         }
       },

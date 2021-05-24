@@ -8,6 +8,7 @@ import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dar
 import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/series_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -103,12 +104,26 @@ class ContestDetails extends StatelessWidget {
         children: [
           Text(
             'Match Prizes',
-            style: TextStyle(fontSize: 18),  
+            style: TextStyle(fontSize: 18),
           ),
           TextButton(
-            child: Text(
-              'Leaderboard',
-              style: TextStyle(color: Theme.of(context).primaryColor),  
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(5),
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.leaderboard,
+                  color: ColorPallate.ebonyClay,
+                  size: 18,
+                ),
+                SizedBox(width: 3),
+                Text(
+                  'Leaderboard',
+                  style: TextStyle(color: Theme.of(context).primaryColor),  
+                ),
+              ],
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
@@ -163,9 +178,23 @@ class ContestDetails extends StatelessWidget {
             style: TextStyle(fontSize: 18),  
           ),
           TextButton(
-            child: Text(
-              'Leaderboard',
-              style: TextStyle(color: Theme.of(context).primaryColor),  
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(5),
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.leaderboard,
+                  color: ColorPallate.ebonyClay,
+                  size: 18,  
+                ),
+                SizedBox(width: 3),
+                Text(
+                  'Leaderboard',
+                  style: TextStyle(color: Theme.of(context).primaryColor),  
+                ),
+              ],
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
