@@ -18,7 +18,7 @@ class FormSubmitButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(12),
         primary: Colors.white,
         backgroundColor: ColorPallate.pomegranate,
       ),

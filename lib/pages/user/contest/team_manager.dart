@@ -1,5 +1,7 @@
 import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -26,34 +28,74 @@ class TeamManager extends StatelessWidget {
             appBar: AppBar(title: Text('Team Manager')),
             body: Column(
               children: [
+                // selection result bars
                 Padding(
                   padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
                   child: Column(children: [
                     getPlayerSelectionResultBarOne(),
                     Divider(),
                     getPlayerSelectionResultBarTwo(),
-                    Divider(color: Colors.grey.shade900),
+                    SizedBox(height: 10),
                   ]),
                 ),
+                
+                // player selection rows
                 Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    shrinkWrap: true,
-                    children: [
-                      SizedBox(height: 20),
-                      getTeam1Players(context),
-                      SizedBox(height: 30),
-                      getTeam2Players(context),
-                      SizedBox(height: 30),
-                      if(_cubit.fantasy.playerNames.length == 11 &&
-                        _cubit.fantasy.captain != null && 
-                        _cubit.fantasy.viceCaptain != null) 
-                        getTeamSubmitButton(context),
-                      if(_cubit.fantasy.playerNames.length == 11 &&
-                        _cubit.fantasy.captain != null && 
-                        _cubit.fantasy.viceCaptain != null) 
-                        SizedBox(height: 30),
-                    ],
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        elevation: 0,
+                        backgroundColor: Colors.grey.shade900,
+                        automaticallyImplyLeading: false,
+                        toolbarHeight: 54,
+                        bottom: TabBar(
+                          indicatorColor: Theme.of(context).primaryColor,
+                          labelPadding: EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 10,  
+                          ),
+                          tabs: <Widget>[
+                            getTeamName(_cubit.excerpt.teamImages[1], 
+                              _cubit.contest.teamsNames[1], context),
+                            getTeamName(_cubit.excerpt.teamImages[0], 
+                              _cubit.contest.teamsNames[0], context),
+                          ],
+                        ),
+                      ),
+                      body: TabBarView(
+                        children: <Widget>[
+                          ListView(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 30,
+                            ),
+                            children: <Widget>[
+                              getTeam1Players(context),
+                              SizedBox(height: 20),
+                              if(_cubit.fantasy.playerNames.length == 11 &&
+                                _cubit.fantasy.captain != null && 
+                                _cubit.fantasy.viceCaptain != null) 
+                                getTeamSubmitButton(context),
+                            ],
+                          ),
+                          ListView(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 30,
+                            ),
+                            children: <Widget>[
+                              getTeam2Players(context),
+                              SizedBox(height: 20),
+                              if(_cubit.fantasy.playerNames.length == 11 &&
+                                _cubit.fantasy.captain != null && 
+                                _cubit.fantasy.viceCaptain != null) 
+                                getTeamSubmitButton(context),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -119,9 +161,6 @@ class TeamManager extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTeamName(_cubit.excerpt.teamImages[0], _cubit.contest.teamsNames[0], 
-          context),
-        SizedBox(height: 20),
         getPlayerFieldTitles(),
         Divider(color: Colors.grey),
         Column(children: playersRows),
@@ -141,9 +180,6 @@ class TeamManager extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getTeamName(_cubit.excerpt.teamImages[1], _cubit.contest.teamsNames[1], 
-          context),
-        SizedBox(height: 20),
         getPlayerFieldTitles(),
         Divider(color: Colors.grey),
         Column(children: playersRows),
@@ -153,20 +189,20 @@ class TeamManager extends StatelessWidget {
 
   Row getTeamName(String imageLink, String name, BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Image.network(
           imageLink,
-          width: 40,
-          height: 40,
+          width: 30,
+          height: 30,
+          fit: BoxFit.cover,
         ),
         SizedBox(width: 10),
         Expanded(
           child: Text(
             name,
-            style: TextStyle(
-              fontSize: 18,
-              color: Theme.of(context).primaryColor,
-            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
