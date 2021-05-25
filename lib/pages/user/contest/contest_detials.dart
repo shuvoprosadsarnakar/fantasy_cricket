@@ -63,22 +63,43 @@ class ContestDetails extends StatelessWidget {
         Expanded(
           child: Column(children: [
             Text(
-              _cubit.excerpt.teamsNames[0] + ' vs ' 
+              _cubit.excerpt.teamsNames[0] + ' X ' 
                 + _cubit.excerpt.teamsNames[1],
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 16,
+                fontSize: 15,
+                shadows: <Shadow>[
+                  Shadow(
+                    blurRadius: 1,
+                    color: ColorPallate.pomegranate,
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 7),
-            Text(_cubit.excerpt.no.toString()
-              + NumberSuffixFinder.getNumberSuffix(_cubit.excerpt.no) + ' '
-              + _cubit.excerpt.type + ' Match'),
+            Text(
+              _cubit.excerpt.no.toString()
+                + NumberSuffixFinder.getNumberSuffix(_cubit.excerpt.no) + ' '
+                + _cubit.excerpt.type + ' Match',
+              style: TextStyle(
+                fontSize: 13,
+              ),
+            ),
             SizedBox(height: 7),
-            Text(_cubit.series.name, textAlign: TextAlign.center),
+            Text(
+              _cubit.series.name,
+              style: TextStyle(
+                fontSize: 13,
+              ),
+            ),
             SizedBox(height: 7),
-            Text(DateFormat.yMMMd().add_jm().format(_cubit.excerpt.startTime
-              .toDate())),
+            Text(
+              DateFormat.yMMMd().add_jm().format(_cubit.excerpt.startTime
+                .toDate()),
+              style: TextStyle(
+                fontSize: 13,
+              ),    
+            ),
           ]),
         ),
         SizedBox(width: 10),
@@ -91,8 +112,8 @@ class ContestDetails extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 40,
-      width: 40,
+      height: 30,
+      width: 30,
       fit: BoxFit.cover,
     );
   }
@@ -104,7 +125,7 @@ class ContestDetails extends StatelessWidget {
         children: [
           Text(
             'Match Prizes',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 16),
           ),
           TextButton(
             style: ButtonStyle(
@@ -116,7 +137,7 @@ class ContestDetails extends StatelessWidget {
                 Icon(
                   Icons.leaderboard,
                   color: ColorPallate.ebonyClay,
-                  size: 18,
+                  size: 15,
                 ),
                 SizedBox(width: 3),
                 Text(
@@ -142,8 +163,8 @@ class ContestDetails extends StatelessWidget {
             children: [
               Image.asset(
                 'lib/resources/images/winner.png',
-                width: 20,
-                height: 20,
+                width: 17,
+                height: 17,
                 fit: BoxFit.cover,
               ),
               SizedBox(width: 8),
@@ -154,8 +175,8 @@ class ContestDetails extends StatelessWidget {
             children: [
               Image.asset(
                 'lib/resources/images/coins.png',
-                width: 40,
-                height: 40,
+                width: 34,
+                height: 34,
                 fit: BoxFit.cover,
               ),
               Text('${_cubit.excerpt.totalChips} Chips'),
@@ -175,7 +196,7 @@ class ContestDetails extends StatelessWidget {
         children: [
           Text(
             'Series Prizes',
-            style: TextStyle(fontSize: 18),  
+            style: TextStyle(fontSize: 16),  
           ),
           TextButton(
             style: ButtonStyle(
@@ -187,7 +208,7 @@ class ContestDetails extends StatelessWidget {
                 Icon(
                   Icons.leaderboard,
                   color: ColorPallate.ebonyClay,
-                  size: 18,  
+                  size: 15,  
                 ),
                 SizedBox(width: 3),
                 Text(
@@ -215,8 +236,8 @@ class ContestDetails extends StatelessWidget {
             children: [
               Image.asset(
                 'lib/resources/images/winner.png',
-                width: 20,
-                height: 20,
+                width: 17,
+                height: 17,
                 fit: BoxFit.cover,
               ),
               SizedBox(width: 8),
@@ -227,8 +248,8 @@ class ContestDetails extends StatelessWidget {
             children: [
               Image.asset(
                 'lib/resources/images/coins.png',
-                width: 40,
-                height: 40,
+                width: 34,
+                height: 34,
                 fit: BoxFit.cover,
               ),
               Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)

@@ -1,6 +1,7 @@
 import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +39,12 @@ class ContestsListItem extends StatelessWidget {
               'Match',
             ),
           ),
-          SizedBox(width: 10),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            width: 1,
+            height: 50,
+            color: Colors.grey.shade300,
+          ),
           Expanded(
             child: _getChipsAndWinnerInfo(
               _seriesTotalChips,
@@ -49,7 +55,7 @@ class ContestsListItem extends StatelessWidget {
         ],
       ),
       Divider(
-        thickness: 2,
+        thickness: 3,
         color: Colors.grey.shade300,
         height: 40,
       ),
@@ -59,8 +65,8 @@ class ContestsListItem extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 40,
-      width: 40,
+      height: 30,
+      width: 30,
       fit: BoxFit.cover,
     );
   }
@@ -69,22 +75,40 @@ class ContestsListItem extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '${_excerpt. teamsNames[0]} vs ${_excerpt.teamsNames[1]}',
+          '${_excerpt. teamsNames[0]} X ${_excerpt.teamsNames[1]}',
           style: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 16,
+            fontSize: 15,
+            shadows: <Shadow>[
+              Shadow(
+                blurRadius: 1,
+                color: ColorPallate.pomegranate,
+              ),
+            ],
           ),
         ),
         SizedBox(height: 7),
-        Text('${_excerpt.no}${NumberSuffixFinder.getNumberSuffix(_excerpt.no)} '
-          + '${_excerpt.type} Match'),
+        Text(
+          '${_excerpt.no}${NumberSuffixFinder.getNumberSuffix(_excerpt.no)} '
+            + '${_excerpt.type} Match',
+          style: TextStyle(
+            fontSize: 13,
+          ),
+        ),
         SizedBox(height: 7),
         Text(
           _series.name,
-          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13,
+          ),
         ),
         SizedBox(height: 7),
-        Text(DateFormat.yMMMd().add_jm().format(_excerpt.startTime.toDate())),
+        Text(
+          DateFormat.yMMMd().add_jm().format(_excerpt.startTime.toDate()),
+          style: TextStyle(
+            fontSize: 13,
+          ),  
+        ),
       ],
     );
   }
@@ -96,31 +120,52 @@ class ContestsListItem extends StatelessWidget {
         children: [
           Image.asset(
             'lib/resources/images/coins.png',
-            width: 40,
-            height: 40,  
+            width: 31,
+            height: 31,
+            fit: BoxFit.cover,  
           ),
-          Text(chips.toString()),
+          Text(
+            chips.toString(),
+            style: TextStyle(
+              fontSize: 13,
+            ),  
+          ),
           SizedBox(width: 10),
           Image.asset(
             'lib/resources/images/winner.png',
-            width: 20,
-            height: 20,  
+            width: 15,
+            height: 15,
+            fit: BoxFit.cover, 
           ),
-          SizedBox(width: 5),
-          Text(winners.toString()),
+          SizedBox(width: 7),
+          Text(
+            winners.toString(),
+            style: TextStyle(
+              fontSize: 13,
+            ),  
+          ),
         ],
       ),
       SizedBox(height: 5),
       Container(
         padding: EdgeInsets.symmetric(
           vertical: 2,
-          horizontal: 10,  
+          horizontal: 5,  
         ),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 0.7,
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Text(contestType),
+        child: Text(
+          contestType,
+          style: TextStyle(
+            fontSize: 13,
+            letterSpacing: 1,
+          ),
+        ),
       ),
     ]);
   }
