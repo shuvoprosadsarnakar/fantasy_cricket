@@ -67,13 +67,7 @@ class ContestDetails extends StatelessWidget {
                 + _cubit.excerpt.teamsNames[1],
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 15,
-                shadows: <Shadow>[
-                  Shadow(
-                    blurRadius: 1,
-                    color: ColorPallate.pomegranate,
-                  ),
-                ],
+                fontSize: 16,
               ),
             ),
             SizedBox(height: 7),
@@ -81,24 +75,15 @@ class ContestDetails extends StatelessWidget {
               _cubit.excerpt.no.toString()
                 + NumberSuffixFinder.getNumberSuffix(_cubit.excerpt.no) + ' '
                 + _cubit.excerpt.type + ' Match',
-              style: TextStyle(
-                fontSize: 13,
-              ),
             ),
             SizedBox(height: 7),
             Text(
               _cubit.series.name,
-              style: TextStyle(
-                fontSize: 13,
-              ),
             ),
             SizedBox(height: 7),
             Text(
               DateFormat.yMMMd().add_jm().format(_cubit.excerpt.startTime
-                .toDate()),
-              style: TextStyle(
-                fontSize: 13,
-              ),    
+                .toDate()),    
             ),
           ]),
         ),
@@ -112,8 +97,8 @@ class ContestDetails extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 30,
-      width: 30,
+      height: 35,
+      width: 35,
       fit: BoxFit.cover,
     );
   }

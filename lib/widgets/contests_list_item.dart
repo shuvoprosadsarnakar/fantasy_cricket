@@ -65,8 +65,8 @@ class ContestsListItem extends StatelessWidget {
   Image _getTeamImage(String imageLink) {
     return Image.network(
       imageLink,
-      height: 30,
-      width: 30,
+      height: 35,
+      width: 35,
       fit: BoxFit.cover,
     );
   }
@@ -78,36 +78,22 @@ class ContestsListItem extends StatelessWidget {
           '${_excerpt. teamsNames[0]} X ${_excerpt.teamsNames[1]}',
           style: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 15,
-            shadows: <Shadow>[
-              Shadow(
-                blurRadius: 1,
-                color: ColorPallate.pomegranate,
-              ),
-            ],
+            fontSize: 16,
           ),
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 7),
         Text(
           '${_excerpt.no}${NumberSuffixFinder.getNumberSuffix(_excerpt.no)} '
             + '${_excerpt.type} Match',
-          style: TextStyle(
-            fontSize: 13,
-          ),
         ),
         SizedBox(height: 7),
         Text(
           _series.name,
-          style: TextStyle(
-            fontSize: 13,
-          ),
         ),
         SizedBox(height: 7),
         Text(
-          DateFormat.yMMMd().add_jm().format(_excerpt.startTime.toDate()),
-          style: TextStyle(
-            fontSize: 13,
-          ),  
+          DateFormat.yMMMd().add_jm().format(_excerpt.startTime.toDate()), 
         ),
       ],
     );
@@ -126,9 +112,7 @@ class ContestsListItem extends StatelessWidget {
           ),
           Text(
             chips.toString(),
-            style: TextStyle(
-              fontSize: 13,
-            ),  
+  
           ),
           SizedBox(width: 10),
           Image.asset(
@@ -139,10 +123,7 @@ class ContestsListItem extends StatelessWidget {
           ),
           SizedBox(width: 7),
           Text(
-            winners.toString(),
-            style: TextStyle(
-              fontSize: 13,
-            ),  
+            winners.toString(), 
           ),
         ],
       ),
