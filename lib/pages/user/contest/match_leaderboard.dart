@@ -189,20 +189,23 @@ class MatchLeaderboard extends StatelessWidget {
         pointsListTiles.add(ListTile(
           leading: Image.network(
             _cubit.excerpt.teamImages[1],
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
             fit: BoxFit.cover,
           ),
           title: Text(
             _cubit.excerpt.teamsNames[1],
-            style: Theme.of(context).textTheme.headline6,  
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),  
           ),
           trailing: Text(
             'Points',
             style: Theme.of(context).textTheme.subtitle2,  
           ),
         ));
-        pointsListTiles.add(Divider(color: Colors.grey));
+        pointsListTiles.add(Divider(color: Colors.grey.shade700));
       }
 
       pointsListTiles.add(ListTile(
@@ -243,19 +246,23 @@ class MatchLeaderboard extends StatelessWidget {
         ListTile(
           leading: Image.network(
             _cubit.excerpt.teamImages[0],
-            width: 40,
-            height: 40,
+            width: 35,
+            height: 35,
+            fit: BoxFit.cover,
           ),
           title: Text(
             _cubit.excerpt.teamsNames[0],
-            style: Theme.of(context).textTheme.headline6,  
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ), 
           ),
           trailing: Text(
             'Points',
             style: Theme.of(context).textTheme.subtitle2, 
           ),
         ),
-        Divider(color: Colors.grey),
+        Divider(color: Colors.grey.shade700),
 
         // player points
         Column(children: pointsListTiles),
@@ -285,8 +292,9 @@ class MatchLeaderboard extends StatelessWidget {
               child: Column(children: [
                 Image.network(
                  _cubit.excerpt.teamImages[0],
-                  width: 40,
-                  height: 40,
+                  width: 35,
+                  height: 35,
+                  fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5),
                 Text(_cubit.contest.teamsNames[0]),
@@ -319,8 +327,8 @@ class MatchLeaderboard extends StatelessWidget {
               child: Column(children: [
                 Image.network(
                   _cubit.excerpt.teamImages[1],
-                  width: 40,
-                  height: 40,
+                  width: 35,
+                  height: 35,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5),

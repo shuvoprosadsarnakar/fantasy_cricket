@@ -56,10 +56,10 @@ class TeamManager extends StatelessWidget {
                             vertical: 10,  
                           ),
                           tabs: <Widget>[
-                            getTeamName(_cubit.excerpt.teamImages[1], 
-                              _cubit.contest.teamsNames[1], context),
                             getTeamName(_cubit.excerpt.teamImages[0], 
                               _cubit.contest.teamsNames[0], context),
+                            getTeamName(_cubit.excerpt.teamImages[1], 
+                              _cubit.contest.teamsNames[1], context),
                           ],
                         ),
                       ),
@@ -231,10 +231,6 @@ class TeamManager extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CircleAvatar(
-          backgroundImage: NetworkImage(_cubit.contest.playerPhotos[i] ?? ''),
-        ),
-        SizedBox(width: 10),
         // player's contest info
         Expanded(
           flex: 5,
