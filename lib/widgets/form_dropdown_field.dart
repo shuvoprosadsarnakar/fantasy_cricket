@@ -7,13 +7,15 @@ class FormDropdownField extends StatelessWidget {
   final List<DropdownMenuItem<dynamic>> items;
   final FormFieldValidator<dynamic> validator;
   final FormFieldSetter<dynamic> onSaved;
+  final ValueChanged<dynamic> onChanged;
 
   FormDropdownField({
     this.value,
     this.hint,
     this.items,
     this.validator,
-    this.onSaved,  
+    this.onSaved,
+    this.onChanged,
   });
 
   @override
@@ -39,7 +41,7 @@ class FormDropdownField extends StatelessWidget {
       onSaved: onSaved,
       
       // dropdown list doesn't show up without this
-      onChanged: (dynamic value) {},
+      onChanged: onChanged,
     );
   }
 }

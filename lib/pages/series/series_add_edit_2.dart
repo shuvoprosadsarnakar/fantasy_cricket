@@ -107,7 +107,7 @@ class SeriesAddEdit2 extends StatelessWidget {
                   return null;
                 }
               },
-              onSaved: (dynamic value) => excerpt.type = value,
+              onChanged: (dynamic value) => excerpt.type = value,
             )),
           ],
         ),
@@ -122,7 +122,7 @@ class SeriesAddEdit2 extends StatelessWidget {
             Expanded(child: FormIntegerField(
               initialValue: excerpt.no == null ? null : excerpt.no.toString(),
               hintText: 'Match number according to type',
-              onSaved: (String value) => excerpt.no = int.parse(value),
+              onChanged: (dynamic value) => excerpt.no = int.parse(value),
             )),
           ],
         ),
@@ -137,14 +137,11 @@ class SeriesAddEdit2 extends StatelessWidget {
               value: excerpt.teamsIds[0],
               hint: Text('Select a team'),
               items: teamDropdownList,
+              onChanged: (dynamic value) => excerpt.teamsIds[0] = value,
               validator: (dynamic value) { 
                 if(value == null) {
                   return 'Team 1 is required.';
                 } else {
-                  // save the value here instead of [onSaved] allow us to check
-                  // same team selection error in the team 2 field [validator]
-                  // as team 2 [validator] will run after this [validator]
-                  excerpt.teamsIds[0] = value;
                   return null;
                 }
               },
@@ -168,6 +165,7 @@ class SeriesAddEdit2 extends StatelessWidget {
               value: excerpt.teamsIds[1],
               hint: Text('Select a team'),
               items: teamDropdownList,
+              onChanged: (dynamic value) => excerpt.teamsIds[1] = value,
               validator: (dynamic value) {
                 if(value == null) {
                   return 'Team 2 is required.';
@@ -178,7 +176,6 @@ class SeriesAddEdit2 extends StatelessWidget {
                 }
               },
               onSaved: (dynamic value) {
-                excerpt.teamsIds[1] = value;
                 excerpt.teamsNames[1] = _cubit.getTeamNameById(value);
                 excerpt.teamImages[1] = _cubit.allTeams.firstWhere((Team team) {
                   return team.name == excerpt.teamsNames[1];
@@ -192,8 +189,7 @@ class SeriesAddEdit2 extends StatelessWidget {
         // time picker field
         DateTimePicker(
           type: DateTimePickerType.dateTime,
-          initialValue: excerpt.startTime == null ? 
-            _cubit.series.times.start.toDate().toString() : 
+          initialValue: excerpt.startTime == null ? null : 
             excerpt.startTime.toDate().toString(),
           firstDate: _cubit.series.times.start.toDate(),
           lastDate: _cubit.series.times.end.toDate(),
@@ -205,9 +201,9 @@ class SeriesAddEdit2 extends StatelessWidget {
               return null;
             }
           },
-          onSaved: (String value) {
+          onChanged: (String value) {
             excerpt.startTime = Timestamp.fromDate(DateTime.parse(value));
-          }
+          },
         ),
         SizedBox(height: 30), 
       ]));

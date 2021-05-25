@@ -123,8 +123,9 @@ class SeriesAddEdit extends StatelessWidget {
       // start date picker
       DateTimePicker(
         type: DateTimePickerType.dateTime,
-        initialValue: times.start.toDate().toString(),
-        firstDate: DateTime.now(),
+        initialValue: times.start == null ? DateTime.now().toString() : 
+          times.start.toDate().toString(),
+        firstDate: DateTime(2021),
         lastDate: DateTime(2100),
         dateLabelText: 'Start Date',
         validator: (String value) {
@@ -145,8 +146,9 @@ class SeriesAddEdit extends StatelessWidget {
       // end date picker
       DateTimePicker(
         type: DateTimePickerType.dateTime,
-        initialValue: times.end.toDate().toString(),
-        firstDate: DateTime.now(),
+        initialValue: times.end == null ? DateTime.now().toString() : 
+          times.end.toDate().toString(),
+        firstDate: DateTime(2021),
         lastDate: DateTime(2100),
         dateLabelText: 'End Date',
         validator: (String value) {

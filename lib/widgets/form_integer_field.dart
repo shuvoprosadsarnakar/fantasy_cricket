@@ -5,8 +5,14 @@ class FormIntegerField extends StatelessWidget {
   final String initialValue;
   final String hintText;
   final FormFieldSetter<String> onSaved;
+  final ValueChanged<dynamic> onChanged;
 
-  FormIntegerField({this.initialValue, this.hintText, this.onSaved});
+  FormIntegerField({
+    this.initialValue,
+    this.hintText,
+    this.onSaved,
+    this.onChanged,
+  });
   
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class FormIntegerField extends StatelessWidget {
         }
       },
       onSaved: onSaved,
+      onChanged: onChanged,
     );
   }
 }
