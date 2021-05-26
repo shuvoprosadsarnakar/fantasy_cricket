@@ -33,9 +33,7 @@ class ContestDetails extends StatefulWidget {
 }
 
 class _ContestDetailsState extends State<ContestDetails> {
-  bool _isButtonDisabled = true;
-  bool _isRewardedAdReady = false;
-  RewardedAd _rewardedAd;
+
   final RewardedAd myRewarded = RewardedAd(
     adUnitId: rewarded,
     request: AdRequest(),
@@ -52,17 +50,8 @@ class _ContestDetailsState extends State<ContestDetails> {
       },
     ),
   );
-  @override
-  void initState() {
-    super.initState();
-    createReawrdAdAndLoad();
-  }
 
-@override
-  void dispose() {
-    super.dispose();
-    _rewardedAd?.dispose();
-  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -340,62 +329,23 @@ class _ContestDetailsState extends State<ContestDetails> {
     return TextButton(
       child: Text(buttonText),
       style: ButtonStyle(
-        backgroundColor: _isButtonDisabled
-            ? MaterialStateProperty.all(Colors.grey)
-            : MaterialStateProperty.all(Colors.red),
+        backgroundColor:MaterialStateProperty.all(Colors.red),
         foregroundColor: MaterialStateProperty.all(Colors.white),
         elevation: MaterialStateProperty.all(5),
       ),
       onPressed: () {
-        //myRewarded.show();
-        if (!_isButtonDisabled) {
           Navigator.push(context, MaterialPageRoute(
             builder: (BuildContext context) {
               return TeamManager(tmCubit.TeamManagerCubit(widget._cubit.series,
                   widget._cubit.user, widget._cubit.excerpt));
             },
           ));
-        } else {
-          myRewarded.show();
-          print("show ad");
-          //createReawrdAdAndLoad();
-        }
-
+      
         // rebuild UI to change button text if user has joined contest
         widget._cubit.rebuildUi();
       },
     );
   }
 
-  createReawrdAdAndLoad() {
-    _rewardedAd = RewardedAd(
-      adUnitId: rewarded,
-      request: AdRequest(),
-      listener: AdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isRewardedAdReady = true;
-            _rewardedAd.show();
-            //_isButtonDisabled = false;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          print('Failed to load a rewarded ad: ${err.message}');
-          _isRewardedAdReady = false;
-          //ad.dispose();
-        },
-        onAdClosed: (_) {
-          setState(() {
-            _isRewardedAdReady = false;
-          });
-          _rewardedAd.load();
-        },
-        onRewardedAdUserEarnedReward: (_, reward) {
-          _isButtonDisabled = false;
-        },
-      ),
-    );
 
-    _rewardedAd.load();
-  }
 }
