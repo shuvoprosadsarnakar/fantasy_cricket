@@ -107,7 +107,15 @@ class TeamManagerCubit extends Cubit<CubitState> {
   }
 
   void removePlayer(int playerIndex) {
-    fantasy.playerNames.remove(contest.playersNames[playerIndex]);
+    String playerName = contest.playersNames[playerIndex];
+    fantasy.playerNames.remove(playerName);
+
+    if(playerName == fantasy.captain) {
+      fantasy.captain = null;
+    } else if(playerName == fantasy.viceCaptain) {
+      fantasy.viceCaptain = null;
+    }
+
     _initCubitAtPlayerRemove(playerIndex);
   }
 
