@@ -1,3 +1,4 @@
+import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:flutter/material.dart';
 
 class FetchErrorMsg extends StatelessWidget {
@@ -6,8 +7,11 @@ class FetchErrorMsg extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Text('Failed to fetch data from databse.'),
+          padding: Paddings.pagePadding,
+          child: Text(
+            'Failed to fetch data from databse.',
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
         ),
       ),
     );

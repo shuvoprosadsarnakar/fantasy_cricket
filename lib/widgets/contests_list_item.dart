@@ -43,7 +43,7 @@ class ContestsListItem extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 5),
             width: 1,
             height: 50,
-            color: Colors.grey.shade300,
+            color: Colors.grey.shade200,
           ),
           Expanded(
             child: _getChipsAndWinnerInfo(
@@ -55,7 +55,7 @@ class ContestsListItem extends StatelessWidget {
         ],
       ),
       Divider(
-        thickness: 3,
+        thickness: 2,
         color: Colors.grey.shade300,
         height: 40,
       ),

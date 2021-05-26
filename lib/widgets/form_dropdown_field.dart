@@ -41,7 +41,7 @@ class FormDropdownField extends StatelessWidget {
       onSaved: onSaved,
       
       // dropdown list doesn't show up without this
-      onChanged: onChanged,
+      onChanged: onChanged ?? (dynamic value) {},
     );
   }
 }
