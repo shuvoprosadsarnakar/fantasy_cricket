@@ -20,7 +20,7 @@ class ReviewTeam  extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Review Team')),
       body: ListView.builder(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(15),
         itemCount: fantasy.playerNames.length,
         itemBuilder: (BuildContext context, int i) {
           return getPlayerDetailsRow(context, i);
@@ -51,14 +51,14 @@ class ReviewTeam  extends StatelessWidget {
               height: 20,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             Expanded(
               child: Text(
                 fantasy.playerNames[i] + ' ' + playerNameSuffix,
                 style: Theme.of(context).textTheme.subtitle1,  
               ),  
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             Image.network(
               excerpt.teamImages[teamIndex],
               width: 20,
