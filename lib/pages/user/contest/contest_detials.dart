@@ -58,6 +58,11 @@ class _ContestDetailsState extends State<ContestDetails> {
     createReawrdAdAndLoad();
   }
 
+@override
+  void dispose() {
+    super.dispose();
+    _rewardedAd?.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -341,9 +346,10 @@ class _ContestDetailsState extends State<ContestDetails> {
         foregroundColor: MaterialStateProperty.all(Colors.white),
         elevation: MaterialStateProperty.all(5),
       ),
-      onPressed: () async {
+      onPressed: () {
+        //myRewarded.show();
         if (!_isButtonDisabled) {
-          await Navigator.push(context, MaterialPageRoute(
+          Navigator.push(context, MaterialPageRoute(
             builder: (BuildContext context) {
               return TeamManager(tmCubit.TeamManagerCubit(widget._cubit.series,
                   widget._cubit.user, widget._cubit.excerpt));
@@ -369,7 +375,8 @@ class _ContestDetailsState extends State<ContestDetails> {
         onAdLoaded: (_) {
           setState(() {
             _isRewardedAdReady = true;
-            _isButtonDisabled = false;
+            _rewardedAd.show();
+            //_isButtonDisabled = false;
           });
         },
         onAdFailedToLoad: (ad, err) {
