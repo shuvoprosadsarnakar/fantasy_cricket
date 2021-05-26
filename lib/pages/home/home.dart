@@ -1,9 +1,9 @@
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/pages/home/tabs/first_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
+import 'package:fantasy_cricket/resources/strings/ad_units.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home>{
 
 final RewardedAd myRewarded = RewardedAd(
-  adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+  adUnitId: rewarded,
   request: AdRequest(),
   listener: AdListener(
     onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {
