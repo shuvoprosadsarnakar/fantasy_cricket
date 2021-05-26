@@ -88,11 +88,6 @@ class FantasyPlayerPoints extends StatelessWidget {
       return Column(
         children: [
           ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                _cubit.contest.playerPhotos[playerIndex] ?? '',
-              ),
-            ),
             title: Text(
               playerName + ' ' + playerNameSuffix,
               style: Theme.of(context).textTheme.subtitle1,  

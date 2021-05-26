@@ -34,12 +34,13 @@ class SeriesLeaderboard extends StatelessWidget {
               appBar: AppBar(title: Text('Series Leaderboard')),
               body: Scaffold(
                 appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  toolbarHeight: 110,
                   title: getSeriesInfo(),
-                  leading: Text(''),
                   bottom: TabBar(
                     tabs: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: EdgeInsets.all(10),
                         child: Text('Ranking'),
                       ),
                       Padding(
@@ -70,7 +71,7 @@ class SeriesLeaderboard extends StatelessWidget {
     int userChips;
 
     int totalContestants = _cubit.series.ranks.length;
-    List<ListTile> rankingListTiles = <ListTile>[];
+    List<Widget> rankingListTiles = <Widget>[];
 
     // set [rankingListTiles]
     _cubit.series.chipsDistributes.forEach((Distribute distribute) {
@@ -81,11 +82,17 @@ class SeriesLeaderboard extends StatelessWidget {
         i < distribute.to && i < totalContestants; i++) 
       {
         rankingListTiles.add(ListTile(
-          leading: Text(RankingMaker.getRank(i).toString()),
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(RankingMaker.getRank(i).toString()),
+          ),
           title: Text(_cubit.series.ranks[i].username),
           subtitle: Text(distribute.chips.toString() + ' Chips'),
           trailing: Text(_cubit.series.ranks[i].totalPoints.toString()),
         ));
+        rankingListTiles.add(Divider(height: 1));
       }
     });
 
@@ -104,30 +111,29 @@ class SeriesLeaderboard extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 10),
 
         // ranking titles
-        Row(children: [
-          Expanded(
-            flex: 1,
-            child: Text('Rank'),
+        ListTile(
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: getRankTitle('Rank'),
           ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 3,
-            child: Text('User'),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            flex: 1,
-            child: Text('Points'),
-          ),
-        ]),
-        Divider(),
+          title: getRankTitle('User'),
+          trailing: getRankTitle('Points'),
+        ),
+        Divider(height: 1),
 
         // user's ranking
         if(userRankIndex != -1) ListTile(
-          leading: Text(RankingMaker.getRank(userRankIndex).toString()),
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(RankingMaker.getRank(userRankIndex).toString()),
+          ),
           title: Text(_cubit.series.ranks[userRankIndex].username),
           subtitle: Text(userChips.toString() + ' Chips'),
           trailing: Text(_cubit.series.ranks[userRankIndex].totalPoints
@@ -139,19 +145,17 @@ class SeriesLeaderboard extends StatelessWidget {
         ),
 
         // all rankings including the user
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount:totalContestants,
-          itemBuilder: (BuildContext context, int i) {
-            return Column(
-              children: [
-                rankingListTiles[i],
-                Divider(height: 1),
-              ],
-            );
-          },
-        ),
+        Column(children: rankingListTiles),
       ],
+    );
+  }
+
+  Text getRankTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 14,
+      ),  
     );
   }
 
@@ -163,28 +167,59 @@ class SeriesLeaderboard extends StatelessWidget {
       Excerpt excerpt = _cubit.series.matchExcerpts[i];
       
       matchWidgets.add(InkWell(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: Text(DateFormat.yMMMd().add_jm().format(excerpt
-              .startTime.toDate()))),
-            SizedBox(width: 5),
-            Expanded(child: Text(excerpt.no.toString() + 
-              NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' + 
-              excerpt.type)),
-            SizedBox(width: 5),
-            Expanded(child: Text(excerpt.teamsNames[0] + ' vs ' + 
-              excerpt.teamsNames[1])),
-            SizedBox(width: 5),
-            Expanded(child: Text(_cubit.userContestRanks[i] != null ?
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // first team's name & image
+            Row(
+              children: [
+                Image.network(
+                  excerpt.teamImages[0],
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(width: 5),
+                Expanded(child: Text(excerpt.teamsNames[0])),
+              ],
+            ),
+            SizedBox(height: 5),
+
+            // second team's name & image
+            Row(
+              children: [
+                Image.network(
+                  excerpt.teamImages[1],
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(width: 5),
+                Expanded(child: Text(excerpt.teamsNames[1])),
+              ],
+            ),
+            SizedBox(height: 5),
+            
+            // match type and number
+            Text(excerpt.no.toString()
+              + NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' 
+              + excerpt.type),
+            SizedBox(height: 5),
+            // match date
+            Text(DateFormat.yMMMd().add_jm().format(excerpt.startTime
+              .toDate())),
+            SizedBox(height: 5),
+            // user's achived points
+            Text('Points Achived ' + (_cubit.userContestRanks[i] != null ? 
               _cubit.userContestRanks[i].totalPoints.toString() : '-')),
-            SizedBox(width: 5),
-            Expanded(child: Text(_cubit.userContestRanks[i] != null ?
-              RankingMaker.getRank(
-                _cubit.userContestRanks.indexOf(_cubit.userContestRanks[i])
-              ).toString() : '-')),
+            SizedBox(height: 5),
+            // user's rank
+            Text('Ranked ' + (_cubit.userContestRanks[i] != null ? 
+              RankingMaker.getRank(_cubit.userContestRanks.indexOf(
+              _cubit.userContestRanks[i])).toString() : '-')),
+            SizedBox(height: 5),
           ],
-        ),
+        ), 
         onTap: () {
           if(excerpt.id != null) {
             Navigator.push(context, MaterialPageRoute(
@@ -195,7 +230,7 @@ class SeriesLeaderboard extends StatelessWidget {
             ));
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Contest isn\'t started.'),
+              content: Text('The contest hasn\'t started yet.'),
             ));
           }
         },
@@ -205,24 +240,7 @@ class SeriesLeaderboard extends StatelessWidget {
 
     return ListView(
       padding: Paddings.pagePadding,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: Text('Date')),
-            SizedBox(width: 5),
-            Expanded(child: Text('Type')),
-            SizedBox(width: 5),
-            Expanded(child: Text('Match')),
-            SizedBox(width: 5),
-            Expanded(child: Text('Points')),
-            SizedBox(width: 5),
-            Expanded(child: Text('Rank')),
-          ],
-        ),
-        Divider(),
-        Column(children: matchWidgets),
-      ],
+      children: matchWidgets,
     );
   }
 

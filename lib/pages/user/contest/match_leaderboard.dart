@@ -67,14 +67,14 @@ class MatchLeaderboard extends StatelessWidget {
     ];
   }
 
-  Padding getUserRankings(BuildContext context) {
+  ListView getUserRankings(BuildContext context) {
     int userRankIndex = _cubit.contest.ranks.indexWhere((Rank rank) {
       return _cubit.user.username == rank.username;
     });
     int userChips;
 
     int totalContestants = _cubit.contest.ranks.length;
-    List<ListTile> rankingListTiles = <ListTile>[];
+    List<Widget> rankingListTiles = <Widget>[];
 
     // set [rankingListTiles]
     _cubit.contest.chipsDistributes.forEach((Distribute distribute) {
@@ -85,7 +85,12 @@ class MatchLeaderboard extends StatelessWidget {
         i < distribute.to && i < totalContestants; i++) 
       {
         rankingListTiles.add(ListTile(
-          leading: Text(RankingMaker.getRank(i).toString()),
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(RankingMaker.getRank(i).toString()),
+          ),
           title: Text(_cubit.contest.ranks[i].username),
           subtitle: Text(distribute.chips.toString() + ' Chips'),
           trailing: Text(_cubit.contest.ranks[i].totalPoints.toString()),
@@ -99,83 +104,78 @@ class MatchLeaderboard extends StatelessWidget {
             },
           )),
         ));
+        rankingListTiles.add(Divider(height: 1));
       }
     });
     
-    return Padding(
+    return ListView(
       padding: Paddings.pagePadding,
-      child: Column(
-        children: [
-          // number of total contestants
-          Row(
-            children: [
-              Icon(Icons.people),
-              SizedBox(width: 10),
-              Text(
-                '$totalContestants Contestants',
-                style: Theme.of(context).textTheme.subtitle2,  
-              ),
-            ],
-          ),
-          SizedBox(height: 30),
-
-          // ranking titles
-          Row(children: [
-            getRankTitle(1, 'Rank', context),
+      children: [
+        // number of total contestants
+        Row(
+          children: [
+            Icon(Icons.people),
             SizedBox(width: 10),
-            getRankTitle(3, 'User', context),
-            SizedBox(width: 10),
-            getRankTitle(1, 'Points', context),
-          ]), 
-          Divider(),
+            Text(
+              '$totalContestants Contestants',
+              style: Theme.of(context).textTheme.subtitle2,  
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
 
-          // user's ranking
-          if(userRankIndex != -1) ListTile(
-            leading: Text(RankingMaker.getRank(userRankIndex).toString()),
-            title: Text(_cubit.contest.ranks[userRankIndex].username),
-            subtitle: Text(userChips.toString() + ' Chips'),
-            trailing: Text(_cubit.contest.ranks[userRankIndex].totalPoints
-              .toString()),
-            onTap: () => Navigator.push(context, MaterialPageRoute(
-              builder: (BuildContext context) {
-                return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
-                  _cubit.contest,
-                  _cubit.contest.ranks[userRankIndex].username,
-                  _cubit.excerpt,
-                ));
-              },
-            )),
+        // ranking titles
+        ListTile(
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: getRankTitle('Rank'),
           ),
-          if(userRankIndex != -1) Divider(
-            color: Colors.grey.shade700,
-            height: 1,  
-          ),
+          title: getRankTitle('User'),
+          trailing: getRankTitle('Points'),
+        ),
+        Divider(height: 1),
 
-          // all rankings including the user
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: totalContestants,
-            itemBuilder: (BuildContext context, int i) {
-              return Column(
-                children: [
-                  rankingListTiles[i],
-                  Divider(height: 1),
-                ],
-              );
+        // user's ranking
+        if(userRankIndex != -1) ListTile(
+          contentPadding: EdgeInsets.all(0),
+          minVerticalPadding: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Text(RankingMaker.getRank(userRankIndex).toString()),
+          ),
+          title: Text(_cubit.contest.ranks[userRankIndex].username),
+          subtitle: Text(userChips.toString() + ' Chips'),
+          trailing: Text(_cubit.contest.ranks[userRankIndex].totalPoints
+            .toString()),
+          onTap: () => Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return FantasyPlayerPoints(fppCubit.FantasyPlayerPointsCubit(
+                _cubit.contest,
+                _cubit.contest.ranks[userRankIndex].username,
+                _cubit.excerpt,
+              ));
             },
-          ),
-        ],
-      ),
+          )),
+        ),
+        if(userRankIndex != -1) Divider(
+          color: Colors.grey.shade700,
+          height: 1,  
+        ),
+
+        // all contestants ranking
+        Column(children: rankingListTiles),
+      ],
     );
   }
 
-  Expanded getRankTitle(int flex, String title, BuildContext context) {
-    return Expanded(
-      flex: flex,
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.subtitle2,  
-      ),
+  Text getRankTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 14,
+      ),  
     );
   }
 
@@ -209,9 +209,6 @@ class MatchLeaderboard extends StatelessWidget {
       }
 
       pointsListTiles.add(ListTile(
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(_cubit.contest.playerPhotos[i] ?? ''),
-        ),
         title: Text(_cubit.contest.playersNames[i]),
         subtitle: Row(
           children: [
@@ -292,8 +289,8 @@ class MatchLeaderboard extends StatelessWidget {
               child: Column(children: [
                 Image.network(
                  _cubit.excerpt.teamImages[0],
-                  width: 35,
-                  height: 35,
+                  width: 30,
+                  height: 30,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5),
@@ -324,19 +321,21 @@ class MatchLeaderboard extends StatelessWidget {
 
             // team two's image, name and score
             Expanded(
-              child: Column(children: [
-                Image.network(
-                  _cubit.excerpt.teamImages[1],
-                  width: 35,
-                  height: 35,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(height: 5),
-                Text(_cubit.contest.teamsNames[1]),
-                SizedBox(height: 5),
-                Text(_cubit.contest.teamsScores.isNotEmpty 
-                  ? _cubit.contest.teamsScores[1] : ''),
-              ]),
+              child: Column(
+                children: [
+                  Image.network(
+                    _cubit.excerpt.teamImages[1],
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(height: 5),
+                  Text(_cubit.contest.teamsNames[1]),
+                  SizedBox(height: 5),
+                  Text(_cubit.contest.teamsScores.isNotEmpty 
+                    ? _cubit.contest.teamsScores[1] : ''),
+                ],
+              ),
             ),
           ],
         ),

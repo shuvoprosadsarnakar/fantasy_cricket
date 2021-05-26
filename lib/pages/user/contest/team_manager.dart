@@ -52,12 +52,11 @@ class TeamManager extends StatelessWidget {
               children: [
                 // selection result bars
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                   child: Column(children: [
                     getPlayerSelectionResultBarOne(),
                     Divider(),
                     getPlayerSelectionResultBarTwo(),
-                    SizedBox(height: 10),
                   ]),
                 ),
                 
@@ -91,7 +90,7 @@ class TeamManager extends StatelessWidget {
                           ListView(
                             padding: EdgeInsets.symmetric(
                               vertical: 10,
-                              horizontal: 30,
+                              horizontal: 20,
                             ),
                             children: <Widget>[
                               getTeam1Players(context),
