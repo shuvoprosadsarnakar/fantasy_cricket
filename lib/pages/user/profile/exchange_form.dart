@@ -62,7 +62,7 @@ class ExchangeForm extends StatelessWidget {
             try {
               parsed = int.parse(value);
             } catch(error) {
-              return 'Invalid chips value.';
+              return 'Invalid number of chips.';
             }
 
             if(parsed < _cubit.minExchangeLimit) {
