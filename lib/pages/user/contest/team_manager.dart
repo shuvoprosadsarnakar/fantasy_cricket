@@ -24,7 +24,21 @@ class TeamManager extends StatelessWidget {
           return FetchErrorMsg();
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text('Team Manager')),
+            appBar: AppBar(
+              title: Text('Team Manager'),
+              actions: <Widget>[
+                if(_cubit.fantasy.playerNames.isNotEmpty) TextButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(1),
+                  ),
+                  child: Text(
+                    'Review',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {},
+                ),
+              ],  
+            ),
             body: Column(
               children: [
                 // selection result bars
@@ -274,17 +288,22 @@ class TeamManager extends StatelessWidget {
         Expanded(child: Checkbox(
           value: playerName == _cubit.fantasy.captain ? true : false,
           onChanged: (bool value) {
-            if(playerName == _cubit.fantasy.viceCaptain) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Captain and vice captain can\'t be same.'),
-              ));
-            } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
-              {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Captain can\'t be an unselected player.'),
-              ));
+            if(value) {
+              if(playerName == _cubit.fantasy.viceCaptain) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Captain and vice captain can\'t be same.'),
+                ));
+              } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
+                {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Captain can\'t be an unselected player.'),
+                ));
+              } else {
+                _cubit.fantasy.captain = playerName;
+                _cubit.rebuildUi();
+              }
             } else {
-              _cubit.fantasy.captain = playerName;
+              _cubit.fantasy.captain = null;
               _cubit.rebuildUi();
             }
           },
@@ -295,17 +314,22 @@ class TeamManager extends StatelessWidget {
         Expanded(child: Checkbox(
           value: playerName == _cubit.fantasy.viceCaptain ? true : false,
           onChanged: (bool value) {
-            if(playerName == _cubit.fantasy.captain) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Captain and vice captain can\'t be same.'),
-              ));
-            } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
-              {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Vice captain can\'t be an unselected player.'),
-              ));
+            if(value) {
+              if(playerName == _cubit.fantasy.captain) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Captain and vice captain can\'t be same.'),
+                ));
+              } else if(_cubit.fantasy.playerNames.contains(playerName) == false) 
+                {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Vice captain can\'t be an unselected player.'),
+                ));
+              } else {
+                _cubit.fantasy.viceCaptain = playerName;
+                _cubit.rebuildUi();
+              }
             } else {
-              _cubit.fantasy.viceCaptain = playerName;
+              _cubit.fantasy.viceCaptain = null;
               _cubit.rebuildUi();
             }
           },
