@@ -1,35 +1,71 @@
 import 'package:fantasy_cricket/helpers/number_suffix_finder.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart' as mlCubit;
-import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart' as rcCubit;
-import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart' as slCubit;
-import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart' as tmCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/match_leaderboard_cubit.dart'
+    as mlCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart'
+    as rcCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/series_leaderboard_cubit.dart'
+    as slCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart'
+    as tmCubit;
 import 'package:fantasy_cricket/pages/user/contest/match_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/series_leaderboard.dart';
 import 'package:fantasy_cricket/pages/user/contest/team_manager.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/strings/ad_units.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
-class ContestDetails extends StatelessWidget {
+class ContestDetails extends StatefulWidget {
   final ContestDetialsCubit _cubit;
 
   ContestDetails(this._cubit);
 
   @override
+  _ContestDetailsState createState() => _ContestDetailsState();
+}
+
+class _ContestDetailsState extends State<ContestDetails> {
+  bool _isButtonDisabled = true;
+  bool _isRewardedAdReady = false;
+  RewardedAd _rewardedAd;
+  final RewardedAd myRewarded = RewardedAd(
+    adUnitId: rewarded,
+    request: AdRequest(),
+    listener: AdListener(
+      onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+        print(reward.type);
+        print(reward.amount);
+      },
+      onAdLoaded: (ad) {
+        print("Ad loaded");
+      },
+      onAdFailedToLoad: (ad, error) {
+        print("Ad failed to load");
+      },
+    ),
+  );
+  @override
+  void initState() {
+    super.initState();
+    createReawrdAdAndLoad();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _cubit,
+      bloc: widget._cubit,
       builder: (BuildContext context, CubitState state) {
-        if(state == CubitState.loading) {
+        if (state == CubitState.loading) {
           return Loading();
-        } else if(state == CubitState.fetchError) {
+        } else if (state == CubitState.fetchError) {
           return FetchErrorMsg();
         } else {
           return Scaffold(
@@ -45,8 +81,10 @@ class ContestDetails extends StatelessWidget {
                 SizedBox(height: 50), // for floating action button
               ],
             ),
-            floatingActionButton: _cubit.excerpt.status == 
-              ContestStatuses.running ? _getJoinContestButton(context) : null,
+            floatingActionButton:
+                widget._cubit.excerpt.status == ContestStatuses.running
+                    ? _getJoinContestButton(context)
+                    : null,
           );
         }
       },
@@ -54,17 +92,17 @@ class ContestDetails extends StatelessWidget {
   }
 
   Row _getContestDetilsHeader() {
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _getTeamImage(_cubit.excerpt.teamImages[0]),
+        _getTeamImage(widget._cubit.excerpt.teamImages[0]),
         SizedBox(width: 10),
-        
         Expanded(
           child: Column(children: [
             Text(
-              _cubit.excerpt.teamsNames[0] + ' X ' 
-                + _cubit.excerpt.teamsNames[1],
+              widget._cubit.excerpt.teamsNames[0] +
+                  ' X ' +
+                  widget._cubit.excerpt.teamsNames[1],
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
@@ -72,24 +110,26 @@ class ContestDetails extends StatelessWidget {
             ),
             SizedBox(height: 7),
             Text(
-              _cubit.excerpt.no.toString()
-                + NumberSuffixFinder.getNumberSuffix(_cubit.excerpt.no) + ' '
-                + _cubit.excerpt.type + ' Match',
+              widget._cubit.excerpt.no.toString() +
+                  NumberSuffixFinder.getNumberSuffix(widget._cubit.excerpt.no) +
+                  ' ' +
+                  widget._cubit.excerpt.type +
+                  ' Match',
             ),
             SizedBox(height: 7),
             Text(
-              _cubit.series.name,
+              widget._cubit.series.name,
             ),
             SizedBox(height: 7),
             Text(
-              DateFormat.yMMMd().add_jm().format(_cubit.excerpt.startTime
-                .toDate()),    
+              DateFormat.yMMMd()
+                  .add_jm()
+                  .format(widget._cubit.excerpt.startTime.toDate()),
             ),
           ]),
         ),
         SizedBox(width: 10),
-        
-        _getTeamImage(_cubit.excerpt.teamImages[1]),
+        _getTeamImage(widget._cubit.excerpt.teamImages[1]),
       ],
     );
   }
@@ -127,14 +167,14 @@ class ContestDetails extends StatelessWidget {
                 SizedBox(width: 3),
                 Text(
                   'Leaderboard',
-                  style: TextStyle(color: Theme.of(context).primaryColor),  
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
               ],
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
                 return MatchLeaderboard(mlCubit.MatchLeaderBoardCubit(
-                  _cubit.excerpt, _cubit.user));
+                    widget._cubit.excerpt, widget._cubit.user));
               },
             )),
           ),
@@ -153,7 +193,7 @@ class ContestDetails extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               SizedBox(width: 8),
-              Text('${_cubit.excerpt.totalWinners} Winners'),
+              Text('${widget._cubit.excerpt.totalWinners} Winners'),
             ],
           ),
           Row(
@@ -164,13 +204,13 @@ class ContestDetails extends StatelessWidget {
                 height: 34,
                 fit: BoxFit.cover,
               ),
-              Text('${_cubit.excerpt.totalChips} Chips'),
+              Text('${widget._cubit.excerpt.totalChips} Chips'),
             ],
           ),
         ],
       ),
       Divider(color: Colors.grey),
-      _getWinnersWiseChipsRows(_cubit.contest.chipsDistributes),
+      _getWinnersWiseChipsRows(widget._cubit.contest.chipsDistributes),
     ]);
   }
 
@@ -181,7 +221,7 @@ class ContestDetails extends StatelessWidget {
         children: [
           Text(
             'Series Prizes',
-            style: TextStyle(fontSize: 16),  
+            style: TextStyle(fontSize: 16),
           ),
           TextButton(
             style: ButtonStyle(
@@ -193,20 +233,20 @@ class ContestDetails extends StatelessWidget {
                 Icon(
                   Icons.leaderboard,
                   color: ColorPallate.ebonyClay,
-                  size: 15,  
+                  size: 15,
                 ),
                 SizedBox(width: 3),
                 Text(
                   'Leaderboard',
-                  style: TextStyle(color: Theme.of(context).primaryColor),  
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
               ],
             ),
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (BuildContext context) {
                 return SeriesLeaderboard(slCubit.SeriesLeaderboardCubit(
-                  _cubit.series,
-                  _cubit.user,
+                  widget._cubit.series,
+                  widget._cubit.user,
                 ));
               },
             )),
@@ -226,7 +266,7 @@ class ContestDetails extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               SizedBox(width: 8),
-              Text('${_cubit.series.chipsDistributes.last.to} Winners'),
+              Text('${widget._cubit.series.chipsDistributes.last.to} Winners'),
             ],
           ),
           Row(
@@ -237,14 +277,16 @@ class ContestDetails extends StatelessWidget {
                 height: 34,
                 fit: BoxFit.cover,
               ),
-              Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(_cubit.series)
-                .toString() + ' Chips'),
+              Text(rcCubit.RunningContestsCubit.getSeriesTotalChips(
+                          widget._cubit.series)
+                      .toString() +
+                  ' Chips'),
             ],
           ),
         ],
       ),
       Divider(color: Colors.grey),
-      _getWinnersWiseChipsRows(_cubit.series.chipsDistributes),
+      _getWinnersWiseChipsRows(widget._cubit.series.chipsDistributes),
     ]);
   }
 
@@ -252,19 +294,23 @@ class ContestDetails extends StatelessWidget {
     List<Column> distributeRows = <Column>[];
     int totalDistributes = distributes.length;
 
-    for(int i = 0; i < totalDistributes; i++) {
+    for (int i = 0; i < totalDistributes; i++) {
       int from = distributes[i].from;
       int to = distributes[i].to;
-      
+
       distributeRows.add(Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                from.toString() + NumberSuffixFinder.getNumberSuffix(from) 
-                  + (from != to ? ' - ' + to.toString() 
-                  + NumberSuffixFinder.getNumberSuffix(to) : ''),
+                from.toString() +
+                    NumberSuffixFinder.getNumberSuffix(from) +
+                    (from != to
+                        ? ' - ' +
+                            to.toString() +
+                            NumberSuffixFinder.getNumberSuffix(to)
+                        : ''),
               ),
               Text(distributes[i].chips.toString() + ' Chips'),
             ],
@@ -277,35 +323,72 @@ class ContestDetails extends StatelessWidget {
     return Column(children: distributeRows);
   }
 
-  TextButton _getJoinContestButton(BuildContext context) {
+  Widget _getJoinContestButton(BuildContext context) {
     String buttonText;
-    
-    if(_cubit.user.contestIds.contains(_cubit.excerpt.id)) {
+
+    if (widget._cubit.user.contestIds.contains(widget._cubit.excerpt.id)) {
       buttonText = 'Update Team';
     } else {
       buttonText = 'Create Team';
     }
-    
+
     return TextButton(
       child: Text(buttonText),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          Theme.of(context).primaryColor
-        ),
+        backgroundColor: _isButtonDisabled
+            ? MaterialStateProperty.all(Colors.grey)
+            : MaterialStateProperty.all(Colors.red),
         foregroundColor: MaterialStateProperty.all(Colors.white),
         elevation: MaterialStateProperty.all(5),
       ),
       onPressed: () async {
-        await Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return TeamManager(tmCubit.TeamManagerCubit(_cubit.series,
-              _cubit.user, _cubit.excerpt));
-          },
-        ));
+        if (!_isButtonDisabled) {
+          await Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return TeamManager(tmCubit.TeamManagerCubit(widget._cubit.series,
+                  widget._cubit.user, widget._cubit.excerpt));
+            },
+          ));
+        } else {
+          myRewarded.show();
+          print("show ad");
+          //createReawrdAdAndLoad();
+        }
 
         // rebuild UI to change button text if user has joined contest
-        _cubit.rebuildUi();
+        widget._cubit.rebuildUi();
       },
     );
+  }
+
+  createReawrdAdAndLoad() {
+    _rewardedAd = RewardedAd(
+      adUnitId: rewarded,
+      request: AdRequest(),
+      listener: AdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isRewardedAdReady = true;
+            _isButtonDisabled = false;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+          _isRewardedAdReady = false;
+          //ad.dispose();
+        },
+        onAdClosed: (_) {
+          setState(() {
+            _isRewardedAdReady = false;
+          });
+          _rewardedAd.load();
+        },
+        onRewardedAdUserEarnedReward: (_, reward) {
+          _isButtonDisabled = false;
+        },
+      ),
+    );
+
+    _rewardedAd.load();
   }
 }
