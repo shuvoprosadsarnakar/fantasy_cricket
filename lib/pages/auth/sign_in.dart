@@ -21,10 +21,11 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final myController = TextEditingController();
+  TextEditingController myController; 
   @override
   void initState() {
     super.initState();
+    myController = TextEditingController(); 
     loadSavedEmail();
   }
 
@@ -93,7 +94,6 @@ class _SignInState extends State<SignIn> {
 
   FormTextField getEmailField() {
     return FormTextField(
-      initialValue: widget._cubit.email,
       keyboardType: TextInputType.emailAddress,
       controller: myController,
       validator: (String value) {
