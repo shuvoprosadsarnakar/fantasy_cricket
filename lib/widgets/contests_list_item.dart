@@ -29,7 +29,7 @@ class ContestsListItem extends StatelessWidget {
           _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
-      SizedBox(height: 15),      
+      Divider(),   
       Row(
         children: [
           Expanded(
@@ -57,7 +57,6 @@ class ContestsListItem extends StatelessWidget {
       Divider(
         thickness: 2,
         color: Colors.grey.shade300,
-        height: 40,
       ),
     ]);
   }
