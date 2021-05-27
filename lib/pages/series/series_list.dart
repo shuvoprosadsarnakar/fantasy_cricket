@@ -1,13 +1,9 @@
 import 'package:fantasy_cricket/models/series.dart';
-import 'package:fantasy_cricket/models/team.dart';
 import 'package:fantasy_cricket/pages/series/bloc/series_bloc.dart';
 import 'package:fantasy_cricket/pages/series/bloc/series_event.dart';
 import 'package:fantasy_cricket/pages/series/bloc/series_state.dart';
 import 'package:fantasy_cricket/pages/series/cubits/series_add_edit_cubit.dart';
 import 'package:fantasy_cricket/pages/series/series_add_edit.dart';
-import 'package:fantasy_cricket/pages/team/cubits/team_add_edit_cubit.dart';
-import 'package:fantasy_cricket/pages/team/team_add_edit.dart';
-import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/strings/image_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

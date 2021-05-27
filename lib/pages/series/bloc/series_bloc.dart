@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:fantasy_cricket/pages/series/bloc/series_event.dart';
 import 'package:fantasy_cricket/pages/series/bloc/series_state.dart';
 import 'package:fantasy_cricket/repositories/series_repo.dart';
-import 'package:fantasy_cricket/repositories/team_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 

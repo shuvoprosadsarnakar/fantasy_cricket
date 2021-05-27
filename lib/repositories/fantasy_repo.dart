@@ -4,8 +4,6 @@ import 'package:fantasy_cricket/models/fantasy.dart';
 import 'package:fantasy_cricket/models/rank.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/models/user.dart';
-import 'package:fantasy_cricket/repositories/series_repo.dart';
-import 'package:fantasy_cricket/repositories/user_repo.dart';
 
 class FantasyRepo {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;

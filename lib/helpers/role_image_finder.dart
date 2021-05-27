@@ -15,7 +15,7 @@ abstract class RoleImageFinder {
         roleImage += 'bat-and-ball.png';
         break;
       case WICKET_KEEPER:
-        roleImage += 'wicket-keeper.jpg';
+        roleImage += 'wicket-keeper.png';
         break;
     }
 

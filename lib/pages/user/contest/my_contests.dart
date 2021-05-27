@@ -4,7 +4,6 @@ import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart'
     as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
-import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';

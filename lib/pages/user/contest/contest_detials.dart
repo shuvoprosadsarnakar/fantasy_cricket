@@ -35,7 +35,7 @@ class ContestDetails extends StatefulWidget {
 class _ContestDetailsState extends State<ContestDetails> {
 
   final RewardedAd myRewarded = RewardedAd(
-    adUnitId: rewarded,
+    adUnitId: AdHelper.rewarded,
     request: AdRequest(),
     listener: AdListener(
       onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {

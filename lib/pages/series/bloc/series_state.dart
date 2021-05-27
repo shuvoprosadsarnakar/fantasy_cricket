@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:fantasy_cricket/models/series.dart';
-import 'package:fantasy_cricket/models/team.dart';
 
 abstract class SeriesState extends Equatable {
   const SeriesState();
