@@ -2,6 +2,7 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/models/win_info.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EarningHistory extends StatelessWidget {
   final User user;
@@ -66,7 +67,8 @@ class EarningHistory extends StatelessWidget {
 
   Row getHistoryRow(WinInfo winInfo) {
     return Row(children: [
-      getHistoryContent(1, winInfo.date.toDate().toString().substring(0, 16)),
+      getHistoryContent(1, 
+        DateFormat.yMMMd().add_jm().format(winInfo.date.toDate())),
       SizedBox(width: 10),
       getHistoryContent(2, winInfo.details),
       SizedBox(width: 10),

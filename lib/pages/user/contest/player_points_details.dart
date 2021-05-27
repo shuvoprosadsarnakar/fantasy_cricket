@@ -80,7 +80,10 @@ class PlayerPointsDetails extends StatelessWidget {
           backgroundImage: NetworkImage(_contest.playerPhotos[_playerIndex]),
         ) : null,
         tileColor: ColorPallate.mercury,
-        title: Text(_contest.playersNames[_playerIndex]),
+        title: Text(
+          _contest.playersNames[_playerIndex],
+          style: TextStyle(color: ColorPallate.pomegranate),
+        ),
         subtitle: Column(
           children: [
             SizedBox(height: 5),

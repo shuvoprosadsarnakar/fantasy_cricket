@@ -102,7 +102,10 @@ class SeriesLeaderboard extends StatelessWidget {
         // number of total contestants
         Row(
           children: [
-            Icon(Icons.people),
+            Icon(
+              Icons.people,
+              color: Theme.of(context).primaryColor,  
+            ),
             SizedBox(width: 5),
             Text(
               ' ${_cubit.series.ranks.length} Contestants',
@@ -201,9 +204,12 @@ class SeriesLeaderboard extends StatelessWidget {
             SizedBox(height: 5),
             
             // match type and number
-            Text(excerpt.no.toString()
+            Text(
+              excerpt.no.toString()
               + NumberSuffixFinder.getNumberSuffix(excerpt.no) + ' ' 
-              + excerpt.type),
+              + excerpt.type,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
             SizedBox(height: 5),
             // match date
             Text(DateFormat.yMMMd().add_jm().format(excerpt.startTime
