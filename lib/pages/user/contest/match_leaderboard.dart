@@ -114,7 +114,10 @@ class MatchLeaderboard extends StatelessWidget {
         // number of total contestants
         Row(
           children: [
-            Icon(Icons.people),
+            Icon(
+              Icons.people,
+              color: Theme.of(context).primaryColor,  
+            ),
             SizedBox(width: 10),
             Text(
               '$totalContestants Contestants',
@@ -198,6 +201,7 @@ class MatchLeaderboard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),  
           ),
           trailing: Text(
@@ -252,6 +256,7 @@ class MatchLeaderboard extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ), 
           ),
           trailing: Text(
@@ -294,7 +299,10 @@ class MatchLeaderboard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5),
-                Text(_cubit.contest.teamsNames[0]),
+                Text(
+                  _cubit.contest.teamsNames[0],
+                  style: Theme.of(context).textTheme.subtitle2,  
+                ),
                 SizedBox(height: 5),
                 Text(_cubit.contest.teamsScores.isNotEmpty 
                   ? _cubit.contest.teamsScores[0] : ''),
@@ -330,7 +338,10 @@ class MatchLeaderboard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                   SizedBox(height: 5),
-                  Text(_cubit.contest.teamsNames[1]),
+                  Text(
+                    _cubit.contest.teamsNames[1],
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
                   SizedBox(height: 5),
                   Text(_cubit.contest.teamsScores.isNotEmpty 
                     ? _cubit.contest.teamsScores[1] : ''),
@@ -349,6 +360,10 @@ class MatchLeaderboard extends StatelessWidget {
         SizedBox(height: 20),
 
         TextButton(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(2),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+          ),
           child: Text(
             'Full Score',
             style: TextStyle(

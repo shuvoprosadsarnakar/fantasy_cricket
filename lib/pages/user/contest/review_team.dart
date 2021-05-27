@@ -41,6 +41,7 @@ class ReviewTeam  extends StatelessWidget {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -55,7 +56,7 @@ class ReviewTeam  extends StatelessWidget {
             Expanded(
               child: Text(
                 fantasy.playerNames[i] + ' ' + playerNameSuffix,
-                style: Theme.of(context).textTheme.subtitle1,  
+                style: Theme.of(context).textTheme.subtitle2,  
               ),  
             ),
             SizedBox(width: 5),
@@ -67,7 +68,9 @@ class ReviewTeam  extends StatelessWidget {
             ),
           ],
         ),
-
+        Text(
+          '${contest.playersCredits[playerIndex].toStringAsFixed(1)} Credits',
+        ),
         if(fantasy.playerNames[i] != fantasy.playerNames.last) Divider(),
       ],
     );

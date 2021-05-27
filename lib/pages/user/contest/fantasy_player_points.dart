@@ -57,7 +57,10 @@ class FantasyPlayerPoints extends StatelessWidget {
       borderRadius: BorderRadius.circular(5),
       child: ListTile(
         tileColor: ColorPallate.mercury,
-        title: Text(_cubit.username),
+        title: Text(
+          _cubit.username,
+          style: TextStyle(color: ColorPallate.pomegranate),  
+        ),
         subtitle: Text('Rank: ' + _cubit.getRank(rankIndex).toString()),
         trailing: Text('Points: ' + 
           _cubit.contest.ranks[rankIndex].totalPoints.toString()),

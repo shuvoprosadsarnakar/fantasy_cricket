@@ -29,7 +29,7 @@ class ContestsListItem extends StatelessWidget {
           _getTeamImage(_excerpt.teamImages[1]),
         ],
       ),
-      SizedBox(height: 15),      
+      Divider(),   
       Row(
         children: [
           Expanded(
@@ -57,7 +57,6 @@ class ContestsListItem extends StatelessWidget {
       Divider(
         thickness: 2,
         color: Colors.grey.shade300,
-        height: 40,
       ),
     ]);
   }
@@ -77,8 +76,15 @@ class ContestsListItem extends StatelessWidget {
         Text(
           '${_excerpt. teamsNames[0]} X ${_excerpt.teamsNames[1]}',
           style: TextStyle(
+            color: ColorPallate.ebonyClay,
             fontWeight: FontWeight.w500,
             fontSize: 16,
+            shadows: <Shadow>[
+              Shadow(
+                blurRadius: 1,
+                color: ColorPallate.pomegranate,
+              ),
+            ],
           ),
           textAlign: TextAlign.center,
         ),
@@ -143,8 +149,7 @@ class ContestsListItem extends StatelessWidget {
         child: Text(
           contestType,
           style: TextStyle(
-            fontSize: 13,
-            letterSpacing: 1,
+            fontSize: 14,
           ),
         ),
       ),

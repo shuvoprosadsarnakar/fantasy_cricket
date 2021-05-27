@@ -74,6 +74,8 @@ class SignUp extends StatelessWidget {
       validator: (String value) {
         if(value.trim().isEmpty) {
           return 'Username is required.';
+        } else if(value.trim().length > 15){
+          return 'Username must not exceed 15 characters.';
         } else {
           return null;
         }
