@@ -29,74 +29,76 @@ class _ProfileState extends State<Profile> {
   bool _isBannerAdReady = false;
   @override
   void initState() {
-    super.initState();
     createAndLoadAd();
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _bannerAd.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: widget._cubit,
-      builder: (BuildContext context, CubitState state) {
-        if (state == CubitState.loading) {
-          return Loading();
-        } else if (state == CubitState.fetchError) {
-          return FetchErrorMsg();
-        } else {
-          return ListView(
-            padding: Paddings.pagePadding,
-            children: [
-              getUsername(context),
-              SizedBox(height: 40),
-              getProfileInfo(
-                context: context,
-                title: 'Total Earned Chips',
-                value: widget._cubit.user.earnedChips.toString(),
-                buttonText: 'Earning History',
-                page: EarningHistory(widget._cubit.user),
-                iconData: Icons.history_outlined,
-              ),
-              Divider(height: 50),
-              getProfileInfo(
-                context: context,
-                title: 'Total Exchanged Chips',
-                value: widget._cubit.getExchangedChips().toString(),
-                buttonText: 'Exchange History',
-                page: ExchangeHistory(
-                    ehCubit.ExchangeHistoryCubit(widget._cubit.user.id)),
-                iconData: Icons.history_outlined,
-              ),
-              Divider(height: 50),
-              getProfileInfo(
-                context: context,
-                title: 'Remaining Chips',
-                value: widget._cubit.user.remainingChips.toString(),
-                buttonText: 'Exchange Chips',
-                page:
-                    ExchangeForm(efCubit.ExchangeFormCubit(widget._cubit.user)),
-                iconData: Icons.money_outlined,
-              ),
-              Divider(height: 50),
-              if (_isBannerAdReady)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: _bannerAd.size.width.toDouble(),
-                    height: _bannerAd.size.height.toDouble(),
-                    child: AdWidget(ad: _bannerAd),
-                  ),
+    return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+      if (_isBannerAdReady)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: _bannerAd.size.width.toDouble(),
+            height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
+          ),
+        ),
+      BlocBuilder(
+        bloc: widget._cubit,
+        builder: (BuildContext context, CubitState state) {
+          if (state == CubitState.loading) {
+            return Loading();
+          } else if (state == CubitState.fetchError) {
+            return FetchErrorMsg();
+          } else {
+            return ListView(
+              padding: Paddings.pagePadding,
+              children: [
+                getUsername(context),
+                SizedBox(height: 40),
+                getProfileInfo(
+                  context: context,
+                  title: 'Total Earned Chips',
+                  value: widget._cubit.user.earnedChips.toString(),
+                  buttonText: 'Earning History',
+                  page: EarningHistory(widget._cubit.user),
+                  iconData: Icons.history_outlined,
                 ),
-            ],
-          );
-        }
-      },
-    );
+                Divider(height: 50),
+                getProfileInfo(
+                  context: context,
+                  title: 'Total Exchanged Chips',
+                  value: widget._cubit.getExchangedChips().toString(),
+                  buttonText: 'Exchange History',
+                  page: ExchangeHistory(
+                      ehCubit.ExchangeHistoryCubit(widget._cubit.user.id)),
+                  iconData: Icons.history_outlined,
+                ),
+                Divider(height: 50),
+                getProfileInfo(
+                  context: context,
+                  title: 'Remaining Chips',
+                  value: widget._cubit.user.remainingChips.toString(),
+                  buttonText: 'Exchange Chips',
+                  page: ExchangeForm(
+                      efCubit.ExchangeFormCubit(widget._cubit.user)),
+                  iconData: Icons.money_outlined,
+                ),
+                Divider(height: 50),
+              ],
+            );
+          }
+        },
+      ),
+    ]);
   }
 
   Text getUsername(BuildContext context) {
@@ -172,9 +174,9 @@ class _ProfileState extends State<Profile> {
 
   void createAndLoadAd() {
     _bannerAd = BannerAd(
-      adUnitId: banner,
+      adUnitId: AdHelper.banner,
       request: AdRequest(),
-      size: AdSize.largeBanner,
+      size: AdSize.banner,
       listener: AdListener(
         onAdLoaded: (_) {
           print('Banner ad loaded');

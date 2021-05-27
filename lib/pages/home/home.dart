@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home>{
 
 final RewardedAd myRewarded = RewardedAd(
-  adUnitId: rewarded,
+  adUnitId: AdHelper.rewarded,
   request: AdRequest(),
   listener: AdListener(
     onRewardedAdUserEarnedReward: (RewardedAd ad, RewardItem reward) {

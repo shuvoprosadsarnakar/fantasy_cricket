@@ -6,55 +6,89 @@ import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/strings/ad_units.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class RunningContests extends StatelessWidget {
+class RunningContests extends StatefulWidget {
   final RunningContestsCubit _cubit;
 
   RunningContests(this._cubit);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _cubit,
-      builder: (BuildContext context, CubitState state) {
-        if (state == CubitState.loading) {
-          return Loading();
-        } else if (state == CubitState.fetchError) {
-          return FetchErrorMsg();
-        } else {
-          final List<InkWell> listItems = _getListItems(context);
-          final int totalItems = listItems.length;
+  _RunningContestsState createState() => _RunningContestsState();
+}
 
-          if (totalItems > 0) {
-            return ListView.builder(
-              padding: Paddings.pagePadding,
-              itemCount: totalItems,
-              itemBuilder: (BuildContext context, int i) {
-                return Column(
-                  children: [
-                    listItems[i],
-                    SizedBox(height: 20),
-                  ],
-                );
-              },
-            );
+class _RunningContestsState extends State<RunningContests> {
+  BannerAd _bannerAd;
+
+  bool _isBannerAdReady = false;
+
+  @override
+  void initState() {
+    createAndLoadAd();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+      if (_isBannerAdReady)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: _bannerAd.size.width.toDouble(),
+            height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
+          ),
+        ),
+      BlocBuilder(
+        bloc: widget._cubit,
+        builder: (BuildContext context, CubitState state) {
+          if (state == CubitState.loading) {
+            return Loading();
+          } else if (state == CubitState.fetchError) {
+            return FetchErrorMsg();
           } else {
-            return Padding(
-              padding: Paddings.pagePadding,
-              child: Text(
-                'No running contest found for you to join.',
-                style: Theme.of(context).textTheme.subtitle1,   
-              ),
-            );
+            final List<InkWell> listItems = _getListItems(context);
+            final int totalItems = listItems.length;
+
+            if (totalItems > 0) {
+              return ListView.builder(
+                padding: Paddings.pagePadding,
+                itemCount: totalItems,
+                itemBuilder: (BuildContext context, int i) {
+                  return Column(
+                    children: [
+                      listItems[i],
+                      SizedBox(height: 20),
+                    ],
+                  );
+                },
+              );
+            } else {
+              return Padding(
+                padding: Paddings.pagePadding,
+                child: Text(
+                  'No running contest found for you to join.',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              );
+            }
           }
-        }
-      },
-    );
+        },
+      )
+    ]);
   }
 
   List<Widget> _getListItems(BuildContext context) {
@@ -63,10 +97,10 @@ class RunningContests extends StatelessWidget {
     final List<InkWell> listItems = <InkWell>[];
 
     // init [runningContestsExcerpts] & [runningContestsSerieses] variables
-    _cubit.notEndedSerieses.forEach((Series series) {
+    widget._cubit.notEndedSerieses.forEach((Series series) {
       series.matchExcerpts.forEach((Excerpt excerpt) {
         if (excerpt.status == ContestStatuses.running &&
-            _cubit.user.contestIds.contains(excerpt.id) == false) {
+            widget._cubit.user.contestIds.contains(excerpt.id) == false) {
           runningContestsExcerpts.add(excerpt);
           runningContestsSerieses.add(series);
         }
@@ -88,18 +122,41 @@ class RunningContests extends StatelessWidget {
               return ContestDetails(cdCubit.ContestDetialsCubit(
                 runningContestsSerieses[i],
                 runningContestsExcerpts[i],
-                _cubit.user,
+                widget._cubit.user,
               ));
             },
           ));
 
           // rebuild UI to update running contests list if user has joined the
           // contest
-          _cubit.rebuildUi();
+          widget._cubit.rebuildUi();
         },
       ));
     }
 
     return listItems;
+  }
+
+  void createAndLoadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.banner,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: AdListener(
+        onAdLoaded: (_) {
+          print('Banner ad loaded');
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
   }
 }
