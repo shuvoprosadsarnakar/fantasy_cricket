@@ -53,10 +53,6 @@ class VerifyEmail extends StatelessWidget {
 
         if (_cubit.state == CubitState.emailVerified) {
           Navigator.popAndPushNamed(context, home);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("You need to verify your email first"),
-          ));
         }
       },
     );

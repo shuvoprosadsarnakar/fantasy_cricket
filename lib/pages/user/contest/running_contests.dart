@@ -42,17 +42,16 @@ class _RunningContestsState extends State<RunningContests> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-      if (_isBannerAdReady)
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: _bannerAd.size.width.toDouble(),
-            height: _bannerAd.size.height.toDouble(),
-            child: AdWidget(ad: _bannerAd),
-          ),
-        ),
-      BlocBuilder(
+    return Scaffold(
+      appBar: AppBar(toolbarHeight: 0),
+      floatingActionButton: _isBannerAdReady ? Container(
+        width: _bannerAd.size.width.toDouble(),
+        height: _bannerAd.size.height.toDouble(),
+        child: AdWidget(ad: _bannerAd),
+      ) : null,
+      floatingActionButtonLocation: 
+        FloatingActionButtonLocation.centerDocked,
+      body: BlocBuilder(
         bloc: widget._cubit,
         builder: (BuildContext context, CubitState state) {
           if (state == CubitState.loading) {
@@ -65,7 +64,7 @@ class _RunningContestsState extends State<RunningContests> {
 
             if (totalItems > 0) {
               return ListView.builder(
-                padding: Paddings.pagePadding,
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 70),
                 itemCount: totalItems,
                 itemBuilder: (BuildContext context, int i) {
                   return Column(
@@ -87,8 +86,8 @@ class _RunningContestsState extends State<RunningContests> {
             }
           }
         },
-      )
-    ]);
+      ),
+    );
   }
 
   List<Widget> _getListItems(BuildContext context) {
