@@ -472,7 +472,7 @@ class _TeamManagerState extends State<TeamManager> {
 
   createReawrdAdAndLoad() {
     _rewardedAd = RewardedAd(
-      adUnitId: AdHelper.banner,
+      adUnitId: AdHelper.rewarded,
       request: AdRequest(),
       listener: AdListener(
         onAdLoaded: (_) {

@@ -29,20 +29,20 @@ class _ProfileState extends State<Profile> {
   bool _isBannerAdReady = false;
   @override
   void initState() {
-    createAndLoadAd();
     super.initState();
+    createAndLoadAd();
   }
 
   @override
   void dispose() {
-    _bannerAd.dispose();
     super.dispose();
+    _bannerAd.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-      if (_isBannerAdReady)
+            if (_isBannerAdReady)
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -98,6 +98,7 @@ class _ProfileState extends State<Profile> {
           }
         },
       ),
+
     ]);
   }
 

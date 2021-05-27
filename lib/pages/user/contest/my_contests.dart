@@ -4,7 +4,7 @@ import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart'
     as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
-import 'package:fantasy_cricket/resources/paddings.dart';
+ import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -44,15 +44,7 @@ class _MyContestsState extends State<MyContests>
   Widget build(BuildContext context) {
     super.build(context);
     return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-      if (_isBannerAdReady)
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: _bannerAd.size.width.toDouble(),
-            height: _bannerAd.size.height.toDouble(),
-            child: AdWidget(ad: _bannerAd),
-          ),
-        ),
+
       BlocBuilder(
         bloc: widget._cubit,
         builder: (BuildContext context, CubitState state) {
@@ -78,10 +70,9 @@ class _MyContestsState extends State<MyContests>
                 },
               );
             } else {
-              return Padding(
-                padding: Paddings.pagePadding,
+              return Center(
                 child: Text(
-                  'You haven\'t joined any contest yet.',
+                  'You haven\'t joined any contests yet.',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               );
@@ -89,6 +80,15 @@ class _MyContestsState extends State<MyContests>
           }
         },
       ),
+          if (_isBannerAdReady)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: _bannerAd.size.width.toDouble(),
+            height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
+          ),
+        ),
     ]);
   }
 

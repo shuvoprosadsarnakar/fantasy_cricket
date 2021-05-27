@@ -42,16 +42,8 @@ class _RunningContestsState extends State<RunningContests> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 0),
-      floatingActionButton: _isBannerAdReady ? Container(
-        width: _bannerAd.size.width.toDouble(),
-        height: _bannerAd.size.height.toDouble(),
-        child: AdWidget(ad: _bannerAd),
-      ) : null,
-      floatingActionButtonLocation: 
-        FloatingActionButtonLocation.centerDocked,
-      body: BlocBuilder(
+    return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+      BlocBuilder(
         bloc: widget._cubit,
         builder: (BuildContext context, CubitState state) {
           if (state == CubitState.loading) {
@@ -76,8 +68,7 @@ class _RunningContestsState extends State<RunningContests> {
                 },
               );
             } else {
-              return Padding(
-                padding: Paddings.pagePadding,
+              return Center(
                 child: Text(
                   'No running contest found for you to join.',
                   style: Theme.of(context).textTheme.subtitle1,
@@ -87,6 +78,15 @@ class _RunningContestsState extends State<RunningContests> {
           }
         },
       ),
+       if (_isBannerAdReady)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: _bannerAd.size.width.toDouble(),
+            height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
+          ),
+        ),]
     );
   }
 
