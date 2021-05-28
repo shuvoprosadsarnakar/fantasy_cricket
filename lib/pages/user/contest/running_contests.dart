@@ -1,8 +1,10 @@
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart' as cdCubit;
+import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart'
+    as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
+import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/resources/strings/ad_units.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
@@ -40,55 +42,51 @@ class _RunningContestsState extends State<RunningContests> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-      children: <Widget>[
-        BlocBuilder(
-          bloc: widget._cubit,
-          builder: (BuildContext context, CubitState state) {
-            if (state == CubitState.loading) {
-              return Loading();
-            } else if (state == CubitState.fetchError) {
-              return Center(child: FetchErrorMsg());
+    return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+      BlocBuilder(
+        bloc: widget._cubit,
+        builder: (BuildContext context, CubitState state) {
+          if (state == CubitState.loading) {
+            return Loading();
+          } else if (state == CubitState.fetchError) {
+            return FetchErrorMsg();
+          } else {
+            final List<InkWell> listItems = _getListItems(context);
+            final int totalItems = listItems.length;
+
+            if (totalItems > 0) {
+              return ListView.builder(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 70),
+                itemCount: totalItems,
+                itemBuilder: (BuildContext context, int i) {
+                  return Column(
+                    children: [
+                      listItems[i],
+                      SizedBox(height: 20),
+                    ],
+                  );
+                },
+              );
             } else {
-              final List<InkWell> listItems = _getListItems(context);
-              final int totalItems = listItems.length;
-
-              if (totalItems > 0) {
-                return ListView.builder(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 70),
-                  itemCount: totalItems,
-                  itemBuilder: (BuildContext context, int i) {
-                    return Column(
-                      children: [
-                        listItems[i],
-                        SizedBox(height: 20),
-                      ],
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: Text(
-                    'No running contest found for you to join.',
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                );
-              }
+              return Center(
+                child: Text(
+                  'No running contest found for you to join.',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              );
             }
-          },
-        ),
-
-        if (_isBannerAdReady)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: _bannerAd.size.width.toDouble(),
-              height: _bannerAd.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd),
-            ),
+          }
+        },
+      ),
+       if (_isBannerAdReady)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: _bannerAd.size.width.toDouble(),
+            height: _bannerAd.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd),
           ),
-      ],
+        ),]
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:fantasy_cricket/pages/user/profile/earning_history.dart';
 import 'package:fantasy_cricket/pages/user/profile/exchange_form.dart';
 import 'package:fantasy_cricket/pages/user/profile/exchange_history.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
+import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/strings/ad_units.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -41,7 +42,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-      if (_isBannerAdReady)
+            if (_isBannerAdReady)
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -50,18 +51,17 @@ class _ProfileState extends State<Profile> {
             child: AdWidget(ad: _bannerAd),
           ),
         ),
-      
       BlocBuilder(
         bloc: widget._cubit,
         builder: (BuildContext context, CubitState state) {
           if (state == CubitState.loading) {
             return Loading();
           } else if (state == CubitState.fetchError) {
-            return Center(child: FetchErrorMsg());
+            return FetchErrorMsg();
           } else {
             return ListView(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
-              children: <Widget>[
+              padding: Paddings.pagePadding,
+              children: [
                 getUsername(context),
                 SizedBox(height: 40),
                 getProfileInfo(
@@ -98,6 +98,7 @@ class _ProfileState extends State<Profile> {
           }
         },
       ),
+
     ]);
   }
 
