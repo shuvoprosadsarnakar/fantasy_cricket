@@ -48,7 +48,6 @@ final RewardedAd myRewarded = RewardedAd(
           PopupMenuButton<int>(
               onSelected: (value) => _onMenuItemSelected(context, value),
               itemBuilder: (context) => [
-                    PopupMenuItem(value: 3, child: Text("Admin panel")),
                     PopupMenuItem(value: 1, child: Text("Settings")),
                     PopupMenuItem(value: 2, child: Text("Sign out")),
                   ])
@@ -109,9 +108,6 @@ final RewardedAd myRewarded = RewardedAd(
       case 2:
         FirebaseAuth.instance.signOut();
         Navigator.pushNamedAndRemoveUntil(context, signIn, (route) => false);
-        break;
-      case 3:
-        Navigator.pushNamed(context, adminHome);
         break;
     }
   }

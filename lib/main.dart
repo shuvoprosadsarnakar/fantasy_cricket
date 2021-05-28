@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fantasy Cricket',
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: AuthRepo.checkUser(),
+      initialRoute: AuthRepo.getInitialRoute(),
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: ColorPallate.pomegranate,

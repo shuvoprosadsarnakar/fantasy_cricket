@@ -32,7 +32,7 @@ class AuthRepo {
     await _auth.signOut();
   }
 
-  static String checkUser()  {
+  static String getInitialRoute()  {
     if (_auth.currentUser.emailVerified && _auth.currentUser != null) {
       return routes.home;
     } else if (!_auth.currentUser.emailVerified && _auth.currentUser != null) {
