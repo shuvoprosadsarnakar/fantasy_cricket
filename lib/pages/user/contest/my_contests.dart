@@ -4,7 +4,6 @@ import 'package:fantasy_cricket/pages/user/contest/contest_detials.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.dart'
     as cdCubit;
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
- import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
@@ -51,18 +50,18 @@ class _MyContestsState extends State<MyContests>
           if (state == CubitState.loading) {
             return Loading();
           } else if (state == CubitState.fetchError) {
-            return FetchErrorMsg();
+            return Center(child: FetchErrorMsg());
           } else {
             final List<InkWell> listItems = getListItems(context);
             final int totalItems = listItems.length;
 
             if (totalItems > 0) {
               return ListView.builder(
-                padding: Paddings.pagePadding,
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
                 itemCount: totalItems,
                 itemBuilder: (BuildContext context, int i) {
                   return Column(
-                    children: [
+                    children: <Widget>[
                       listItems[i],
                       SizedBox(height: 20),
                     ],
@@ -80,7 +79,8 @@ class _MyContestsState extends State<MyContests>
           }
         },
       ),
-          if (_isBannerAdReady)
+      
+      if (_isBannerAdReady)
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
