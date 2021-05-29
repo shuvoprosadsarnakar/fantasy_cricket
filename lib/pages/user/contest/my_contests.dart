@@ -13,7 +13,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:fantasy_cricket/resources/strings/ad_units.dart';
+import 'package:fantasy_cricket/helpers/ad_units.dart';
 
 class MyContests extends StatefulWidget {
   final RunningContestsCubit _cubit;

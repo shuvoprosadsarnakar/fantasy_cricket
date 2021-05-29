@@ -2,7 +2,7 @@ import 'package:fantasy_cricket/helpers/role_image_finder.dart';
 import 'package:fantasy_cricket/pages/user/contest/cubits/team_manager_cubit.dart';
 import 'package:fantasy_cricket/pages/user/contest/review_team.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
-import 'package:fantasy_cricket/resources/strings/ad_units.dart';
+import 'package:fantasy_cricket/helpers/ad_units.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';

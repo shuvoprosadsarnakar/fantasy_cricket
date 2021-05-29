@@ -8,7 +8,7 @@ import 'package:fantasy_cricket/pages/user/profile/exchange_form.dart';
 import 'package:fantasy_cricket/pages/user/profile/exchange_history.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/resources/strings/ad_units.dart';
+import 'package:fantasy_cricket/helpers/ad_units.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';

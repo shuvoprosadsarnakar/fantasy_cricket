@@ -3,7 +3,7 @@ import 'package:fantasy_cricket/pages/user/contest/my_contests.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/pages/home/tabs/second_tab.dart';
 import 'package:fantasy_cricket/pages/home/tabs/profile_tab.dart';
-import 'package:fantasy_cricket/resources/strings/ad_units.dart';
+import 'package:fantasy_cricket/helpers/ad_units.dart';
 import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

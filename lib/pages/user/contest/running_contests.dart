@@ -6,7 +6,7 @@ import 'package:fantasy_cricket/pages/user/contest/cubits/contest_details_cubit.
 import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
-import 'package:fantasy_cricket/resources/strings/ad_units.dart';
+import 'package:fantasy_cricket/helpers/ad_units.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/loading.dart';
