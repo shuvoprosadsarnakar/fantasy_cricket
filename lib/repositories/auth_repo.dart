@@ -14,7 +14,10 @@ class AuthRepo {
 
   static Future<bool> isEmailVerified() async {
     await _auth.currentUser.reload();
-    return _auth.currentUser.emailVerified;
+    if (_auth.currentUser != null)
+      return _auth.currentUser.emailVerified;
+    else
+      return false;
   }
 
   static Future<void> signIn(String email, String password) async {
@@ -32,14 +35,15 @@ class AuthRepo {
     await _auth.signOut();
   }
 
-  static String getInitialRoute()  {
-    if (_auth.currentUser.emailVerified && _auth.currentUser != null) {
-      return routes.home;
-    } else if (!_auth.currentUser.emailVerified && _auth.currentUser != null) {
-      return routes.verifyEmail;
-    } else {
-      return routes.signIn;
+  static String getInitialRoute() {
+    if (_auth.currentUser != null) {
+      if (_auth.currentUser.emailVerified) {
+        return routes.home;
+      } else if (!_auth.currentUser.emailVerified) {
+        return routes.verifyEmail;
+      }
     }
+    return routes.signIn;
   }
 
   static Future<void> sendPasswordResetEmail(String email) async {

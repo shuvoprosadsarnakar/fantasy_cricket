@@ -15,18 +15,18 @@ class SignUp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign up'),
-        actions: [getSignInButton(context)],  
-      ),
-      body: BlocBuilder(
+    return BlocBuilder(
         bloc: _cubit,
         builder: (BuildContext contest, CubitState state) {
           if(state == CubitState.loading) {
             return Loading();
           } else {
-            return Form(
+            return Scaffold(
+      appBar: AppBar(
+        title: Text('Sign up'),
+        actions: [getSignInButton(context)],  
+      ),
+      body:Form(
               key: _cubit.formKey,
               child: ListView(
                 padding: Paddings.pagePadding,
@@ -50,11 +50,11 @@ class SignUp extends StatelessWidget {
                   getSignUpButton(context),
                 ],
               ),
-            );
+            ));
           }
         },
-      ),
-    );
+      );
+    
   }
 
   TextButton getSignInButton(BuildContext context) {
