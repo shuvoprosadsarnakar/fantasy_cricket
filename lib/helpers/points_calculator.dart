@@ -124,15 +124,14 @@ abstract class PointsCalculator {
   }
 
   static double getEconomyRatePoints(int ballsBowled, int runsGiven, 
-    String matchType) 
-  {
+    String matchType) {
     double economyRate = getEconomyRate(ballsBowled, runsGiven);
     double point = 0;
 
     if(matchType == MatchTypes.t20 && ballsBowled >= 12) {
       if(economyRate <= 4) {
         point = 3;
-      } else if(economyRate == 5) {
+      } else if(economyRate <= 5) {
         point = 2;
       } else if(economyRate <= 7) {
         point = 1;
@@ -143,7 +142,7 @@ abstract class PointsCalculator {
       } else {
         point = -3;
       }
-    } else if(matchType == MatchTypes.oneDay && ballsBowled >= 12) {
+    } else if(matchType == MatchTypes.oneDay && ballsBowled >= 30) {
       if(economyRate <= 2.5) {
         point = 3;
       } else if(economyRate <= 3.5) {
