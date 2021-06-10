@@ -3,6 +3,7 @@ import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
+import 'package:fantasy_cricket/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,22 +17,26 @@ class ExchangeUpdater extends StatelessWidget {
     return BlocBuilder(
       bloc: _cubit,
       builder: (BuildContext context, CubitState state) {
-        return Scaffold(
-          appBar: AppBar(title: Text('Update Exchange')),
-          body: Form(
-            key: _cubit.formKey,
-            child: ListView(
-              padding: Paddings.pagePadding,
-              children: [
-                getDetailsFormField(),
-                SizedBox(height: 10),
-                getIsFailedField(),
-                SizedBox(height: 20),
-                getFormSubmitButton(context),
-              ],
+        if(state == CubitState.loading) {
+          return Loading();
+        } else {
+          return Scaffold(
+            appBar: AppBar(title: Text('Update Exchange')),
+            body: Form(
+              key: _cubit.formKey,
+              child: ListView(
+                padding: Paddings.pagePadding,
+                children: [
+                  getDetailsFormField(),
+                  SizedBox(height: 10),
+                  getIsFailedField(),
+                  SizedBox(height: 20),
+                  getFormSubmitButton(context),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
     );
   }

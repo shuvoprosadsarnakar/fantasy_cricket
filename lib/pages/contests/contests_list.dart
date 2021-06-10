@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fantasy_cricket/helpers/get_total_chips.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
 import 'package:fantasy_cricket/pages/contests/contest_ender.dart';
@@ -8,8 +9,6 @@ import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart'
 import 'package:fantasy_cricket/pages/contests/cubits/contest_manager_cubit.dart'
     as cmCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
-import 'package:fantasy_cricket/pages/user/contest/cubits/running_contests_cubit.dart'
-    as rcCubit;
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
@@ -75,7 +74,6 @@ class ContestsList extends StatelessWidget {
                   children: [
                     _getTeamNames(excerpt.teamImages, excerpt.teamsNames, 
                       context),
-                    SizedBox(height: 5),
                     _getMatchTypeAndNo(excerpt.no, excerpt.type),
                     SizedBox(height: 5),
                     _getSeriesName(series.photo, series.name, context),
@@ -85,7 +83,7 @@ class ContestsList extends StatelessWidget {
                     if (_contestStatus != ContestStatuses.upcoming)
                       SizedBox(height: 5),
                     _getSeriesPrice(series),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     _getStartingTime(excerpt.startTime),
                   ],
                 ),
@@ -193,7 +191,7 @@ class ContestsList extends StatelessWidget {
 
   Text _getSeriesPrice(Series series) {
     return Text(
-        'Series: ${rcCubit.RunningContestsCubit.getSeriesTotalChips(series)} ' 
+        'Series: ${getTotalChips(series.chipsDistributes)} ' 
         + 'Chips & ${series.chipsDistributes.last.to} Winners');
   }
 

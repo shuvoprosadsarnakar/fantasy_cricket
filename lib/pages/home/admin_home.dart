@@ -16,7 +16,7 @@ class AdminHome extends StatelessWidget {
           // upcoming contests tile
           getAdminHomeTile(
             'Upcoming Contests',
-            Icons.arrow_circle_down,
+            Icons.arrow_circle_down_outlined,
             Colors.blueAccent,
             () => Navigator.push(
               context,
@@ -33,7 +33,7 @@ class AdminHome extends StatelessWidget {
           // running contests tile
           getAdminHomeTile(
             'Running Contests',
-            Icons.run_circle,
+            Icons.run_circle_outlined,
             Colors.redAccent,
             () {
               Navigator.pushNamed(context, runningContestList);
@@ -44,7 +44,7 @@ class AdminHome extends StatelessWidget {
           // locked contests tile
           getAdminHomeTile(
             'Locked Contests',
-            Icons.lock_rounded,
+            Icons.lock_outline,
             Colors.yellow.shade800,
             () {
               Navigator.pushNamed(context, lockedContestList);
@@ -64,7 +64,7 @@ class AdminHome extends StatelessWidget {
           SizedBox(height: 10),
           getAdminHomeTile(
             'Players List',
-            Icons.person,
+            Icons.person_outline,
             Colors.cyan,
             () {
               Navigator.pushNamed(context, player);
@@ -72,8 +72,8 @@ class AdminHome extends StatelessWidget {
           ),
           SizedBox(height: 10),
           getAdminHomeTile(
-            'Team List',
-            Icons.people,
+            'Teams List',
+            Icons.people_outline,
             Colors.blueGrey,
             () {
               Navigator.pushNamed(context, team);
@@ -81,11 +81,21 @@ class AdminHome extends StatelessWidget {
           ),
           SizedBox(height: 10),
           getAdminHomeTile(
-            'Series List',
-            Icons.device_unknown_sharp,
+            'Serieses List',
+            Icons.file_copy_outlined,
             Colors.teal,
             () {
               Navigator.pushNamed(context, series);
+            },
+          ),
+          SizedBox(height: 10),
+
+          getAdminHomeTile(
+            'Exchanges List',
+            Icons.money_outlined,
+            Colors.green,
+            () {
+              Navigator.pushNamed(context, exchangesList);
             },
           ),
           SizedBox(height: 10),
@@ -104,7 +114,7 @@ class AdminHome extends StatelessWidget {
       ),
       child: ListTile(
         tileColor: tileColor,
-        trailing: Icon(
+        leading: Icon(
           iconData,
           color: Colors.white,
           size: 30,
@@ -114,6 +124,9 @@ class AdminHome extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             color: Colors.white,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1,
+            wordSpacing: 1,
           ),
         ),
         onTap: onTap,

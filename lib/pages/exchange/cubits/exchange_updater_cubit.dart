@@ -46,10 +46,12 @@ class ExchangeUpdaterCubit extends Cubit<CubitState> {
     emit(CubitState.loading);
     formKey.currentState.save();
 
-    if(isFailed && exchange.status != ExchangeStatuses.failed) {
-      exchange.status = ExchangeStatuses.failed;
-      user.remainingChips += exchange.chips;
-    } else if(!isFailed) {
+    if(isFailed) {
+      if(exchange.status != ExchangeStatuses.failed) {
+        exchange.status = ExchangeStatuses.failed;
+        user.remainingChips += exchange.chips;
+      }
+    } else {
       if(exchange.status == ExchangeStatuses.failed) {
         exchange.status = ExchangeStatuses.successfull;
         user.remainingChips -= exchange.chips;

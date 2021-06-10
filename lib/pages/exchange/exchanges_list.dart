@@ -48,7 +48,38 @@ class ExchangesList extends StatelessWidget {
           SizedBox(height: 5),
           Text('Payment Type: ${exchange.paymentType}'),
           SizedBox(height: 5),
-          Text('Mobile: ${exchange.mobile}'),
+
+          if(exchange.paymentType != PaymentTypes.steem && 
+            exchange.paymentType != PaymentTypes.binance)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Mobile: ${exchange.mobile}'),
+                SizedBox(height: 5),
+                Text('Taka: ${exchange.taka.toStringAsFixed(2)}')
+              ],
+            ),
+          
+          if(exchange.paymentType == PaymentTypes.steem ||
+            exchange.paymentType == PaymentTypes.binance)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${exchange.paymentType} Username: '
+                  '${exchange.paymentUsername}'),
+                SizedBox(height: 5),
+                Text('Steem: ${exchange.steem.toStringAsFixed(2)}'),
+              ],
+            ),
+          
+          if(exchange.paymentType == PaymentTypes.binance)
+            Column(
+              children: <Widget>[
+                SizedBox(height: 5),
+                Text('Memo: ${exchange.memo}'),
+              ],
+            ),
+          
           SizedBox(height: 5),
           Text('Date & Time: ' + 
             exchange.dateTime.toDate().toString().substring(0, 16)),
@@ -95,4 +126,13 @@ class ExchangesList extends StatelessWidget {
       ),
     );
   }
+}
+
+abstract class PaymentTypes {
+  static final String bKash = 'bKash';
+  static final String nagad = 'Nagad';
+  static final String rocket = 'Rocket';
+  static final String mobileRecharge = 'Mobile Recharge';
+  static final String steem = 'Steem';
+  static final String binance = 'Binance';
 }
