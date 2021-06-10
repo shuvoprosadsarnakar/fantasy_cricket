@@ -34,7 +34,7 @@ class ContestEnder extends StatelessWidget {
                   children: [
                     // team 1 report form fields
                     getTeamNameAndScoreField(_cubit.contest.teamsNames[0], 0, 
-                      context),
+                      context, _cubit.contest.teamsScores[0]),
                     SizedBox(height: 20),
                     Divider(),
                     getPlayerReportFields(0, _cubit.contest.team1TotalPlayers),
@@ -42,7 +42,7 @@ class ContestEnder extends StatelessWidget {
 
                     // team 2 report form fields
                     getTeamNameAndScoreField(_cubit.contest.teamsNames[1], 1,
-                      context),
+                      context, _cubit.contest.teamsScores[1]),
                     SizedBox(height: 20),
                     Divider(),
                     getPlayerReportFields(_cubit.contest.team1TotalPlayers,
@@ -72,7 +72,7 @@ class ContestEnder extends StatelessWidget {
   }
 
   Row getTeamNameAndScoreField(String name, int scoreIndex,
-    BuildContext context) {
+    BuildContext context, String initialValue) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,6 +91,7 @@ class ContestEnder extends StatelessWidget {
           width: 150,
           child: FormTextField(
             hintText: 'Score',
+            initialValue: initialValue,
             validator: (String value) {
               if(value == null || value.trim().isEmpty) {
                 return 'Team score is required.';
@@ -129,7 +130,10 @@ class ContestEnder extends StatelessWidget {
                 SizedBox(
                   width: 100,
                   child: FormIntegerField(
-                    initialValue: '1',
+                    initialValue:
+                      (_cubit.playersReports[i][_cubit.reportKeys[j]] != null 
+                      ? _cubit.playersReports[i][_cubit.reportKeys[j]] : 0)
+                      .toString(),
                     onSaved: (String value) {
                     _cubit.playersReports[i][_cubit.reportKeys[j]] = 
                       int.parse(value);
@@ -159,6 +163,7 @@ class ContestEnder extends StatelessWidget {
     return FormDropdownField(
       hint: Text('Select player of the match'),
       items: dropdownItems,
+      value: _cubit.contest.playerOfTheMatch,
       validator: (dynamic value) {
         if(value == null) {
           return 'Player of the match is required.';
@@ -188,6 +193,7 @@ class ContestEnder extends StatelessWidget {
         SizedBox(width: 10),
         Expanded(
           child: FormTextField(
+            initialValue: _cubit.contest.result,
             validator: (String value) {
               if(value == null || value.trim().isEmpty) {
                 return 'Match result is required.';

@@ -50,26 +50,39 @@ class ContestEnderCubit extends Cubit<CubitState> {
     ContestRepo.getContestById(series.matchExcerpts[excerptIndex].id)
       .catchError((dynamic error) {
         emit(CubitState.fetchError);
-        return null;
       })
       .then((Contest contest) {
         this.contest = contest;
-        contest.teamsScores = [null, null];
-    
-        final Report report = Report();
+
+        if(contest.teamsScores.isEmpty) {
+          contest.teamsScores = [null, null];
+        }
         
-        contest.playersNames.forEach((element) {
-          playersReports.add(report.toMap());
-        });
+        if(contest.playersReports.isNotEmpty) {
+          contest.playersReports.forEach((Report report) {
+            playersReports.add(report.toMap());
+          });
+        } else {
+          contest.playersNames.forEach((String playerName) {
+            final Report report = Report();
+            playersReports.add(report.toMap());
+          });
+        }
+
         emit(null);
       });
   }
 
   Future<void> updateContest() async {
     if(formKey.currentState.validate()) {
-      formKey.currentState.save();
       emit(CubitState.loading);
-      
+      formKey.currentState.save();
+      contest.playersReports.removeRange(0, contest.playersReports.length);
+
+      playersReports.forEach((Map<String, dynamic> report) {
+        contest.playersReports.add(Report.fromMap(report));  
+      });
+
       try {
         await ContestRepo.updateContest(contest);
         emit(CubitState.updated);
