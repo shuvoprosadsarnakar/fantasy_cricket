@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/models/contest.dart';
 import 'package:fantasy_cricket/models/distribute.dart';
-import 'package:fantasy_cricket/models/series.dart';
+import 'package:fantasy_cricket/models/series.dart' as seriesModel;
 import 'package:fantasy_cricket/models/user.dart';
 
 class ContestRepo {
   static final _db = FirebaseFirestore.instance;
   static final _contestCollection = _db.collection('contests');
 
-  static Future<void> addContest(
-    Contest contest,
-    Series series, 
-    int excerptIndex,
-  ) async {
+  static Future<void> addContest(Contest contest, seriesModel.Series series, 
+    int excerptIndex) async {
     WriteBatch batch = _db.batch();
     DocumentReference docRef = _contestCollection.doc();
 
@@ -44,15 +41,16 @@ class ContestRepo {
   }
 
   static Future<void> updateContest(Contest contest) async {
-    await _contestCollection.doc(contest.id).update(contest.toMap());
+    await _contestCollection.doc(contest.id).update({
+      CHIPS_DISTRIBUTES_KEY: contest.chipsDistributes,
+      PLAYERS_CREDITS_KEY: contest.playersCredits,
+      IS_PLAYINGS_KEY: contest.isPlayings,
+      FULL_SCORE_URL_KEY: contest.fullScoreUrl,
+    });
   }
 
-  static Future<void> endContest(
-    Contest contest,
-    Series series,
-    List<User> contestWinners,
-    List<User> seriesWinners,
-  ) async {
+  static Future<void> endContest(Contest contest, seriesModel.Series series,
+    List<User> contestWinners, List<User> seriesWinners) async {
     WriteBatch batch = _db.batch();
     DocumentReference docRef;
     

@@ -92,7 +92,7 @@ class FantasyRepo {
     });
   }
 
-  static Future<Contest> updateFantasy(Fantasy fantasy, 
+  static Future<void> updateFantasy(Fantasy fantasy, 
     List<String> oldPlayerNames) async 
   {
     DocumentReference fantasyRef = _fantasyCollection.doc(fantasy.id);

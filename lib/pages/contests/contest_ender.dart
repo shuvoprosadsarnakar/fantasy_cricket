@@ -207,16 +207,55 @@ class ContestEnder extends StatelessWidget {
       width: double.maxFinite,
       child: FormSubmitButton(
         title: 'End Contest',
-        onPressed: () async {
-          if(await _cubit.endContest()) {
-            if(_cubit.state == CubitState.failed) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Failed to end contest, try again.')
-              ));
-            } else {
-              Navigator.pop(context, 'Contest ended successfully.');
-            }
-          }
+        onPressed: () {
+          showDialog(
+            context: context, 
+            builder: (BuildContext context) {
+              return Center(
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Are you sure to end the contest?',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            TextButton(
+                              child: Text('No'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            SizedBox(width: 10),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                if(await _cubit.endContest()) {
+                                  if(_cubit.state == CubitState.failed) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Failed to end '
+                                        'contest, try again.'))
+                                    );
+                                  } else {
+                                    Navigator.pop(context, 
+                                      'Contest ended successfully.');
+                                  }
+                                }
+                              }
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
         },
       ),
     );
