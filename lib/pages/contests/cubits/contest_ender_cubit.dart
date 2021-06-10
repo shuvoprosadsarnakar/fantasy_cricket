@@ -21,6 +21,7 @@ enum CubitState {
   loading,
   fetchError,
   failed,
+  updated,
 }
 
 class ContestEnderCubit extends Cubit<CubitState> {
@@ -62,6 +63,20 @@ class ContestEnderCubit extends Cubit<CubitState> {
         });
         emit(null);
       });
+  }
+
+  Future<void> updateContest() async {
+    if(formKey.currentState.validate()) {
+      formKey.currentState.save();
+      emit(CubitState.loading);
+      
+      try {
+        await ContestRepo.updateContest(contest);
+        emit(CubitState.updated);
+      } catch(error) {
+        emit(CubitState.failed);
+      }
+    }
   }
 
   Future<bool> endContest() async {

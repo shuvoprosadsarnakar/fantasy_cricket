@@ -41,11 +41,14 @@ class ContestRepo {
   }
 
   static Future<void> updateContest(Contest contest) async {
-    await _contestCollection.doc(contest.id).update({
-      CHIPS_DISTRIBUTES_KEY: contest.chipsDistributes,
-      PLAYERS_CREDITS_KEY: contest.playersCredits,
-      IS_PLAYINGS_KEY: contest.isPlayings,
-      FULL_SCORE_URL_KEY: contest.fullScoreUrl,
+    final DocumentReference contestRef = _contestCollection.doc(contest.id);
+    
+    await _db.runTransaction((Transaction transaction) {
+      return transaction.get(contestRef).then((DocumentSnapshot doc) {
+        // get new rank if any
+        contest.ranks = Contest.fromMap(doc.data(), doc.id).ranks;
+        transaction.update(contestRef, contest.toMap());
+      });
     });
   }
 

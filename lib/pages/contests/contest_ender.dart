@@ -57,7 +57,9 @@ class ContestEnder extends StatelessWidget {
                     getMatchResultField(context),
                     SizedBox(height: 30),
 
-                    // form submit button
+                    // form buttons
+                    getUpdateContestButton(context),
+                    SizedBox(height: 10),
                     getFormSubmitButton(context),
                   ],
                 ),
@@ -256,6 +258,28 @@ class ContestEnder extends StatelessWidget {
               );
             },
           );
+        },
+      ),
+    );
+  }
+
+  SizedBox getUpdateContestButton(BuildContext context) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: FormSubmitButton(
+        title: 'Update Contest',
+        onPressed: () async {
+          await _cubit.updateContest();
+
+          if(_cubit.state == CubitState.failed) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Failed to update contest, try again.'),
+            ));
+          } else if(_cubit.state == CubitState.updated) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Contest updated successfully.'),
+            ));
+          }
         },
       ),
     );
