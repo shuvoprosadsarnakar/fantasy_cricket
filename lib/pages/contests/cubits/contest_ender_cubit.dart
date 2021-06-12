@@ -22,6 +22,7 @@ enum CubitState {
   fetchError,
   failed,
   updated,
+  rebuild,
 }
 
 class ContestEnderCubit extends Cubit<CubitState> {
@@ -43,6 +44,7 @@ class ContestEnderCubit extends Cubit<CubitState> {
     RUN_OUTS_KEY,
   ];
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isSeriesEnded = false;
 
   ContestEnderCubit(this.series, this.excerptIndex) : super(null) {
     emit(CubitState.loading);
@@ -113,11 +115,10 @@ class ContestEnderCubit extends Cubit<CubitState> {
         // give chips to contest winners and get them 
         List<User> contestWinners = await _getUpdatedContestWinners();
         
-        // give chips to series winners and get them if it is the last contest 
-        // of the series
+        // give chips to series winners and get them if series is ended
         List<User> seriesWinners;
 
-        if(excerptIndex == (series.matchExcerpts.length - 1)) {
+        if(isSeriesEnded) {
           seriesWinners = await _getUpdatedSeriesWinners(contestWinners);
         }
 
@@ -322,6 +323,14 @@ class ContestEnderCubit extends Cubit<CubitState> {
         + PointsCalculator.getIsPlayingPoints(contest.isPlayings[i])
         + PointsCalculator.getPlayerOfTheMatchPoints(contest.playerOfTheMatch ==
           contest.playersNames[i]);
+    }
+  }
+
+  void rebuild() {
+    if(state == CubitState.rebuild) {
+      emit(null);
+    } else {
+      emit(CubitState.rebuild);
     }
   }
 }

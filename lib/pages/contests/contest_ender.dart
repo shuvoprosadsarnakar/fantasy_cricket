@@ -1,7 +1,9 @@
 import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart';
+import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_msg.dart';
 import 'package:fantasy_cricket/widgets/form_dropdown_field.dart';
+import 'package:fantasy_cricket/widgets/form_field_title.dart';
 import 'package:fantasy_cricket/widgets/form_integer_field.dart';
 import 'package:fantasy_cricket/widgets/form_submit_button.dart';
 import 'package:fantasy_cricket/widgets/form_text_field.dart';
@@ -31,7 +33,8 @@ class ContestEnder extends StatelessWidget {
               child: Form(
                 key: _cubit.formKey,
                 child: Column(
-                  children: [
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
                     // team 1 report form fields
                     getTeamNameAndScoreField(_cubit.contest.teamsNames[0], 0, 
                       context, _cubit.contest.teamsScores[0]),
@@ -50,12 +53,31 @@ class ContestEnder extends StatelessWidget {
                     SizedBox(height: 20),
 
                     // man of the match field
+                    FormFieldTitle('Player of The Match'),
+                    SizedBox(height: 5),
                     getPlayerOfTheMatchField(),
                     SizedBox(height: 20),
 
                     // match result field
+                    FormFieldTitle('Result'),
+                    SizedBox(height: 5),
                     getMatchResultField(context),
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
+
+                    // is series ended checkbox
+                    Row(
+                      children: <Widget>[
+                        Checkbox(
+                          value: _cubit.isSeriesEnded, 
+                          onChanged: (bool value) {
+                            _cubit.isSeriesEnded = value;
+                            _cubit.rebuild();
+                          },
+                        ),
+                        FormFieldTitle('Series Ended'),
+                      ],
+                    ),
+                    SizedBox(height: 20),
 
                     // form buttons
                     getUpdateContestButton(context),
@@ -175,38 +197,19 @@ class ContestEnder extends StatelessWidget {
     );
   }
 
-  Row getMatchResultField(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: Text(
-            'Result',
-            style: TextStyle(
-              fontSize: 20,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: FormTextField(
-            initialValue: _cubit.contest.result,
-            validator: (String value) {
-              if(value == null || value.trim().isEmpty) {
-                return 'Match result is required.';
-              } else {
-                return null;
-              }
-            },
-            onSaved: (String value) {
-              _cubit.contest.result = value;
-            }
-          ),
-        ),
-      ],
+  FormTextField getMatchResultField(BuildContext context) {
+    return FormTextField(
+      initialValue: _cubit.contest.result,
+      validator: (String value) {
+        if(value == null || value.trim().isEmpty) {
+          return 'Match result is required.';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (String value) {
+        _cubit.contest.result = value;
+      }
     );
   }
 
@@ -221,8 +224,9 @@ class ContestEnder extends StatelessWidget {
             builder: (BuildContext context) {
               return Center(
                 child: Card(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(15),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,14 +235,31 @@ class ContestEnder extends StatelessWidget {
                           'Are you sure to end the contest?',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
+                        SizedBox(height: 10),
                         Row(
                           children: <Widget>[
                             TextButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(5),
+                                foregroundColor: MaterialStateProperty.all(
+                                  ColorPallate.pomegranate
+                                ),
+                                backgroundColor: 
+                                  MaterialStateProperty.all(Colors.white),
+                              ),
                               child: Text('No'),
                               onPressed: () => Navigator.pop(context),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 20),
                             TextButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(5),
+                                foregroundColor: MaterialStateProperty.all(
+                                  ColorPallate.pomegranate
+                                ),
+                                backgroundColor: 
+                                  MaterialStateProperty.all(Colors.white),
+                              ),
                               child: Text('Yes'),
                               onPressed: () async {
                                 Navigator.pop(context);
