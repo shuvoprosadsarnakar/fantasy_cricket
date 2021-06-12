@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContestEnder extends StatelessWidget {
   final ContestEnderCubit _cubit;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   ContestEnder(this._cubit);
 
@@ -27,6 +28,7 @@ class ContestEnder extends StatelessWidget {
           return FetchErrorMsg();
         } else {
           return Scaffold(
+            key: scaffoldKey,
             appBar: AppBar(title: Text('End Contest')),
             body: SingleChildScrollView(
               padding: Paddings.pagePadding,
@@ -214,6 +216,8 @@ class ContestEnder extends StatelessWidget {
   }
 
   SizedBox getFormSubmitButton(BuildContext context) {
+    final BuildContext oldContext = context;
+
     return SizedBox(
       width: double.maxFinite,
       child: FormSubmitButton(
@@ -262,16 +266,21 @@ class ContestEnder extends StatelessWidget {
                               ),
                               child: Text('Yes'),
                               onPressed: () async {
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
+
                                 if(await _cubit.endContest()) {
                                   if(_cubit.state == CubitState.failed) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Failed to end '
-                                        'contest, try again.'))
-                                    );
+                                    ScaffoldMessenger
+                                      .of(context)
+                                      .showSnackBar(SnackBar(
+                                        content: Text(
+                                          'Failed to end contest, try again.'
+                                        ),
+                                      ));
                                   } else {
-                                    Navigator.pop(context, 
-                                      'Contest ended successfully.');
+                                    Navigator
+                                      .of(oldContext)
+                                      .pop('Contest ended successfully.');
                                   }
                                 }
                               }
