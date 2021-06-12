@@ -34,7 +34,7 @@ class AdminHome extends StatelessWidget {
           getAdminHomeTile(
             'Running Contests',
             Icons.run_circle_outlined,
-            Colors.redAccent,
+            Colors.lime.shade800,
             () {
               Navigator.pushNamed(context, runningContestList);
             },
@@ -45,7 +45,7 @@ class AdminHome extends StatelessWidget {
           getAdminHomeTile(
             'Locked Contests',
             Icons.lock_outline,
-            Colors.yellow.shade800,
+            Colors.yellow.shade900,
             () {
               Navigator.pushNamed(context, lockedContestList);
             },
@@ -62,6 +62,7 @@ class AdminHome extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
+
           getAdminHomeTile(
             'Players List',
             Icons.person_outline,
@@ -71,6 +72,7 @@ class AdminHome extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
+
           getAdminHomeTile(
             'Teams List',
             Icons.people_outline,
@@ -80,6 +82,7 @@ class AdminHome extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
+          
           getAdminHomeTile(
             'Serieses List',
             Icons.file_copy_outlined,

@@ -48,7 +48,10 @@ class ContestsList extends StatelessWidget {
             } else {
               return Padding(
                 padding: Paddings.pagePadding,
-                child: Text('No contest found.'),
+                child: Text(
+                  'No contest found.',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
               );
             }
           }
