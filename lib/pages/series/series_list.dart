@@ -35,7 +35,7 @@ class _SeriesListState extends State<SeriesList> {
     return Scaffold(
       appBar: AppBar(
         actions: [],
-        title: Text('Series List'),
+        title: Text('Serieses List'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

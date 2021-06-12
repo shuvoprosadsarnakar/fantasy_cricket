@@ -37,7 +37,7 @@ class _TeamListState extends State<TeamList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Team List'),
+        title: Text('Teams List'),
       ),
       body: RefreshIndicator(
               onRefresh: () async { _teamBloc..add(TeamSearchClosed()); },

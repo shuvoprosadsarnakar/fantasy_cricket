@@ -25,7 +25,7 @@ class ExchangesList extends StatelessWidget {
           return FetchErrorMsg();
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text('All Exchanges')),
+            appBar: AppBar(title: Text('Exchanges List')),
             body: ListView.builder(
               padding: Paddings.pagePadding,
               itemCount: _cubit.exchanges.length,
@@ -90,8 +90,10 @@ class ExchangesList extends StatelessWidget {
               _getExchangeStatus(exchange.status),
             ],
           ),
-          SizedBox(height: 5),
-          Text('Details: ${exchange.details}'),
+          if(exchange.details.isNotEmpty)
+            SizedBox(height: 5),
+          if(exchange.details.isNotEmpty) 
+            Text('Details: ${exchange.details}'),
           Divider(),
         ],
       ),

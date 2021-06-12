@@ -30,7 +30,7 @@ class _PlayerListState extends State<PlayerList> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('Players List')),
       body: RefreshIndicator(
         onRefresh: () async {
           _playerBloc..add(PlayerSearchClosed());
