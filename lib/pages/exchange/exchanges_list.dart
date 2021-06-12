@@ -110,7 +110,7 @@ class ExchangesList extends StatelessWidget {
     Color textColor;
 
     if(exchangeStatus == ExchangeStatuses.processing) {
-      textColor = Colors.yellow;
+      textColor = Colors.yellow.shade800;
     } else if(exchangeStatus == ExchangeStatuses.successfull) {
       textColor = Colors.green;
     } else {

@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fantasy_cricket/helpers/get_total_chips.dart';
 import 'package:fantasy_cricket/models/excerpt.dart';
 import 'package:fantasy_cricket/models/series.dart';
+import 'package:fantasy_cricket/pages/contests/contest_detials.dart';
 import 'package:fantasy_cricket/pages/contests/contest_ender.dart';
 import 'package:fantasy_cricket/pages/contests/contest_manager.dart';
+import 'package:fantasy_cricket/pages/contests/cubits/contest_details_cubit.dart' as cdCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contest_ender_cubit.dart'
     as ceCubit;
 import 'package:fantasy_cricket/pages/contests/cubits/contest_manager_cubit.dart'
@@ -169,7 +171,10 @@ class ContestsList extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (BuildContext context) {
-            if (_contestStatus != ContestStatuses.locked) {
+            if (_contestStatus == ContestStatuses.ended) {
+              return ContestDetails(
+                cdCubit.ContestDetialsCubit(series, series.matchExcerpts[excerptIndex]));
+            } else if (_contestStatus != ContestStatuses.locked) {
               return ContestManager(
                   cmCubit.ContestManagerCubit(series, excerptIndex));
             } else {
