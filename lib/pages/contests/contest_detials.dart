@@ -11,7 +11,6 @@ import 'package:fantasy_cricket/pages/contests/match_leaderboard.dart';
 import 'package:fantasy_cricket/pages/contests/series_leaderboard.dart';
 import 'package:fantasy_cricket/resources/colours/color_pallate.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/resources/contest_statuses.dart';
 import 'package:fantasy_cricket/resources/prize_images_folder.dart';
 import 'package:fantasy_cricket/widgets/contests_list_item.dart';
 import 'package:fantasy_cricket/widgets/fetch_error_or_message.dart';

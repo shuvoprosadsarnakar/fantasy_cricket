@@ -11,6 +11,7 @@ import 'package:fantasy_cricket/models/user.dart';
 import 'package:fantasy_cricket/models/win_info.dart';
 import 'package:fantasy_cricket/repositories/contest_repo.dart';
 import 'package:fantasy_cricket/repositories/fantasy_repo.dart';
+import 'package:fantasy_cricket/repositories/series_repo.dart';
 import 'package:fantasy_cricket/repositories/user_repo.dart';
 import 'package:fantasy_cricket/helpers/points_calculator.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
@@ -28,7 +29,7 @@ enum CubitState {
 class ContestEnderCubit extends Cubit<CubitState> {
   Contest contest;
   final List<Map<String, dynamic>> playersReports = <Map<String, dynamic>>[];
-  final Series series;
+  Series series;
   final int excerptIndex;
   final List<String> reportKeys = <String>[
     RUNS_TAKEN_KEY,
@@ -50,9 +51,6 @@ class ContestEnderCubit extends Cubit<CubitState> {
     emit(CubitState.loading);
     
     ContestRepo.getContestById(series.matchExcerpts[excerptIndex].id)
-      .catchError((dynamic error) {
-        emit(CubitState.fetchError);
-      })
       .then((Contest contest) {
         this.contest = contest;
 
@@ -72,7 +70,8 @@ class ContestEnderCubit extends Cubit<CubitState> {
         }
 
         emit(null);
-      });
+      })
+      .catchError((Object error) => emit(CubitState.fetchError));
   }
 
   Future<void> updateContest() async {
@@ -96,19 +95,25 @@ class ContestEnderCubit extends Cubit<CubitState> {
 
   Future<bool> endContest() async {
     if(formKey.currentState.validate()) {
+      emit(CubitState.loading);
       formKey.currentState.save();
+      
       // init contest's [playersPoints] && [playersReports] properties
       _setPlayersPoints();
+      
       // update the [playerPoints] of the series
       contest.playersNames.forEach((String playerName) {
         series.playerPoints[series.playerNames.indexOf(playerName)] 
           += contest.playersPoints[contest.playersNames.indexOf(playerName)];
       });
+
       // update the status of the contest in series match excerpt
       series.matchExcerpts[excerptIndex].status = ContestStatuses.ended;
       
       try {
-        emit(CubitState.loading);
+        // get the updated series [ranks]
+        series.ranks = (await SeriesRepo.getSeriesById(series.id)).ranks;
+
         // update contest and series's [ranks] property
         await _updateContestAndSeriesRanks();
 
@@ -130,10 +135,14 @@ class ContestEnderCubit extends Cubit<CubitState> {
         emit(null);
       } catch(error) {
         emit(CubitState.failed);
+
+        // minus the added [playerPoints] of the series
         contest.playersNames.forEach((String playerName) {
           series.playerPoints[series.playerNames.indexOf(playerName)] 
             -= contest.playersPoints[contest.playersNames.indexOf(playerName)];
         });
+
+        // undo the status of the contest in series match excerpt
         series.matchExcerpts[excerptIndex].status = ContestStatuses.locked;
       }
       
