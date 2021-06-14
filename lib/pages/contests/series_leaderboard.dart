@@ -213,7 +213,7 @@ class SeriesLeaderboard extends StatelessWidget {
           excerpt.teamImages[teamIndex],
           width: 20,
           height: 20,
-          fit: BoxFit.contain
+          fit: BoxFit.contain,
         ),
         SizedBox(width: 5),
         Expanded(
