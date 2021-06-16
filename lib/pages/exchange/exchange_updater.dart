@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExchangeUpdater extends StatelessWidget {
   final ExchangeUpdaterCubit _cubit;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   
   ExchangeUpdater(this._cubit);
 
@@ -23,7 +24,7 @@ class ExchangeUpdater extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: Text('Update Exchange')),
             body: Form(
-              key: _cubit.formKey,
+              key: formKey,
               child: ListView(
                 padding: Paddings.pagePadding,
                 children: [
@@ -77,7 +78,8 @@ class ExchangeUpdater extends StatelessWidget {
     return FormSubmitButton(
       title: 'Update Exchange',
       onPressed: () async {
-        await _cubit.updateExchange();
+        formKey.currentState.save();
+        await _cubit.updateExchangeInDb();
 
         String msg;
 

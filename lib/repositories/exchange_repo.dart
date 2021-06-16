@@ -37,10 +37,19 @@ class ExchangeRepo {
     }).toList();
   }
 
-  static Future<void> updateExchange(Exchange exchange, User user) async {
-    WriteBatch batch = _db.batch();
-    batch.update(exchangesCollection.doc(exchange.id), exchange.toMap());
-    batch.update(_db.collection('users').doc(user.id), user.toMap());
-    await batch.commit();
+  static Future<void> updateExchange(Exchange exchange,
+    void Function(User) updateUserAndExchange) async {
+    await _db.runTransaction((transaction) {
+      return transaction.get(_db.collection('users').doc(exchange.userId))
+        .then((value) {
+          final User user = User.fromMap(value.data(), value.id);
+          updateUserAndExchange(user);
+
+          transaction.update(exchangesCollection.doc(exchange.id),
+            exchange.toMap());
+          transaction.update(_db.collection('users').doc(user.id), 
+            user.toMap());
+        });
+    });
   }
 }
