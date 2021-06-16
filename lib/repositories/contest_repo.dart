@@ -77,4 +77,10 @@ class ContestRepo {
 
     await batch.commit();
   }
+
+  static Future<void> updateIsContestEnding(bool isContestEnding) async {
+    await _contestCollection
+      .doc('info')
+      .update({'isContestEnding': isContestEnding});
+  }
 }

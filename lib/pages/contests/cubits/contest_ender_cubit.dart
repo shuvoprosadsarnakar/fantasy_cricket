@@ -111,6 +111,8 @@ class ContestEnderCubit extends Cubit<CubitState> {
       series.matchExcerpts[excerptIndex].status = ContestStatuses.ended;
       
       try {
+        await ContestRepo.updateIsContestEnding(true);
+
         // get the updated series [ranks]
         series.ranks = (await SeriesRepo.getSeriesById(series.id)).ranks;
 
@@ -145,6 +147,8 @@ class ContestEnderCubit extends Cubit<CubitState> {
         // undo the status of the contest in series match excerpt
         series.matchExcerpts[excerptIndex].status = ContestStatuses.locked;
       }
+
+      ContestRepo.updateIsContestEnding(false);
       
       return true;
     } else {
