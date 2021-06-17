@@ -133,46 +133,50 @@ class ContestEnder extends StatelessWidget {
   }
 
   Column getPlayerReportFields(int start, int end) {
-    final List<Column> reportFieldsItems = [];
+    final List<Column> playerReportRows = <Column>[];
     final int totalReportFields = _cubit.reportKeys.length;
     
     for(int i = start; i < end; i++) {
-      reportFieldsItems.add(Column(children: [
-        ListTile(
-          title: Text(_cubit.contest.playersNames[i]),
-          subtitle: Text(_cubit.contest.playersRoles[i]),
-        ),
-        SizedBox(width: 20),
+      playerReportRows.add(Column(
+        children: <Widget>[
+          ListTile(
+            title: Text(_cubit.contest.playersNames[i]),
+            subtitle: Text(_cubit.contest.playersRoles[i]),
+          ),
 
-        for(int j = 0; j < totalReportFields; j++) Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(mapKeyToFieldTitle(
-                  _cubit.reportKeys[j]) + ': '),
-                SizedBox(
-                  width: 100,
-                  child: FormIntegerField(
-                    initialValue:
-                      (_cubit.playersReports[i][_cubit.reportKeys[j]] != null 
-                      ? _cubit.playersReports[i][_cubit.reportKeys[j]] : 0)
-                      .toString(),
-                    onSaved: (String value) {
-                    _cubit.playersReports[i][_cubit.reportKeys[j]] = 
-                      int.parse(value);
-                  }),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-          ],
-        ),
-        Divider(),
-      ]));
+          Row(
+            children: <Widget>[
+              for(int j = 0; j < totalReportFields; j++) Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text(mapKeyToFieldTitle(_cubit.reportKeys[j])),
+                      SizedBox(
+                        width: 100,
+                        child: FormIntegerField(
+                          initialValue:
+                            (_cubit.playersReports[i][_cubit.reportKeys[j]] != null 
+                            ? _cubit.playersReports[i][_cubit.reportKeys[j]] : 0)
+                            .toString(),
+                          onSaved: (String value) {
+                          _cubit.playersReports[i][_cubit.reportKeys[j]] = 
+                            int.parse(value);
+                        }),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 10),
+                ],
+              ),
+            ],
+          ),
+          Divider(),
+        ],
+      ));
     }
 
-    return Column(children: reportFieldsItems);
+    return Column(children: playerReportRows);
   }
 
   FormDropdownField getPlayerOfTheMatchField() {
@@ -188,13 +192,13 @@ class ContestEnder extends StatelessWidget {
       hint: Text('Select player of the match'),
       items: dropdownItems,
       value: _cubit.contest.playerOfTheMatch,
-      validator: (dynamic value) {
-        if(value == null) {
-          return 'Player of the match is required.';
-        } else {
-          return null;
-        }
-      },
+      // validator: (dynamic value) {
+      //   if(value == null) {
+      //     return 'Player of the match is required.';
+      //   } else {
+      //     return null;
+      //   }
+      // },
       onSaved: (dynamic value) => _cubit.contest.playerOfTheMatch = value,
     );
   }
@@ -202,13 +206,13 @@ class ContestEnder extends StatelessWidget {
   FormTextField getMatchResultField(BuildContext context) {
     return FormTextField(
       initialValue: _cubit.contest.result,
-      validator: (String value) {
-        if(value == null || value.trim().isEmpty) {
-          return 'Match result is required.';
-        } else {
-          return null;
-        }
-      },
+      // validator: (String value) {
+      //   if(value == null || value.trim().isEmpty) {
+      //     return 'Match result is required.';
+      //   } else {
+      //     return null;
+      //   }
+      // },
       onSaved: (String value) {
         _cubit.contest.result = value;
       }
