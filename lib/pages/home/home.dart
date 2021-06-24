@@ -1,11 +1,11 @@
 import 'package:fantasy_cricket/pages/contests/cubits/contests_list_cubit.dart';
 import 'package:fantasy_cricket/pages/contests/contests_list.dart';
 import 'package:fantasy_cricket/resources/paddings.dart';
-import 'package:fantasy_cricket/routing/routes.dart';
 import 'package:fantasy_cricket/resources/contest_statuses.dart';
+import 'package:fantasy_cricket/resources/route_names.dart';
 import 'package:flutter/material.dart';
 
-class AdminHome extends StatelessWidget {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class AdminHome extends StatelessWidget {
             Icons.run_circle_outlined,
             Colors.lime.shade800,
             () {
-              Navigator.pushNamed(context, runningContestList);
+              Navigator.pushNamed(context, RouteNames.runningContestList);
             },
           ),
           SizedBox(height: 10),
@@ -47,7 +47,7 @@ class AdminHome extends StatelessWidget {
             Icons.lock_outline,
             Colors.yellow.shade900,
             () {
-              Navigator.pushNamed(context, lockedContestList);
+              Navigator.pushNamed(context, RouteNames.lockedContestList);
             },
           ),
           SizedBox(height: 10),
@@ -58,7 +58,7 @@ class AdminHome extends StatelessWidget {
             Icons.arrow_circle_up,
             Colors.deepPurpleAccent,
             () {
-              Navigator.pushNamed(context, endedContestList);
+              Navigator.pushNamed(context, RouteNames.endedContestList);
             },
           ),
           SizedBox(height: 10),
@@ -68,7 +68,7 @@ class AdminHome extends StatelessWidget {
             Icons.person_outline,
             Colors.cyan,
             () {
-              Navigator.pushNamed(context, player);
+              Navigator.pushNamed(context, RouteNames.playerList);
             },
           ),
           SizedBox(height: 10),
@@ -78,7 +78,7 @@ class AdminHome extends StatelessWidget {
             Icons.people_outline,
             Colors.blueGrey,
             () {
-              Navigator.pushNamed(context, team);
+              Navigator.pushNamed(context, RouteNames.teamList);
             },
           ),
           SizedBox(height: 10),
@@ -88,7 +88,7 @@ class AdminHome extends StatelessWidget {
             Icons.file_copy_outlined,
             Colors.teal,
             () {
-              Navigator.pushNamed(context, series);
+              Navigator.pushNamed(context, RouteNames.seriesList);
             },
           ),
           SizedBox(height: 10),
@@ -98,7 +98,7 @@ class AdminHome extends StatelessWidget {
             Icons.money_outlined,
             Colors.green,
             () {
-              Navigator.pushNamed(context, exchangesList);
+              Navigator.pushNamed(context, RouteNames.exchangeList);
             },
           ),
           SizedBox(height: 10),
